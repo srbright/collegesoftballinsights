@@ -41,7 +41,7 @@
       <h2 class="text-4xl font-bold text-center mb-10">Find Your 2026 Fit</h2>
       <div class="flex justify-center mb-6">
         <button onclick="filterConf('all')" class="px-6 py-2 bg-pink-600 text-white rounded-l-full mr-1">All</button>
-        <button onclick="filterConf('SEC')" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-r-l full">SEC</button>
+        <button onclick="filterConf('SEC')" class="px-6 py-2 bg-gray-200 text-gray-700">SEC</button>
         <button onclick="filterConf('Big Ten')" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-r-full">Big Ten</button>
       </div>
       <input type="text" id="searchInput" placeholder="Search team, state..." class="w-full p-5 border-2 border-gray-300 rounded-xl text-lg focus:border-pink-600 focus:outline-none" autofocus />
@@ -50,7 +50,7 @@
     </div>
   </section>
 
-  <!-- TEAM DETAIL (unchanged) -->
+  <!-- TEAM DETAIL -->
   <section id="teamDetails" class="py-20 bg-gray-50 hidden">
     <div class="max-w-5xl mx-auto px-4 text-center">
       <h2 id="detailTitle" class="text-4xl font-bold mb-10"></h2>
@@ -88,18 +88,27 @@
     let positionChart = null;
     let currentFilter = 'all';
 
+    // Load teams.json with error handling
     fetch('teams.json')
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+        return res.json();
+      })
       .then(data => {
+        console.log('Teams loaded:', data.length); // Debug log
         allTeams = data;
         fuse = new Fuse(allTeams, { keys: ['name', 'conf', 'state'], threshold: 0.3 });
         renderResults(allTeams.slice(0, 12));
+      })
+      .catch(err => {
+        console.error('JSON Load Error:', err); // Debug log
+        document.getElementById('noResults').textContent = 'Error loading data—check console & refresh. Contact support if persists.';
       });
 
     document.getElementById('searchInput').addEventListener('input', () => {
       const query = document.getElementById('searchInput').value.trim();
       let results = allTeams.filter(t => currentFilter === 'all' || t.conf === currentFilter);
-      if (query) {
+      if (query && fuse) {
         const fuseResults = fuse.search(query).map(r => r.item);
         results = results.filter(t => fuseResults.some(fr => fr.name === t.name));
       }
@@ -108,7 +117,11 @@
 
     function filterConf(conf) {
       currentFilter = conf;
-      document.querySelectorAll('button').forEach(btn => btn.classList.remove('bg-pink-600', 'text-white'));
+      document.querySelectorAll('button[onclick*="filterConf"]').forEach(btn => {
+        btn.classList.remove('bg-pink-600', 'text-white');
+        btn.classList.add('bg-gray-200', 'text-gray-700');
+      });
+      event.target.classList.remove('bg-gray-200', 'text-gray-700');
       event.target.classList.add('bg-pink-600', 'text-white');
       document.getElementById('searchInput').value = '';
       let filtered = allTeams.filter(t => conf === 'all' || t.conf === conf);
@@ -120,7 +133,7 @@
       const noResults = document.getElementById('noResults');
       if (teams.length === 0) {
         container.innerHTML = '';
-        noResults.textContent = 'No teams found.';
+        noResults.textContent = allTeams.length ? 'No teams match your search.' : 'No teams loaded yet.';
         return;
       }
       noResults.textContent = '';
