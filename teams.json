@@ -1,0 +1,48 @@
+[
+  {
+    "name": "Oklahoma Sooners",
+    "conf": "SEC",
+    "state": "OK",
+    "winPct": 0.932,
+    "transfers": 4,
+    "roster": { "Fr": 9, "So": 7, "Jr": 5, "Sr": 3, "Gr": 2 },
+    "positions": { "P": 7, "C": 2, "INF": 9, "OF": 6, "UTIL": 2 }
+  },
+  {
+    "name": "Texas Longhorns",
+    "conf": "SEC",
+    "state": "TX",
+    "winPct": 0.915,
+    "transfers": 6,
+    "roster": { "Fr": 8, "So": 6, "Jr": 7, "Sr": 4, "Gr": 1 },
+    "positions": { "P": 8, "C": 3, "INF": 10, "OF": 5, "UTIL": 2 }
+  },
+  {
+    "name": "UCLA Bruins",
+    "conf": "Big Ten",
+    "state": "CA",
+    "winPct": 0.889,
+    "transfers": 3,
+    "roster": { "Fr": 7, "So": 5, "Jr": 8, "Sr": 4, "Gr": 2 },
+    "positions": { "P": 6, "C": 2, "INF": 9, "OF": 7, "UTIL": 2 }
+  },
+  {
+    "name": "Tennessee Lady Vols",
+    "conf": "SEC",
+    "state": "TN",
+    "winPct": 0.902,
+    "transfers": 5,
+    "roster": { "Fr": 10, "So": 6, "Jr": 5, "Sr": 3, "Gr": 3 },
+    "positions": { "P": 7, "C": 2, "INF": 8, "OF": 8, "UTIL": 2 }
+  },
+  {
+    "name": "Florida Gators",
+    "conf": "SEC",
+    "state": "FL",
+    "winPct": 0.875,
+    "transfers": 7,
+    "roster": { "Fr": 11, "So": 5, "Jr": 6, "Sr": 4, "Gr": 1 },
+    "positions": { "P": 8, "C": 3, "INF": 9, "OF": 6, "UTIL": 1 }
+  }
+  // I’ll give you the full 300+ team version in the next message if you want it now
+]
