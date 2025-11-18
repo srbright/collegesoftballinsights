@@ -7,7 +7,6 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
   <style>
     .hero { background: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url('https://images.unsplash.com/photo-1595433975016-2c3e9b9b2a1f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80') center/cover; }
   </style>
@@ -18,101 +17,123 @@
   <header class="hero h-screen flex items-center justify-center text-white text-center px-4">
     <div>
       <h1 class="text-4xl md:text-6xl font-bold mb-4">College Softball Insights</h1>
-      <p class="text-xl md:text-2xl mb-8">Research any program in under 60 seconds. Save thousands on recruiting.</p>
-      <a href="#search" class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-4 px-10 rounded-full text-lg transition">Start Searching Now</a>
+      <p class="text-xl md:text-2xl mb-8">2026 Rosters: SEC & Big Ten • Research in <60s • Save $7k+ on recruiting</p>
+      <a href="#search" class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-4 px-10 rounded-full text-lg transition">Explore 2026 Rosters</a>
     </div>
   </header>
 
   <!-- VALUE PROP -->
   <section class="py-20 bg-gray-50 text-center">
     <div class="max-w-5xl mx-auto px-4">
-      <h2 class="text-4xl font-bold mb-8">Real Data. Real Fast.</h2>
+      <h2 class="text-4xl font-bold mb-8">Projected 2026 Insights • Fresh from Fall Ball</h2>
       <div class="grid md:grid-cols-4 gap-8">
-        <div class="bg-white p-8 rounded-xl shadow-lg"><h3 class="text-2xl font-bold text-pink-600">$149.99/yr</h3><p>Less than $0.42/day</p></div>
-        <div class="bg-white p-8 rounded-xl shadow-lg"><h3 class="text-2xl font-bold text-pink-600">1,200+ Teams</h3><p>D1 · D2 · D3 · NAIA · JUCO</p></div>
-        <div class="bg-white p-8 rounded-xl shadow-lg"><h3 class="text-2xl font-bold text-pink-600">Weekly Updates</h3><p>Always current rosters</p></div>
-        <div class="bg-white p-8 rounded-xl shadow-lg"><h3 class="text-2xl font-bold text-pink-600">Save $7k–$10k</h3><p>On travel & showcases</p></div>
+        <div class="bg-white p-8 rounded-xl shadow-lg"><h3 class="text-2xl font-bold text-pink-600">$149.99/yr</h3><p><0.42/day</p></div>
+        <div class="bg-white p-8 rounded-xl shadow-lg"><h3 class="text-2xl font-bold text-pink-600">34 Teams</h3><p>SEC + Big Ten</p></div>
+        <div class="bg-white p-8 rounded-xl shadow-lg"><h3 class="text-2xl font-bold text-pink-600">Weekly Scrapes</h3><p>Portal + Signees</p></div>
+        <div class="bg-white p-8 rounded-xl shadow-lg"><h3 class="text-2xl font-bold text-pink-600">Save $7k–$10k</h3><p>Travel & Camps</p></div>
       </div>
     </div>
   </section>
 
-  <!-- SEARCH -->
+  <!-- SEARCH & FILTERS -->
   <section id="search" class="py-20 bg-white">
     <div class="max-w-6xl mx-auto px-4">
-      <h2 class="text-4xl font-bold text-center mb-10">Find Your Perfect Fit</h2>
-      <input type="text" id="searchInput" placeholder="Search by team, conference, state..." class="w-full p-5 border-2 border-gray-300 rounded-xl text-lg focus:border-pink-600 focus:outline-none" />
+      <h2 class="text-4xl font-bold text-center mb-10">Find Your 2026 Fit</h2>
+      <div class="flex justify-center mb-6">
+        <button onclick="filterConf('all')" class="px-6 py-2 bg-pink-600 text-white rounded-l-full mr-1">All</button>
+        <button onclick="filterConf('SEC')" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-r-l full">SEC</button>
+        <button onclick="filterConf('Big Ten')" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-r-full">Big Ten</button>
+      </div>
+      <input type="text" id="searchInput" placeholder="Search team, state..." class="w-full p-5 border-2 border-gray-300 rounded-xl text-lg focus:border-pink-600 focus:outline-none" autofocus />
       <div id="results" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-10"></div>
-      <p class="text-center text-gray-500 mt-10" id="noResults">Start typing to see real 2025 teams...</p>
+      <p class="text-center text-gray-500 mt-10" id="noResults">Loading 2026 rosters...</p>
     </div>
   </section>
 
-  <!-- SAMPLE CHARTS (updates when you click a team) -->
-  <section class="py-20 bg-gray-50 hidden" id="teamDetails">
+  <!-- TEAM DETAIL (unchanged) -->
+  <section id="teamDetails" class="py-20 bg-gray-50 hidden">
     <div class="max-w-5xl mx-auto px-4 text-center">
       <h2 id="detailTitle" class="text-4xl font-bold mb-10"></h2>
-      <div class="grid md:grid-cols-2 gap-12">
-        <canvas id="classChart"></canvas>
-        <canvas id="positionChart"></canvas>
+      <div class="grid md:grid-cols-2 gap-12 max-w-4xl mx-auto">
+        <div class="bg-white p-8 rounded-xl shadow-lg">
+          <canvas id="classChart"></canvas>
+        </div>
+        <div class="bg-white p-8 rounded-xl shadow-lg">
+          <canvas id="positionChart"></canvas>
+        </div>
       </div>
-      <button onclick="document.getElementById('teamDetails').classList.add('hidden')" class="mt-10 text-pink-600 font-bold">← Back to search</button>
+      <button onclick="closeDetails()" class="mt-12 inline-block bg-pink-600 text-white px-8 py-4 rounded-full font-bold hover:bg-pink-700 transition">
+        ← Back to Search
+      </button>
     </div>
   </section>
 
   <!-- CTA -->
   <section class="py-20 bg-pink-600 text-white text-center">
     <div class="max-w-4xl mx-auto px-4">
-      <h2 class="text-5xl font-bold mb-6">Launch Special: $99 First Year</h2>
-      <p class="text-2xl mb-10">Limited to first 100 subscribers</p>
-      <a href="https://buy.stripe.com/test_..." class="bg-white text-pink-600 hover:bg-gray-100 font-bold py-5 px-12 rounded-full text-xl transition inline-block">Claim Your Spot Now</a>
+      <h2 class="text-5xl font-bold mb-6">Launch: $99/1st Year</h2>
+      <p class="text-2xl mb-10">First 100 subs • Full 1,200+ teams soon</p>
+      <a href="#" class="bg-white text-pink-600 hover:bg-gray-100 font-bold py-5 px-12 rounded-full text-xl transition inline-block">Subscribe Now</a>
     </div>
   </section>
 
   <footer class="bg-gray-900 text-white py-10 text-center">
-    © 2025 College Softball Insights • All rights reserved
+    © 2025 College Softball Insights • Data from official rosters
   </footer>
 
   <script>
     let allTeams = [];
     let fuse;
+    let classChart = null;
+    let positionChart = null;
+    let currentFilter = 'all';
 
-    // Load teams.json
     fetch('teams.json')
       .then(res => res.json())
       .then(data => {
         allTeams = data;
-        fuse = new Fuse(allTeams, {
-          keys: ['name', 'conf', 'state'],
-          threshold: 0.3
-        });
+        fuse = new Fuse(allTeams, { keys: ['name', 'conf', 'state'], threshold: 0.3 });
+        renderResults(allTeams.slice(0, 12));
       });
 
-    const searchInput = document.getElementById('searchInput');
-    const resultsDiv = document.getElementById('results');
-    const noResults = document.getElementById('noResults');
-
-    searchInput.addEventListener('input', () => {
-      const query = searchInput.value.trim();
-      if (!fuse) return;
-      const result = query ? fuse.search(query).map(r => r.item) : [];
-      renderResults(result.length ? result : allTeams.slice(0, 12));
+    document.getElementById('searchInput').addEventListener('input', () => {
+      const query = document.getElementById('searchInput').value.trim();
+      let results = allTeams.filter(t => currentFilter === 'all' || t.conf === currentFilter);
+      if (query) {
+        const fuseResults = fuse.search(query).map(r => r.item);
+        results = results.filter(t => fuseResults.some(fr => fr.name === t.name));
+      }
+      renderResults(results.slice(0, 12));
     });
 
+    function filterConf(conf) {
+      currentFilter = conf;
+      document.querySelectorAll('button').forEach(btn => btn.classList.remove('bg-pink-600', 'text-white'));
+      event.target.classList.add('bg-pink-600', 'text-white');
+      document.getElementById('searchInput').value = '';
+      let filtered = allTeams.filter(t => conf === 'all' || t.conf === conf);
+      renderResults(filtered.slice(0, 12));
+    }
+
     function renderResults(teams) {
+      const container = document.getElementById('results');
+      const noResults = document.getElementById('noResults');
       if (teams.length === 0) {
-        resultsDiv.innerHTML = '';
+        container.innerHTML = '';
         noResults.textContent = 'No teams found.';
         return;
       }
       noResults.textContent = '';
-      resultsDiv.innerHTML = teams.map(t => `
-        <div onclick="showTeam('${t.name}')" class="border-2 border-gray-200 rounded-xl p-6 hover:border-pink-600 hover:shadow-xl transition cursor-pointer bg-white">
-          <h3 class="font-bold text-2xl text-pink-600">${t.name}</h3>
-          <p class="text-lg">${t.conf} • ${t.state}</p>
-          <div class="mt-4 grid grid-cols-2 text-sm">
-            <div><strong>Win %:</strong> ${(t.winPct*100).toFixed(1)}%</div>
-            <div><strong>Transfers:</strong> ${t.transfers}</div>
+      container.innerHTML = teams.map(team => `
+        <div onclick="showTeam('${team.name.replace(/'/g, "\\'")}')" 
+             class="border-2 border-gray-200 rounded-xl p-8 hover:border-pink-600 hover:shadow-2xl transition cursor-pointer bg-white text-center">
+          <h3 class="font-bold text-2xl text-pink-600 mb-2">${team.name}</h3>
+          <p class="text-lg mb-4">${team.conf} • ${team.state}</p>
+          <div class="grid grid-cols-2 text-sm font-medium mb-6">
+            <div>Win %: ${(team.winPct * 100).toFixed(1)}%</div>
+            <div>Transfers: ${team.transfers}</div>
           </div>
-          <p class="mt-4 text-pink-600 font-bold">Click for full roster breakdown →</p>
+          <p class="text-pink-600 font-bold text-lg">View 2026 Roster →</p>
         </div>
       `).join('');
     }
@@ -120,34 +141,38 @@
     window.showTeam = function(name) {
       const team = allTeams.find(t => t.name === name);
       if (!team) return;
-
-      document.getElementById('detailTitle').textContent = `${team.name} • 2025 Roster`;
+      document.getElementById('detailTitle').textContent = `${team.name} • Projected 2026 Roster`;
       document.getElementById('teamDetails').classList.remove('hidden');
-      document.getElementById('search').scrollIntoView();
+      document.getElementById('search').classList.add('hidden');
+      document.getElementById('teamDetails').scrollIntoView({ behavior: 'smooth' });
 
-      // Class chart
-      new Chart(document.getElementById('classChart'), {
+      if (classChart) classChart.destroy();
+      if (positionChart) positionChart.destroy();
+
+      classChart = new Chart(document.getElementById('classChart'), {
         type: 'doughnut',
         data: {
           labels: ['Fr', 'So', 'Jr', 'Sr', 'Gr'],
           datasets: [{ data: Object.values(team.roster), backgroundColor: ['#FF6B6B','#4ECDC4','#45B7D1','#96CEB4','#FECA57'] }]
         },
-        options: { plugins: { title: { display: true, text: 'Class Distribution' } } }
+        options: { plugins: { title: { display: true, text: 'Class Breakdown (incl. Signees)' } } }
       });
 
-      // Position chart
-      new Chart(document.getElementById('positionChart'), {
+      positionChart = new Chart(document.getElementById('positionChart'), {
         type: 'bar',
         data: {
           labels: Object.keys(team.positions),
           datasets: [{ label: 'Players', data: Object.values(team.positions), backgroundColor: '#FF6B6B' }]
         },
-        options: { plugins: { title: { display: true, text: 'Position Count' } } }
+        options: { plugins: { title: { display: true, text: 'Positions' } } }
       });
     };
 
-    // Show a few teams on first load
-    setTimeout(() => renderResults(allTeams.slice(0,6)), 1000);
+    window.closeDetails = function() {
+      document.getElementById('teamDetails').classList.add('hidden');
+      document.getElementById('search').classList.remove('hidden');
+      document.getElementById('searchInput').focus();
+    };
   </script>
 </body>
 </html>
