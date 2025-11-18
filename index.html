@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>College Softball Insights</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .hero { background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1595433975016-2c3e9b9b2a1f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80') center/cover; }
+  </style>
+</head>
+<body class="font-sans text-gray-800">
+
+  <!-- HERO -->
+  <header class="hero h-screen flex items-center justify-center text-white text-center px-4">
+    <div>
+      <h1 class="text-4xl md:text-6xl font-bold mb-4">College Softball Insights</h1>
+      <p class="text-xl md:text-2xl mb-8">Research any D1–D3 program in < 60 seconds. Save $7k+ on recruiting.</p>
+      <a href="#search" class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-3 px-8 rounded-full text-lg transition">Start Free Search</a>
+    </div>
+  </header>
+
+  <!-- VALUE PROP -->
+  <section class="py-16 bg-gray-50 text-center">
+    <div class="max-w-4xl mx-auto px-4">
+      <h2 class="text-3xl font-bold mb-6">Stop Guessing. Start Knowing.</h2>
+      <p class="text-lg mb-8">Roster counts • Class distribution • Position gaps • Transfers • Win %</p>
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="bg-white p-6 rounded-lg shadow">
+          <h3 class="font-bold text-xl text-pink-600">$149.99/year</h3>
+          <p class="text-sm">Less than $0.42/day</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow">
+          <h3 class="font-bold text-xl text-pink-600">1,200+ Teams</h3>
+          <p class="text-sm">D1, D2, D3, NAIA, JUCO</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow">
+          <h3 class="font-bold text-xl text-pink-600">Updated Weekly</h3>
+          <p class="text-sm">Fresh rosters & transfers</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEARCH TOOL -->
+  <section id="search" class="py-16 bg-white">
+    <div class="max-w-5xl mx-auto px-4">
+      <h2 class="text-3xl font-bold text-center mb-8">Find Your Fit</h2>
+      <input type="text" id="searchInput" placeholder="Search team, conference, state..." class="w-full p-4 border rounded-lg text-lg mb-6" />
+      <div id="results" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+      <p class="text-center text-gray-500 mt-8" id="noResults">Start typing to see teams...</p>
+    </div>
+  </section>
+
+  <!-- CHARTS (EXAMPLE) -->
+  <section class="py-16 bg-gray-50">
+    <div class="max-w-4xl mx-auto px-4">
+      <h2 class="text-3xl font-bold text-center mb-8">Sample Insight: Oklahoma Sooners 2025</h2>
+      <div class="grid md:grid-cols-2 gap-8">
+        <canvas id="classChart"></canvas>
+        <canvas id="positionChart"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-16 bg-pink-600 text-white text-center">
+    <div class="max-w-3xl mx-auto px-4">
+      <h2 class="text-4xl font-bold mb-6">Launch Special: $99 First Year</h2>
+      <p class="text-xl mb-8">Limited to first 100 subscribers</p>
+      <a href="https://tally.so/r/w2P5kL" target="_blank" class="bg-white text-pink-600 hover:bg-gray-100 font-bold py-4 px-10 rounded-full text-lg transition inline-block">
+        Claim Your Spot
+      </a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-gray-900 text-white py-8 text-center">
+    <p>© 2025 College Softball Insights • <a href="#" class="underline">Privacy</a> • <a href="#" class="underline">Terms</a></p>
+  </footer>
+
+  <!-- DATA + LOGIC -->
+  <script>
+    // Sample roster data (replace with your scraper output later)
+    const teams = [
+      {
+        name: "Oklahoma Sooners", conf: "Big 12", state: "OK",
+        roster: { Fr: 8, So: 6, Jr: 5, Sr: 4, Gr: 2 },
+        positions: { P: 6, C: 2, INF: 8, OF: 7, UTIL: 2 },
+        transfers: 3, winPct: 0.92
+      },
+      {
+        name: "UCLA Bruins", conf: "Pac-12", state: "CA",
+        roster: { Fr: 7, So: 5, Jr: 6, Sr: 5, Gr: 1 },
+        positions: { P: 5, C: 2, INF: 9, OF: 6, UTIL: 2 },
+        transfers: 2, winPct: 0.88
+      }
+      // Add 50–100 more from your CSV
+    ];
+
+    // Fuse.js search
+    const fuse = new Fuse(teams, {
+      keys: ['name', 'conf', 'state'],
+      threshold: 0.3
+    });
+
+    const searchInput = document.getElementById('searchInput');
+    const resultsDiv = document.getElementById('results');
+    const noResults = document.getElementById('noResults');
+
+    searchInput.addEventListener('input', () => {
+      const query = searchInput.value.trim();
+      const result = query ? fuse.search(query) : [];
+      renderResults(result.map(r => r.item));
+    });
+
+    function renderResults(items) {
+      if (items.length === 0) {
+        resultsDiv.innerHTML = '';
+        noResults.textContent = 'No teams found.';
+        return;
+      }
+      noResults.textContent = '';
+      resultsDiv.innerHTML = items.map(t => `
+        <div class="border rounded-lg p-4 hover:shadow-lg transition">
+          <h3 class="font-bold text-lg">${t.name}</h3>
+          <p class="text-sm text-gray-600">${t.conf} • ${t.state}</p>
+          <p class="mt-2"><strong>Win %:</strong> ${(t.winPct*100).toFixed(0)}%</p>
+          <p><strong>Transfers:</strong> ${t.transfers}</p>
+          <a href="#" class="text-pink-600 text-sm font-medium">View Full Roster →</a>
+        </div>
+      `).join('');
+    }
+
+    // Sample Charts
+    new Chart(document.getElementById('classChart'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Fr', 'So', 'Jr', 'Sr', 'Gr'],
+        datasets: [{ data: [8,6,5,4,2], backgroundColor: ['#FF6B6B','#4ECDC4','#45B7D1','#96CEB4','#FECA57'] }]
+      },
+      options: { plugins: { title: { display: true, text: 'Class Distribution' } } }
+    });
+
+    new Chart(document.getElementById('positionChart'), {
+      type: 'bar',
+      data: {
+        labels: ['P', 'C', 'INF', 'OF', 'UTIL'],
+        datasets: [{ label: 'Players', data: [6,2,8,7,2], backgroundColor: '#FF6B6B' }]
+      },
+      options: { plugins: { title: { display: true, text: 'Position Count' } } }
+    });
+  </script>
+</body>
+</html>
