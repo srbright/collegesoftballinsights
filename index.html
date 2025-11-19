@@ -4,10 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>College Softball Insights</title>
-
-  <!-- PRODUCTION TAILWIND (no more CDN warning) -->
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.1/dist/tailwind.min.css" rel="stylesheet">
-
+  <!-- PRODUCTION TAILWIND (official minified build - no warnings) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: { colors: { pink: { 600: '#db2777', 700: '#be185d' } } } }
+    }
+  </script>
   <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
@@ -28,7 +31,7 @@
         College Softball Insights
       </h1>
       <p class="text-xl md:text-2xl max-w-4xl mx-auto leading-relaxed mb-10 opacity-95">
-        Finding the right college softball program begins with clarity. Our tool helps parents and players narrow down options by location, conference, competitive level, enrollment size, class breakdown, retention rates, and coaching stability. Instead of feeling lost in endless choices, you’ll have a focused starting point to explore programs that truly match your priorities — making the first step in the recruiting process simpler, smarter, and more confident.
+        Finding the right college softball program begins with clarity. Our tool helps parents and players narrow down options by location, conference, competitive level, enrollment size, class breakdown, retention rates, and coaching stability. Instead of feeling lost in endless choices, you'll have a focused starting point to explore programs that truly match your priorities — making the first step in the recruiting process simpler, smarter, and more confident.
       </p>
       <a href="#search" class="inline-block bg-pink-600 hover:bg-pink-700 text-white font-bold py-5 px-12 rounded-full text-xl transition transform hover:scale-105">
         Start Your Search
@@ -121,7 +124,7 @@
 
   <script>
     let allTeams = [], fuse, classChart = null, positionChart = null;
-    const XAI_API_KEY = 'xai-dEQaTjpf1wXo9OFgveiAksjyhZlCo59vwEhXldUdAxTquerIfvNP6p7P4RtNi0DPFppdMz4TmtyhnhpV'; // ← Replace with your fresh key
+    const XAI_API_KEY = 'xai-vjvKcG8WRwbdEEP5lDxOptpSDha0gWVOQJL2qc3F561F4RlUjIV688ZuwPTjsO5KOzo86rVc64YaKcM3';
     const XAI_URL = 'https://api.x.ai/v1/chat/completions';
 
     fetch('teams.json')
@@ -129,7 +132,7 @@
       .then(data => {
         allTeams = data;
         fuse = new Fuse(allTeams, {keys: ['name','conf','state'], threshold: 0.3});
-        renderResults(allTeams);
+        renderResults(allTeams.slice(0,12));
         document.getElementById('noResults').textContent = '34 programs loaded — type above to search';
       })
       .catch(err => {
@@ -137,67 +140,78 @@
         document.getElementById('noResults').textContent = 'teams.json missing — re-upload to repo';
       });
 
-    document.getElementById('searchBtn').onclick = runAISearch;
-    document.getElementById('aiSearchInput').onkeypress = e => { if (e.key === 'Enter') runAISearch(); };
+    document.getElementById('searchBtn').addEventListener('click', runAISearch);
+    document.getElementById('aiSearchInput').addEventListener('keypress', e => { if (e.key === 'Enter') runAISearch(); });
 
     async function runAISearch() {
       const query = document.getElementById('aiSearchInput').value.trim();
-      if (!query) { renderResults(allTeams); return; }
+      if (!query) {
+        renderResults(allTeams.slice(0,12));
+        return;
+      }
 
-      document.getElementById('noResults').textContent = 'Searching...';
+      document.getElementById('noResults').textContent = 'Grok is thinking...';
       document.getElementById('results').innerHTML = '';
+      document.getElementById('explanation').classList.add('hidden');
 
       try {
-        const res = await fetch(XAI_URL, {
+        const response = await fetch(XAI_URL, {
           method: 'POST',
-          headers: { 'Authorization': `Bearer ${XAI_API_KEY}`, 'Content-Type': 'application/json' },
+          headers: {
+            'Authorization': `Bearer ${XAI_API_KEY}`,
+            'Content-Type': 'application/json'
+          },
           body: JSON.stringify({
             model: 'grok-beta',
             messages: [
-              { role: 'system', content: `Return ONLY valid JSON {"matches": [teams], "explanation": "short text"} from this data: ${JSON.stringify(allTeams)}` },
+              { role: 'system', content: `You are a softball recruiting expert. Filter this data for the query. Return ONLY JSON: {"matches": [teams], "explanation": "short summary"}. Data: ${JSON.stringify(allTeams)}` },
               { role: 'user', content: query }
             ],
             temperature: 0.2,
-            max_tokens: 1000
+            max_tokens: 1200
           })
         });
 
-        const json = await res.json();
-        const text = json.choices[0].message.content.trim();
-        const { matches, explanation } = JSON.parse(text);
+        const result = await response.json();
+        const content = result.choices[0].message.content.trim();
+        const { matches, explanation } = JSON.parse(content);
 
         renderResults(matches.length ? matches : allTeams.slice(0,8));
         document.getElementById('explanation').innerHTML = `<p class="text-xl">${explanation}</p>`;
         document.getElementById('explanation').classList.remove('hidden');
+        document.getElementById('noResults').textContent = '';
 
       } catch (err) {
         console.error('AI failed:', err);
         const fallback = fuse.search(query).map(r => r.item);
-        renderResults(fallback.length ? fallback : allTeams);
+        renderResults(fallback.length ? fallback : allTeams.slice(0,8));
         document.getElementById('explanation').innerHTML = '<p class="text-xl">Grok activating — showing keyword matches.</p>';
         document.getElementById('explanation').classList.remove('hidden');
       }
     }
 
     function renderResults(teams) {
-      const c = document.getElementById('results');
-      c.innerHTML = teams.map(t => {
-        const total = Object.values(t.roster).reduce((a,b)=>a+b,0);
-        const change = t.net > 0 ? `+${t.net}` : t.net;
-        const color = t.net > 0 ? 'text-green-600' : 'text-red-600';
+      const container = document.getElementById('results');
+      if (teams.length === 0) { container.innerHTML = '<p class="col-span-full text-center text-gray-500">No matches found.</p>'; return; }
+
+      container.innerHTML = teams.map(team => {
+        const total = Object.values(team.roster).reduce((a,b)=>a+b,0);
+        const change = team.net > 0 ? `+${team.net}` : team.net;
+        const color = team.net > 0 ? 'text-green-600' : 'text-red-600';
+
         return `
-          <div onclick="showTeam('${t.name.replace(/'/g, "\\'")}')" class="bg-white rounded-2xl shadow-xl p-8 hover:shadow-2xl hover:border-4 hover:border-pink-400 transition cursor-pointer text-center">
-            <h3 class="text-3xl font-bold text-pink-600 mb-3">${t.name}</h3>
-            <p class="text-xl mb-6">${t.conf} • ${t.state}</p>
+          <div onclick="showTeam('${team.name.replace(/'/g, "\\'")}')" class="bg-white rounded-2xl shadow-xl p-8 hover:shadow-2xl hover:border-4 hover:border-pink-400 transition cursor-pointer text-center">
+            <h3 class="text-3xl font-bold text-pink-600 mb-3">${team.name}</h3>
+            <p class="text-xl mb-6">${team.conf} • ${team.state}</p>
             <div class="text-lg font-medium mb-6">
-              <div>Win %: ${(t.winPct*100).toFixed(1)}%</div>
-              <div>Newcomers: <strong>${t.newcomers}</strong></div>
+              <div>Win %: ${(team.winPct*100).toFixed(1)}%</div>
+              <div>Newcomers: <strong>${team.newcomers}</strong></div>
             </div>
             <div class="text-2xl font-black bg-gray-100 rounded-full py-4 px-6 inline-block">
               ${total} <span class="text-pink-600">players</span> in 2026 
               <span class="${color}">(${change})</span>
             </div>
-            <p class="mt-6 text-pink-600 font-bold">Tap for full roster</p>
+            <p class="mt-6 text-pink-600 font-bold">Tap for full roster →</p>
           </div>`;
       }).join('');
     }
