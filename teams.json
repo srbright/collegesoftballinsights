@@ -1,35 +1,60 @@
 [
-  {"name":"Oklahoma Sooners","conf":"SEC","state":"OK","winPct":0.932,"transfersIn":6,"transfersOut":5,"net":1,"roster":{"Fr":14,"So":7,"Jr":6,"Sr":4,"Gr":3},"positions":{"P":10,"C":3,"INF":12,"OF":8,"UTIL":1}},
-  {"name":"Texas Longhorns","conf":"SEC","state":"TX","winPct":0.915,"transfersIn":8,"transfersOut":6,"net":2,"roster":{"Fr":15,"So":8,"Jr":7,"Sr":4,"Gr":2},"positions":{"P":11,"C":3,"INF":13,"OF":8,"UTIL":1}},
-  {"name":"Tennessee Lady Vols","conf":"SEC","state":"TN","winPct":0.902,"transfersIn":7,"transfersOut":5,"net":2,"roster":{"Fr":12,"So":8,"Jr":6,"Sr":4,"Gr":2},"positions":{"P":9,"C":3,"INF":11,"OF":8,"UTIL":1}},
-  {"name":"UCLA Bruins","conf":"Big Ten","state":"CA","winPct":0.889,"transfersIn":7,"transfersOut":4,"net":3,"roster":{"Fr":13,"So":7,"Jr":7,"Sr":4,"Gr":2},"positions":{"P":10,"C":3,"INF":12,"OF":7,"UTIL":1}},
-  {"name":"Florida Gators","conf":"SEC","state":"FL","winPct":0.875,"transfersIn":9,"transfersOut":7,"net":2,"roster":{"Fr":13,"So":6,"Jr":6,"Sr":4,"Gr":2},"positions":{"P":10,"C":4,"INF":10,"OF":6,"UTIL":1}},
-  {"name":"LSU Tigers","conf":"SEC","state":"LA","winPct":0.842,"transfersIn":8,"transfersOut":6,"net":2,"roster":{"Fr":11,"So":7,"Jr":6,"Sr":4,"Gr":2},"positions":{"P":9,"C":3,"INF":11,"OF":6,"UTIL":1}},
-  {"name":"Alabama Crimson Tide","conf":"SEC","state":"AL","winPct":0.854,"transfersIn":6,"transfersOut":5,"net":1,"roster":{"Fr":12,"So":8,"Jr":7,"Sr":4,"Gr":2},"positions":{"P":9,"C":3,"INF":12,"OF":7,"UTIL":1}},
-  {"name":"Texas A&M Aggies","conf":"SEC","state":"TX","winPct":0.823,"transfersIn":7,"transfersOut":5,"net":2,"roster":{"Fr":11,"So":7,"Jr":6,"Sr":4,"Gr":2},"positions":{"P":9,"C":3,"INF":11,"OF":6,"UTIL":1}},
-  {"name":"Oregon Ducks","conf":"Big Ten","state":"OR","winPct":0.889,"transfersIn":9,"transfersOut":6,"net":3,"roster":{"Fr":14,"So":7,"Jr":6,"Sr":4,"Gr":2},"positions":{"P":10,"C":3,"INF":12,"OF":7,"UTIL":1}},
-  {"name":"Michigan Wolverines","conf":"Big Ten","state":"MI","winPct":0.856,"transfersIn":7,"transfersOut":4,"net":3,"roster":{"Fr":12,"So":7,"Jr":6,"Sr":4,"Gr":3},"positions":{"P":9,"C":3,"INF":11,"OF":8,"UTIL":1}},
-  {"name":"Arkansas Razorbacks","conf":"SEC","state":"AR","winPct":0.821,"transfersIn":6,"transfersOut":5,"net":1,"roster":{"Fr":11,"So":7,"Jr":6,"Sr":4,"Gr":2},"positions":{"P":9,"C":3,"INF":10,"OF":7,"UTIL":1}},
-  {"name":"South Carolina Gamecocks","conf":"SEC","state":"SC","winPct":0.812,"transfersIn":5,"transfersOut":4,"net":1,"roster":{"Fr":10,"So":7,"Jr":6,"Sr":4,"Gr":3},"positions":{"P":8,"C":3,"INF":11,"OF":7,"UTIL":1}},
-  {"name":"Nebraska Cornhuskers","conf":"Big Ten","state":"NE","winPct":0.812,"transfersIn":6,"transfersOut":5,"net":1,"roster":{"Fr":11,"So":7,"Jr":6,"Sr":4,"Gr":2},"positions":{"P":9,"C":3,"INF":10,"OF":7,"UTIL":1}},
-  {"name":"Auburn Tigers","conf":"SEC","state":"AL","winPct":0.763,"transfersIn":5,"transfersOut":4,"net":1,"roster":{"Fr":10,"So":7,"Jr":6,"Sr":4,"Gr":2},"positions":{"P":8,"C":3,"INF":10,"OF":7,"UTIL":1}},
-  {"name":"Kentucky Wildcats","conf":"SEC","state":"KY","winPct":0.789,"transfersIn":6,"transfersOut":5,"net":1,"roster":{"Fr":11,"So":7,"Jr":5,"Sr":4,"Gr":2},"positions":{"P":8,"C":3,"INF":10,"OF":7,"UTIL":1}},
-  {"name":"Minnesota Golden Gophers","conf":"Big Ten","state":"MN","winPct":0.789,"transfersIn":5,"transfersOut":4,"net":1,"roster":{"Fr":10,"So":7,"Jr":6,"Sr":4,"Gr":2},"positions":{"P":8,"C":3,"INF":10,"OF":7,"UTIL":1}},
-  {"name":"Ole Miss Rebels","conf":"SEC","state":"MS","winPct":0.756,"transfersIn":6,"transfersOut":5,"net":1,"roster":{"Fr":10,"So":7,"Jr":6,"Sr":4,"Gr":2},"positions":{"P":8,"C":3,"INF":10,"OF":7,"UTIL":1}},
-  {"name":"Mississippi State Bulldogs","conf":"SEC","state":"MS","winPct":0.734,"transfersIn":5,"transfersOut":4,"net":1,"roster":{"Fr":10,"So":7,"Jr":6,"Sr":4,"Gr":2},"positions":{"P":8,"C":3,"INF":10,"OF":7,"UTIL":1}},
-  {"name":"Georgia Bulldogs","conf":"SEC","state":"GA","winPct":0.712,"transfersIn":4,"transfersOut":3,"net":1,"roster":{"Fr":9,"So":7,"Jr":6,"Sr":4,"Gr":3},"positions":{"P":8,"C":3,"INF":10,"OF":7,"UTIL":1}},
-  {"name":"Missouri Tigers","conf":"SEC","state":"MO","winPct":0.689,"transfersIn":5,"transfersOut":4,"net":1,"roster":{"Fr":9,"So":7,"Jr":6,"Sr":4,"Gr":2},"positions":{"P":8,"C":3,"INF":10,"OF":6,"UTIL":1}},
-  {"name":"Illinois Fighting Illini","conf":"Big Ten","state":"IL","winPct":0.678,"transfersIn":4,"transfersOut":3,"net":1,"roster":{"Fr":9,"So":7,"Jr":6,"Sr":4,"Gr":2},"positions":{"P":8,"C":3,"INF":9,"OF":7,"UTIL":1}},
-  {"name":"Indiana Hoosiers","conf":"Big Ten","state":"IN","winPct":0.712,"transfersIn":4,"transfersOut":3,"net":1,"roster":{"Fr":9,"So":7,"Jr":6,"Sr":4,"Gr":2},"positions":{"P":8,"C":3,"INF":9,"OF":7,"UTIL":1}},
-  {"name":"Iowa Hawkeyes","conf":"Big Ten","state":"IA","winPct":0.745,"transfersIn":5,"transfersOut":4,"net":1,"roster":{"Fr":10,"So":7,"Jr":6,"Sr":4,"Gr":2},"positions":{"P":8,"C":3,"INF":10,"OF":7,"UTIL":1}},
-  {"name":"Maryland Terrapins","conf":"Big Ten","state":"MD","winPct":0.823,"transfersIn":6,"transfersOut":5,"net":1,"roster":{"Fr":11,"So":7,"Jr":6,"Sr":4,"Gr":2},"positions":{"P":9,"C":3,"INF":10,"OF":7,"UTIL":1}},
-  {"name":"Michigan State Spartans","conf":"Big Ten","state":"MI","winPct":0.734,"transfersIn":5,"transfersOut":4,"net":1,"roster":{"Fr":10,"So":7,"Jr":6,"Sr":4,"Gr":2},"positions":{"P":8,"C":3,"INF":10,"OF":7,"UTIL":1}},
-  {"name":"Northwestern Wildcats","conf":"Big Ten","state":"IL","winPct":0.901,"transfersIn":4,"transfersOut":3,"net":1,"roster":{"Fr":9,"So":7,"Jr":6,"Sr":4,"Gr":3},"positions":{"P":8,"C":3,"INF":10,"OF":7,"UTIL":1}},
-  {"name":"Ohio State Buckeyes","conf":"Big Ten","state":"OH","winPct":0.767,"transfersIn":5,"transfersOut":4,"net":1,"roster":{"Fr":10,"So":7,"Jr":6,"Sr":4,"Gr":2},"positions":{"P":8,"C":3,"INF":10,"OF":7,"UTIL":1}},
-  {"name":"Penn State Nittany Lions","conf":"Big Ten","state":"PA","winPct":0.745,"transfersIn":5,"transfersOut":4,"net":1,"roster":{"Fr":10,"So":7,"Jr":6,"Sr":4,"Gr":2},"positions":{"P":8,"C":3,"INF":10,"OF":7,"UTIL":1}},
-  {"name":"Purdue Boilermakers","conf":"Big Ten","state":"IN","winPct":0.656,"transfersIn":4,"transfersOut":3,"net":1,"roster":{"Fr":9,"So":7,"Jr":6,"Sr":4,"Gr":2},"positions":{"P":8,"C":3,"INF":9,"OF":7,"UTIL":1}},
-  {"name":"Rutgers Scarlet Knights","conf":"Big Ten","state":"NJ","winPct":0.623,"transfersIn":4,"transfersOut":3,"net":1,"roster":{"Fr":9,"So":7,"Jr":6,"Sr":4,"Gr":2},"positions":{"P":7,"C":3,"INF":9,"OF":7,"UTIL":1}},
-  {"name":"USC Trojans","conf":"Big Ten","state":"CA","winPct":0.834,"transfersIn":7,"transfersOut":5,"net":2,"roster":{"Fr":12,"So":7,"Jr":6,"Sr":4,"Gr":2},"positions":{"P":9,"C":3,"INF":11,"OF":7,"UTIL":1}},
-  {"name":"Washington Huskies","conf":"Big Ten","state":"WA","winPct":0.778,"transfersIn":6,"transfersOut":5,"net":1,"roster":{"Fr":11,"So":7,"Jr":6,"Sr":4,"Gr":2},"positions":{"P":9,"C":3,"INF":10,"OF":7,"UTIL":1}},
-  {"name":"Wisconsin Badgers","conf":"Big Ten","state":"WI","winPct":0.712,"transfersIn":5,"transfersOut":4,"net":1,"roster":{"Fr":10,"So":7,"Jr":6,"Sr":4,"Gr":2},"positions":{"P":8,"C":3,"INF":10,"OF":7,"UTIL":1}}
+  {"name":"Oklahoma Sooners","conf":"SEC","state":"OK","winPct":0.932,"transfersIn":6,"transfersOut":5,"net":15,"roster":{"Fr":14,"So":7,"Jr":6,"Sr":4,"Gr":3},"positions":{"P":10,"C":3,"INF":12,"OF":8,"UTIL":1},"players":[
+    {"name":"Payton Jackson","pos":"P","class":"Fr"},{"name":"Kyla Morris","pos":"P","class":"Fr"},{"name":"Sydney Berzon","pos":"P","class":"Jr"},{"name":"Karlie Keeney","pos":"P","class":"So"},{"name":"SJ Geurin","pos":"P","class":"So"},
+    {"name":"Cydney Sanders","pos":"INF","class":"Sr"},{"name":"Alyssa Brito","pos":"INF","class":"Gr"},{"name":"Tiare Jennings","pos":"INF","class":"Sr"},{"name":"Ella Parker","pos":"INF","class":"So"},{"name":"Nelly McEnroe-Marinas","pos":"INF","class":"R-Fr"},
+    {"name":"Jocelyn Erickson","pos":"C","class":"Jr"},{"name":"Riley Ludlam","pos":"C","class":"So"},{"name":"Maya Bland","pos":"C","class":"Fr"},
+    {"name":"Jayda Coleman","pos":"OF","class":"Gr"},{"name":"Rylie Boone","pos":"OF","class":"Gr"},{"name":"Kasidi Pickering","pos":"OF","class":"So"},{"name":"Abby Dayton","pos":"OF","class":"Fr"},{"name":"Kassidy Moore","pos":"OF","class":"Fr"}
+  ]},
+  {"name":"Texas Longhorns","conf":"SEC","state":"TX","winPct":0.915,"transfersIn":8,"transfersOut":6,"net":14,"roster":{"Fr":15,"So":8,"Jr":7,"Sr":4,"Gr":2},"positions":{"P":11,"C":3,"INF":13,"OF":8,"UTIL":1},"players":[
+    {"name":"Teagan Kavan","pos":"P","class":"So"},{"name":"Maci Brown","pos":"P","class":"Fr"},{"name":"Reese Atwood","pos":"C","class":"Jr"},{"name":"Katie Stewart","pos":"INF","class":"So"},{"name":"Viviana Martinez","pos":"INF","class":"So"},
+    {"name":"Mia Scott","pos":"INF","class":"Sr"},{"name":"Alyssa Washington","pos":"INF","class":"Gr"},{"name":"Jazzy Burns","pos":"OF","class":"Jr"},{"name":"Kayden Henry","pos":"OF","class":"Fr"},{"name":"Bella Dayton","pos":"OF","class":"Fr"}
+  ]},
+  {"name":"Tennessee Lady Vols","conf":"SEC","state":"TN","winPct":0.902,"transfersIn":7,"transfersOut":5,"net":12,"roster":{"Fr":12,"So":8,"Jr":6,"Sr":4,"Gr":2},"positions":{"P":9,"C":3,"INF":11,"OF":8,"UTIL":1},"players":[
+    {"name":"Karlyn Pickens","pos":"P","class":"So"},{"name":"Nicola Simpson","pos":"P","class":"Fr"},{"name":"Lair Beautae","pos":"INF","class":"Sr"},{"name":"Laura Mealer","pos":"INF","class":"So"},{"name":"Taylor Pannell","pos":"OF","class":"Sr"},
+    {"name":"Kiki Milloy","pos":"OF","class":"Gr"},{"name":"Rylie West","pos":"C","class":"Fr"},{"name":"Sophia Nugent","pos":"UTIL","class":"Fr"}
+  ]},
+  {"name":"UCLA Bruins","conf":"Big Ten","state":"CA","winPct":0.889,"transfersIn":7,"transfersOut":4,"net":13,"roster":{"Fr":13,"So":7,"Jr":7,"Sr":4,"Gr":2},"positions":{"P":10,"C":3,"INF":12,"OF":7,"UTIL":1},"players":[
+    {"name":"Kaitlyn Terry","pos":"P","class":"Sr"},{"name":"Jordan Woolery","pos":"INF","class":"Jr"},{"name":"Megan Grant","pos":"INF","class":"So"},{"name":"Maya Brady","pos":"UTIL","class":"Gr"},{"name":"Sharlynn Tate","pos":"OF","class":"Sr"}
+  ]},
+  {"name":"Florida Gators","conf":"SEC","state":"FL","winPct":0.875,"transfersIn":9,"transfersOut":7,"net":11,"roster":{"Fr":13,"So":6,"Jr":6,"Sr":4,"Gr":2},"positions":{"P":10,"C":4,"INF":10,"OF":6,"UTIL":1},"players":[
+    {"name":"Keagan Rothrock","pos":"P","class":"So"},{"name":"Ava Brown","pos":"P","class":"Fr"},{"name":"Jocelyn Erickson","pos":"C","class":"Jr"},{"name":"Reagan Walsh","pos":"INF","class":"Sr"},{"name":"Skylar Wallace","pos":"INF","class":"Gr"}
+  ]},
+  {"name":"LSU Tigers","conf":"SEC","state":"LA","winPct":0.842,"transfersIn":8,"transfersOut":6,"net":10,"roster":{"Fr":11,"So":7,"Jr":6,"Sr":4,"Gr":2},"positions":{"P":9,"C":3,"INF":11,"OF":6,"UTIL":1},"players":[
+    {"name":"Sydney Berzon","pos":"P","class":"Jr"},{"name":"Kelley Lynch","pos":"P","class":"Sr"},{"name":"Ali Newland","pos":"OF","class":"So"},{"name":"Ciara Briggs","pos":"OF","class":"Gr"},{"name":"Taylor Pleasants","pos":"INF","class":"Sr"}
+  ]},
+  {"name":"Alabama Crimson Tide","conf":"SEC","state":"AL","winPct":0.854,"transfersIn":6,"transfersOut":5,"net":10,"roster":{"Fr":12,"So":8,"Jr":7,"Sr":4,"Gr":2},"positions":{"P":9,"C":3,"INF":12,"OF":7,"UTIL":1},"players":[
+    {"name":"Jocelyn Briski","pos":"P","class":"So"},{"name":"Kayla Beaver","pos":"P","class":"Gr"},{"name":"Kenzie Cahalan","pos":"INF","class":"So"},{"name":"Bailey Dowling","pos":"INF","class":"Sr"},{"name":"Jenna Johnson","pos":"OF","class":"Gr"}
+  ]},
+  {"name":"Oregon Ducks","conf":"Big Ten","state":"OR","winPct":0.889,"transfersIn":9,"transfersOut":6,"net":12,"roster":{"Fr":14,"So":7,"Jr":6,"Sr":4,"Gr":2},"positions":{"P":10,"C":3,"INF":12,"OF":7,"UTIL":1},"players":[
+    {"name":"Taylour Spencer","pos":"P","class":"Fr"},{"name":"Stevie Hansen","pos":"P","class":"Sr"},{"name":"Ariel Carlson","pos":"OF","class":"So"},{"name":"Vallery Wong","pos":"INF","class":"Jr"}
+  ]},
+  {"name":"Michigan Wolverines","conf":"Big Ten","state":"MI","winPct":0.856,"transfersIn":7,"transfersOut":4,"net":11,"roster":{"Fr":12,"So":7,"Jr":6,"Sr":4,"Gr":3},"positions":{"P":9,"C":3,"INF":11,"OF":8,"UTIL":1},"players":[
+    {"name":"Lauren Derkowski","pos":"P","class":"Sr"},{"name":"Ellie Sieler","pos":"P","class":"Fr"},{"name":"Indiana Langford","pos":"INF","class":"Jr"},{"name":"Keke Tholl","pos":"C","class":"Sr"}
+  ]},
+  {"name":"Texas A&M Aggies","conf":"SEC","state":"TX","winPct":0.823,"transfersIn":7,"transfersOut":5,"net":10,"roster":{"Fr":11,"So":7,"Jr":6,"Sr":4,"Gr":2},"positions":{"P":9,"C":3,"INF":11,"OF":6,"UTIL":1},"players":[
+    {"name":"Emiley Kennedy","pos":"P","class":"Sr"},{"name":"Maddie Penta","pos":"P","class":"Gr"},{"name":"Trinity Cannon","pos":"INF","class":"So"},{"name":"Kramer Eschete","pos":"C","class":"Fr"}
+  ]},
+  {"name":"Arkansas Razorbacks","conf":"SEC","state":"AR","winPct":0.821,"transfersIn":6,"transfersOut":5,"net":9,"roster":{"Fr":11,"So":7,"Jr":6,"Sr":4,"Gr":2},"positions":{"P":9,"C":3,"INF":10,"OF":7,"UTIL":1}},
+  {"name":"South Carolina Gamecocks","conf":"SEC","state":"SC","winPct":0.812,"transfersIn":5,"transfersOut":4,"net":9,"roster":{"Fr":10,"So":7,"Jr":6,"Sr":4,"Gr":3},"positions":{"P":8,"C":3,"INF":11,"OF":7,"UTIL":1}},
+  {"name":"Nebraska Cornhuskers","conf":"Big Ten","state":"NE","winPct":0.812,"transfersIn":6,"transfersOut":5,"net":9,"roster":{"Fr":11,"So":7,"Jr":6,"Sr":4,"Gr":2},"positions":{"P":9,"C":3,"INF":10,"OF":7,"UTIL":1}},
+  {"name":"Auburn Tigers","conf":"SEC","state":"AL","winPct":0.763,"transfersIn":5,"transfersOut":4,"net":9,"roster":{"Fr":10,"So":7,"Jr":6,"Sr":4,"Gr":2},"positions":{"P":8,"C":3,"INF":10,"OF":7,"UTIL":1}},
+  {"name":"Kentucky Wildcats","conf":"SEC","state":"KY","winPct":0.789,"transfersIn":6,"transfersOut":5,"net":9,"roster":{"Fr":11,"So":7,"Jr":5,"Sr":4,"Gr":2},"positions":{"P":8,"C":3,"INF":10,"OF":7,"UTIL":1}},
+  {"name":"Minnesota Golden Gophers","conf":"Big Ten","state":"MN","winPct":0.789,"transfersIn":5,"transfersOut":4,"net":9,"roster":{"Fr":10,"So":7,"Jr":6,"Sr":4,"Gr":2},"positions":{"P":8,"C":3,"INF":10,"OF":7,"UTIL":1}},
+  {"name":"Ole Miss Rebels","conf":"SEC","state":"MS","winPct":0.756,"transfersIn":6,"transfersOut":5,"net":9,"roster":{"Fr":10,"So":7,"Jr":6,"Sr":4,"Gr":2},"positions":{"P":8,"C":3,"INF":10,"OF":7,"UTIL":1}},
+  {"name":"Mississippi State Bulldogs","conf":"SEC","state":"MS","winPct":0.734,"transfersIn":5,"transfersOut":4,"net":9,"roster":{"Fr":10,"So":7,"Jr":6,"Sr":4,"Gr":2},"positions":{"P":8,"C":3,"INF":10,"OF":7,"UTIL":1}},
+  {"name":"Georgia Bulldogs","conf":"SEC","state":"GA","winPct":0.712,"transfersIn":4,"transfersOut":3,"net":9,"roster":{"Fr":9,"So":7,"Jr":6,"Sr":4,"Gr":3},"positions":{"P":8,"C":3,"INF":10,"OF":7,"UTIL":1}},
+  {"name":"Missouri Tigers","conf":"SEC","state":"MO","winPct":0.689,"transfersIn":5,"transfersOut":4,"net":9,"roster":{"Fr":9,"So":7,"Jr":6,"Sr":4,"Gr":2},"positions":{"P":8,"C":3,"INF":10,"OF":6,"UTIL":1}},
+  {"name":"Illinois Fighting Illini","conf":"Big Ten","state":"IL","winPct":0.678,"transfersIn":4,"transfersOut":3,"net":9,"roster":{"Fr":9,"So":7,"Jr":6,"Sr":4,"Gr":2},"positions":{"P":8,"C":3,"INF":9,"OF":7,"UTIL":1}},
+  {"name":"Indiana Hoosiers","conf":"Big Ten","state":"IN","winPct":0.712,"transfersIn":4,"transfersOut":3,"net":9,"roster":{"Fr":9,"So":7,"Jr":6,"Sr":4,"Gr":2},"positions":{"P":8,"C":3,"INF":9,"OF":7,"UTIL":1}},
+  {"name":"Iowa Hawkeyes","conf":"Big Ten","state":"IA","winPct":0.745,"transfersIn":5,"transfersOut":4,"net":9,"roster":{"Fr":10,"So":7,"Jr":6,"Sr":4,"Gr":2},"positions":{"P":8,"C":3,"INF":10,"OF":7,"UTIL":1}},
+  {"name":"Maryland Terrapins","conf":"Big Ten","state":"MD","winPct":0.823,"transfersIn":6,"transfersOut":5,"net":9,"roster":{"Fr":11,"So":7,"Jr":6,"Sr":4,"Gr":2},"positions":{"P":9,"C":3,"INF":10,"OF":7,"UTIL":1}},
+  {"name":"Michigan State Spartans","conf":"Big Ten","state":"MI","winPct":0.734,"transfersIn":5,"transfersOut":4,"net":9,"roster":{"Fr":10,"So":7,"Jr":6,"Sr":4,"Gr":2},"positions":{"P":8,"C":3,"INF":10,"OF":7,"UTIL":1}},
+  {"name":"Northwestern Wildcats","conf":"Big Ten","state":"IL","winPct":0.901,"transfersIn":4,"transfersOut":3,"net":9,"roster":{"Fr":9,"So":7,"Jr":6,"Sr":4,"Gr":3},"positions":{"P":8,"C":3,"INF":10,"OF":7,"UTIL":1}},
+  {"name":"Ohio State Buckeyes","conf":"Big Ten","state":"OH","winPct":0.767,"transfersIn":5,"transfersOut":4,"net":9,"roster":{"Fr":10,"So":7,"Jr":6,"Sr":4,"Gr":2},"positions":{"P":8,"C":3,"INF":10,"OF":7,"UTIL":1}},
+  {"name":"Penn State Nittany Lions","conf":"Big Ten","state":"PA","winPct":0.745,"transfersIn":5,"transfersOut":4,"net":9,"roster":{"Fr":10,"So":7,"Jr":6,"Sr":4,"Gr":2},"positions":{"P":8,"C":3,"INF":10,"OF":7,"UTIL":1}},
+  {"name":"Purdue Boilermakers","conf":"Big Ten","state":"IN","winPct":0.656,"transfersIn":4,"transfersOut":3,"net":9,"roster":{"Fr":9,"So":7,"Jr":6,"Sr":4,"Gr":2},"positions":{"P":8,"C":3,"INF":9,"OF":7,"UTIL":1}},
+  {"name":"Rutgers Scarlet Knights","conf":"Big Ten","state":"NJ","winPct":0.623,"transfersIn":4,"transfersOut":3,"net":9,"roster":{"Fr":9,"So":7,"Jr":6,"Sr":4,"Gr":2},"positions":{"P":7,"C":3,"INF":9,"OF":7,"UTIL":1}},
+  {"name":"USC Trojans","conf":"Big Ten","state":"CA","winPct":0.834,"transfersIn":7,"transfersOut":5,"net":10,"roster":{"Fr":12,"So":7,"Jr":6,"Sr":4,"Gr":2},"positions":{"P":9,"C":3,"INF":11,"OF":7,"UTIL":1}},
+  {"name":"Washington Huskies","conf":"Big Ten","state":"WA","winPct":0.778,"transfersIn":6,"transfersOut":5,"net":9,"roster":{"Fr":11,"So":7,"Jr":6,"Sr":4,"Gr":2},"positions":{"P":9,"C":3,"INF":10,"OF":7,"UTIL":1}},
+  {"name":"Wisconsin Badgers","conf":"Big Ten","state":"WI","winPct":0.712,"transfersIn":5,"transfersOut":4,"net":9,"roster":{"Fr":10,"So":7,"Jr":6,"Sr":4,"Gr":2},"positions":{"P":8,"C":3,"INF":10,"OF":7,"UTIL":1}}
 ]
