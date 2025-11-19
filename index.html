@@ -8,16 +8,12 @@
   <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    .hero {
-      background: linear-gradient(rgba(0,0,0,0.58), rgba(0,0,0,0.58)),
-                  url('https://justwomenssports.com/wp-content/uploads/2025/06/GettyImages-2219054470-1024x683.jpg') center/cover no-repeat;
-      background-attachment: fixed;
-    }
+    .hero { background: linear-gradient(rgba(0,0,0,0.58), rgba(0,0,0,0.58)), url('https://justwomenssports.com/wp-content/uploads/2025/06/GettyImages-2219054470-1024x683.jpg') center/cover no-repeat fixed; }
   </style>
 </head>
 <body class="font-sans text-gray-800">
 
-  <!-- HERO -->
+  <!-- HERO (unchanged) -->
   <header class="hero h-screen flex items-center justify-center text-white text-center px-4">
     <div>
       <h1 class="text-4xl md:text-6xl font-bold mb-4">College Softball Insights</h1>
@@ -28,13 +24,13 @@
 
   <!-- VALUE PROP -->
   <section class="py-20 bg-gray-50 text-center">
-    <div class="max-w-5.org mx-auto px-4">
+    <div class="max-w-5xl mx-auto px-4">
       <h2 class="text-4xl font-bold mb-8">Updated 2025-2026 Roster Insights</h2>
       <div class="grid md:grid-cols-4 gap-8">
         <div class="bg-white p-8 rounded-xl shadow-lg"><h3 class="text-2xl font-bold text-pink-600">$149.99/yr</h3><p>Less than $0.42/day</p></div>
         <div class="bg-white p-8 rounded-xl shadow-lg"><h3 class="text-2xl font-bold text-pink-600">34 Teams</h3><p>SEC + Big Ten</p></div>
-        <div class="bg-white p-8 rounded-xl shadow-lg"><h3 class="text-2xl font-bold text-pink-600">Updated Daily!</h3><p>Portal + signees</p></div>
-        <div class="bg-white p-8 rounded-xl shadow-lg"><h3 class="text-2xl font-bold text-pink-600">Save $7k–$10k</h3><p>Travel & camps</p></div>
+        <div class="bg-white p-8 rounded-xl shadow-lg"><h3 class="text-2xl font-bold text-pink-600">Updated Daily!</h3><p>Portal + Signees</p></div>
+        <div class="bg-white p-8 rounded-xl shadow-lg"><h3 class="text-2xl font-bold text-pink-600">Save $7k–$10k</h3><p>Travel & Camps</p></div>
       </div>
     </div>
   </section>
@@ -54,11 +50,27 @@
     </div>
   </section>
 
-  <!-- TEAM DETAIL -->
+  <!-- TEAM DETAIL (Enhanced with Table & Diff) -->
   <section id="teamDetails" class="py-20 bg-gray-50 hidden">
-    <div class="max-w-5xl mx-auto px-4 text-center">
-      <h2 id="detailTitle" class="text-4xl font-bold mb-10"></h2>
-      <div class="grid md:grid-cols-2 gap-12 max-w-4xl mx-auto">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="text-center mb-8">
+        <h2 id="detailTitle" class="text-4xl font-bold mb-4"></h2>
+        <div id="netChange" class="inline-flex items-center px-4 py-2 rounded-full font-bold text-lg"></div>
+      </div>
+      
+      <!-- Transfer Diff Table -->
+      <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+        <h3 class="text-2xl font-bold mb-4 text-center">Transfer Portal Changes (2025 → 2026)</h3>
+        <table class="w-full border-collapse">
+          <thead><tr class="bg-gray-100"><th class="p-3 text-left">Incoming</th><th class="p-3 text-left">Outgoing</th><th class="p-3 text-left">Net</th></tr></thead>
+          <tbody id="transferTable">
+            <!-- Populated by JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Charts (Bigger, with Totals) -->
+      <div class="grid md:grid-cols-2 gap-12 mb-8">
         <div class="bg-white p-8 rounded-xl shadow-lg">
           <canvas id="classChart"></canvas>
         </div>
@@ -66,13 +78,25 @@
           <canvas id="positionChart"></canvas>
         </div>
       </div>
-      <button onclick="closeDetails()" class="mt-12 inline-block bg-pink-600 text-white px-8 py-4 rounded-full font-bold hover:bg-pink-700 transition">
+
+      <!-- Roster Table (Easy Read, Sortable Placeholder) -->
+      <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+        <h3 class="text-2xl font-bold p-6 text-center bg-gray-50">Full Roster</h3>
+        <table class="w-full" id="rosterTable">
+          <thead class="bg-pink-100"><tr><th class="p-3 text-left">Name</th><th class="p-3 text-left">Pos</th><th class="p-3 text-left">Class</th></tr></thead>
+          <tbody>
+            <!-- Populated by JS - Mock for now -->
+          </tbody>
+        </table>
+      </div>
+
+      <button onclick="closeDetails()" class="mt-12 inline-block bg-pink-600 text-white px-8 py-4 rounded-full font-bold hover:bg-pink-700 transition block mx-auto">
         Back to Search
       </button>
     </div>
   </section>
 
-  <!-- CTA -->
+  <!-- CTA & Footer (unchanged) -->
   <section class="py-20 bg-pink-600 text-white text-center">
     <div class="max-w-4xl mx-auto px-4">
       <h2 class="text-5xl font-bold mb-6">Launch Special: $99 First Year</h2>
@@ -80,12 +104,8 @@
       <a href="#" class="bg-white text-pink-600 hover:bg-gray-100 font-bold py-5 px-12 rounded-full text-xl transition inline-block">Claim Your Spot Now</a>
     </div>
   </section>
+  <footer class="bg-gray-900 text-white py-10 text-center">© 2025 College Softball Insights • Data updated daily</footer>
 
-  <footer class="bg-gray-900 text-white py-10 text-center">
-    © 2025 College Softball Insights • Data updated daily
-  </footer>
-
-  <!-- SAME WORKING SCRIPT FROM LAST MESSAGE (bug-free) -->
   <script>
     let allTeams = [];
     let fuse;
@@ -93,28 +113,22 @@
     let positionChart = null;
     let currentFilter = 'all';
 
-    fetch('teams.json')
-      .then(res => { if (!res.ok) throw new Error(`HTTP ${res.status}`); return res.json(); })
+    // Load data (unchanged)
+    fetch('teams.json').then(res => { if (!res.ok) throw new Error(`HTTP ${res.status}`); return res.json(); })
       .then(data => {
         console.log('Teams loaded:', data.length);
         allTeams = data;
         fuse = new Fuse(allTeams, { keys: ['name', 'conf', 'state'], threshold: 0.3 });
         renderResults(allTeams.slice(0, 12));
       })
-      .catch(err => {
-        console.error('Load error:', err);
-        document.getElementById('noResults').innerHTML = 'Data loading… refresh in 60s or check GitHub repo.';
-      });
+      .catch(err => { console.error('Load error:', err); document.getElementById('noResults').innerHTML = 'Data loading… refresh in 60s.'; });
 
+    // Filters & Search (unchanged)
     document.querySelectorAll('.filter-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         currentFilter = btn.dataset.conf;
-        document.querySelectorAll('.filter-btn').forEach(b => {
-          b.classList.remove('bg-pink-600', 'text-white');
-          b.classList.add('bg-gray-200', 'text-gray-700');
-        });
-        btn.classList.remove('bg-gray-200', 'text-gray-700');
-        btn.classList.add('bg-pink-600', 'text-white');
+        document.querySelectorAll('.filter-btn').forEach(b => { b.classList.remove('bg-pink-600', 'text-white'); b.classList.add('bg-gray-200', 'text-gray-700'); });
+        btn.classList.remove('bg-gray-200', 'text-gray-700'); btn.classList.add('bg-pink-600', 'text-white');
         document.getElementById('searchInput').value = '';
         let filtered = allTeams.filter(t => currentFilter === 'all' || t.conf === currentFilter);
         renderResults(filtered.slice(0, 12));
@@ -134,46 +148,60 @@
     function renderResults(teams) {
       const container = document.getElementById('results');
       const noResults = document.getElementById('noResults');
-      if (teams.length === 0) {
-        container.innerHTML = '';
-        noResults.textContent = allTeams.length ? 'No matches found.' : 'Still loading data…';
-        return;
-      }
+      if (teams.length === 0) { container.innerHTML = ''; noResults.textContent = allTeams.length ? 'No matches.' : 'Loading...'; return; }
       noResults.textContent = '';
-      container.innerHTML = teams.map(team => `
-        <div onclick="showTeam('${team.name.replace(/'/g, "\\'")}')" 
-             class="border-2 border-gray-200 rounded-xl p-8 hover:border-pink-600 hover:shadow-2xl transition cursor-pointer bg-white text-center">
-          <h3 class="font-bold text-2xl text-pink-600 mb-2">${team.name}</h3>
-          <p class="text-lg mb-4">${team.conf} • ${team.state}</p>
-          <div class="grid grid-cols-2 text-sm font-medium mb-6">
-            <div>Win %: ${(team.winPct * 100).toFixed(1)}%</div>
-            <div>Transfers In: ${team.transfers}</div>
+      container.innerHTML = teams.map(team => {
+        const netClass = team.net > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
+        const netText = team.net > 0 ? `+${team.net}` : team.net;
+        return `
+          <div onclick="showTeam('${team.name.replace(/'/g, "\\'")}')" class="border-2 border-gray-200 rounded-xl p-8 hover:border-pink-600 hover:shadow-2xl transition cursor-pointer bg-white text-center">
+            <h3 class="font-bold text-2xl text-pink-600 mb-2">${team.name}</h3>
+            <p class="text-lg mb-4">${team.conf} • ${team.state}</p>
+            <div class="grid grid-cols-2 text-sm font-medium mb-2">
+              <div>Win %: ${(team.winPct * 100).toFixed(1)}%</div>
+              <div>Transfers In: ${team.transfersIn}</div>
+            </div>
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${netClass} mb-6">${netText} Net Change</span>
+            <p class="text-pink-600 font-bold text-lg">View Roster & Diff →</p>
           </div>
-          <p class="text-pink-600 font-bold text-lg">View 2026 Roster →</p>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
     window.showTeam = function(name) {
       const team = allTeams.find(t => t.name === name);
       if (!team) return;
       document.getElementById('detailTitle').textContent = `${team.name} • Updated 2025-2026 Roster`;
+      const netEl = document.getElementById('netChange');
+      netEl.textContent = `Net Roster Change: ${team.net > 0 ? '+' : ''}${team.net}`;
+      netEl.className = `inline-flex items-center px-4 py-2 rounded-full font-bold text-lg ${team.net > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`;
+
+      // Transfer Table
+      document.getElementById('transferTable').innerHTML = `
+        <tr><td class="p-3 border-t">${team.transfersIn} In (e.g., Sydney Berzon from TN)</td><td class="p-3 border-t">${team.transfersOut} Out (e.g., Early Dep: Kennedy Marceaux)</td><td class="p-3 border-t font-bold ${team.net > 0 ? 'text-green-600' : 'text-red-600'}">${team.net > 0 ? '+' : ''}${team.net}</td></tr>
+      `; // Real examples from trackers; expand with full lists
+
+      // Mock Roster Table (from scrape; replace with full data)
+      const mockRoster = team.name === 'Oklahoma Sooners' ? [
+        {name: 'Cydney Sanders', pos: 'INF', class: 'Sr'}, {name: 'Nelly McEnroe-Marinas', pos: 'INF', class: 'R-Fr'}, // ... full from scrape
+      ] : []; // Placeholder - add per team
+      document.getElementById('rosterTable').querySelector('tbody').innerHTML = mockRoster.map(p => `<tr><td class="p-3">${p.name}</td><td class="p-3">${p.pos}</td><td class="p-3">${p.class}</td></tr>`).join('');
+
       document.getElementById('teamDetails').classList.remove('hidden');
       document.getElementById('search').classList.add('hidden');
       document.getElementById('teamDetails').scrollIntoView({ behavior: 'smooth' });
 
-      if (classChart) classChart.destroy();
-      if (positionChart) positionChart.destroy();
+      if (classChart) classChart.destroy(); if (positionChart) positionChart.destroy();
 
+      // Charts with Totals
+      const totalPlayers = Object.values(team.roster).reduce((a, b) => a + b, 0);
       classChart = new Chart(document.getElementById('classChart'), {
-        type: 'doughnut',
-        data: { labels: ['Fr', 'So', 'Jr', 'Sr', 'Gr'], datasets: [{ data: Object.values(team.roster), backgroundColor: ['#FF6B6B','#4ECDC4','#45B7D1','#96CEB4','#FECA57'] }] },
-        options: { plugins: { title: { display: true, text: 'Class Breakdown' } } }
+        type: 'doughnut', data: { labels: ['Fr', 'So', 'Jr', 'Sr', 'Gr'], datasets: [{ data: Object.values(team.roster), backgroundColor: ['#FF6B6B','#4ECDC4','#45B7D1','#96CEB4','#FECA57'] }] },
+        options: { plugins: { title: { display: true, text: `Class Breakdown (${totalPlayers} Total Players)` } } }
       });
 
       positionChart = new Chart(document.getElementById('positionChart'), {
-        type: 'bar',
-        data: { labels: Object.keys(team.positions), datasets: [{ label: 'Players', data: Object.values(team.positions), backgroundColor: '#FF6B6B' }] },
+        type: 'bar', data: { labels: Object.keys(team.positions), datasets: [{ label: 'Players', data: Object.values(team.positions), backgroundColor: '#FF6B6B' }] },
         options: { plugins: { title: { display: true, text: 'Players by Position' } } }
       });
     };
