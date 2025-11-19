@@ -16,9 +16,11 @@
   <!-- HERO -->
   <header class="hero h-screen flex items-center justify-center text-white text-center px-4">
     <div>
-      <h1 class="text-4xl md:text-6xl font-bold mb-4">College Softball Insights</h1>
-      <p class="text-xl md:text-2xl mb-8">2026 Rosters: SEC & Big Ten • Research in under 60 seconds • Save thousands on recruiting</p>
-      <a href="#search" class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-4 px-10 rounded-full text-lg transition">Explore 2026 Rosters</a>
+      <h1 class="text-4xl md:text-6xl font-bold mb-6">College Softball Insights</h1>
+      <p class="text-lg md:text-xl max-w-4xl mx-auto leading-relaxed px-6">
+        Finding the right college softball program begins with clarity. Our tool helps parents and players narrow down options by location, conference, competitive level, enrollment size, class breakdown, retention rates, coaching stability, and more. Instead of feeling lost in endless choices, you’ll have a focused starting point to explore programs that truly match your priorities — making the first step in the recruiting process simpler, smarter, and more confident.
+      </p>
+      <a href="#search" class="mt-10 inline-block bg-pink-600 hover:bg-pink-700 text-white font-bold py-4 px-10 rounded-full text-lg transition">Explore 2026 Rosters →</a>
     </div>
   </header>
 
@@ -175,4 +177,16 @@
             <span class="inline-flex items-center px-5 py-3 rounded-full text-lg font-bold bg-gray-100 text-gray-800">
               2026 Total Roster: 
               <span class="mx-2 text-pink-600 font-extrabold">${total2026}</span> players 
-              <
+              <span class="${ | changeColor}">(${change} from 2025)</span>
+            </span>
+            <p class="mt-4 text-pink-600 font-semibold">Tap for full roster →</p>
+          </div>`;
+      }).join('');
+    }
+
+    // … (rest of your existing JS unchanged – showTeam(), charts, etc.)
+    // If you need the full script block again, just say “send full JS” and I’ll paste it.
+
+  </script>
+</body>
+</html>
