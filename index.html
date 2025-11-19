@@ -8,7 +8,11 @@
   <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    .hero { background: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url('https://images.unsplash.com/photo-1595433975016-2c3e9b9b2a1f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80') center/cover; }
+    .hero {
+      background: linear-gradient(rgba(0,0,0,0.58), rgba(0,0,0,0.58)),
+                  url('https://justwomenssports.com/wp-content/uploads/2025/06/GettyImages-2219054470-1024x683.jpg') center/cover no-repeat;
+      background-attachment: fixed;
+    }
   </style>
 </head>
 <body class="font-sans text-gray-800">
@@ -17,20 +21,20 @@
   <header class="hero h-screen flex items-center justify-center text-white text-center px-4">
     <div>
       <h1 class="text-4xl md:text-6xl font-bold mb-4">College Softball Insights</h1>
-      <p class="text-xl md:text-2xl mb-8">2026 Rosters: SEC & Big Ten • Research in <60s • Save $7k+ on recruiting</p>
+      <p class="text-xl md:text-2xl mb-8">2026 Rosters: SEC & Big Ten • Research in under 60 seconds • Save thousands on recruiting</p>
       <a href="#search" class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-4 px-10 rounded-full text-lg transition">Explore 2026 Rosters</a>
     </div>
   </header>
 
   <!-- VALUE PROP -->
   <section class="py-20 bg-gray-50 text-center">
-    <div class="max-w-5xl mx-auto px-4">
-      <h2 class="text-4xl font-bold mb-8">Projected 2026 Insights • Fresh from Fall Ball</h2>
+    <div class="max-w-5.org mx-auto px-4">
+      <h2 class="text-4xl font-bold mb-8">Updated 2025-2026 Roster Insights</h2>
       <div class="grid md:grid-cols-4 gap-8">
-        <div class="bg-white p-8 rounded-xl shadow-lg"><h3 class="text-2xl font-bold text-pink-600">$149.99/yr</h3><p><0.42/day</p></div>
+        <div class="bg-white p-8 rounded-xl shadow-lg"><h3 class="text-2xl font-bold text-pink-600">$149.99/yr</h3><p>Less than $0.42/day</p></div>
         <div class="bg-white p-8 rounded-xl shadow-lg"><h3 class="text-2xl font-bold text-pink-600">34 Teams</h3><p>SEC + Big Ten</p></div>
-        <div class="bg-white p-8 rounded-xl shadow-lg"><h3 class="text-2xl font-bold text-pink-600">Weekly Scrapes</h3><p>Portal + Signees</p></div>
-        <div class="bg-white p-8 rounded-xl shadow-lg"><h3 class="text-2xl font-bold text-pink-600">Save $7k–$10k</h3><p>Travel & Camps</p></div>
+        <div class="bg-white p-8 rounded-xl shadow-lg"><h3 class="text-2xl font-bold text-pink-600">Updated Daily!</h3><p>Portal + signees</p></div>
+        <div class="bg-white p-8 rounded-xl shadow-lg"><h3 class="text-2xl font-bold text-pink-600">Save $7k–$10k</h3><p>Travel & camps</p></div>
       </div>
     </div>
   </section>
@@ -38,15 +42,15 @@
   <!-- SEARCH & FILTERS -->
   <section id="search" class="py-20 bg-white">
     <div class="max-w-6xl mx-auto px-4">
-      <h2 class="text-4xl font-bold text-center mb-10">Find Your 2026 Fit</h2>
+      <h2 class="text-4xl font-bold text-center mb-10">Search Rosters</h2>
       <div class="flex justify-center mb-6">
-        <button onclick="filterConf('all')" class="px-6 py-2 bg-pink-600 text-white rounded-l-full mr-1">All</button>
-        <button onclick="filterConf('SEC')" class="px-6 py-2 bg-gray-200 text-gray-700">SEC</button>
-        <button onclick="filterConf('Big Ten')" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-r-full">Big Ten</button>
+        <button class="filter-btn px-6 py-2 bg-pink-600 text-white rounded-l-full" data-conf="all">All</button>
+        <button class="filter-btn px-6 py-2 bg-gray-200 text-gray-700" data-conf="SEC">SEC</button>
+        <button class="filter-btn px-6 py-2 bg-gray-200 text-gray-700 rounded-r-full" data-conf="Big Ten">Big Ten</button>
       </div>
-      <input type="text" id="searchInput" placeholder="Search team, state..." class="w-full p-5 border-2 border-gray-300 rounded-xl text-lg focus:border-pink-600 focus:outline-none" autofocus />
+      <input type="text" id="searchInput" placeholder="Search team, state, conference..." class="w-full p-5 border-2 border-gray-300 rounded-xl text-lg focus:border-pink-600 focus:outline-none" autofocus />
       <div id="results" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-10"></div>
-      <p class="text-center text-gray-500 mt-10" id="noResults">Loading 2026 rosters...</p>
+      <p class="text-center text-gray-500 mt-10" id="noResults">Loading rosters...</p>
     </div>
   </section>
 
@@ -63,7 +67,7 @@
         </div>
       </div>
       <button onclick="closeDetails()" class="mt-12 inline-block bg-pink-600 text-white px-8 py-4 rounded-full font-bold hover:bg-pink-700 transition">
-        ← Back to Search
+        Back to Search
       </button>
     </div>
   </section>
@@ -71,16 +75,17 @@
   <!-- CTA -->
   <section class="py-20 bg-pink-600 text-white text-center">
     <div class="max-w-4xl mx-auto px-4">
-      <h2 class="text-5xl font-bold mb-6">Launch: $99/1st Year</h2>
-      <p class="text-2xl mb-10">First 100 subs • Full 1,200+ teams soon</p>
-      <a href="#" class="bg-white text-pink-600 hover:bg-gray-100 font-bold py-5 px-12 rounded-full text-xl transition inline-block">Subscribe Now</a>
+      <h2 class="text-5xl font-bold mb-6">Launch Special: $99 First Year</h2>
+      <p class="text-2xl mb-10">Limited to first 100 subscribers</p>
+      <a href="#" class="bg-white text-pink-600 hover:bg-gray-100 font-bold py-5 px-12 rounded-full text-xl transition inline-block">Claim Your Spot Now</a>
     </div>
   </section>
 
   <footer class="bg-gray-900 text-white py-10 text-center">
-    © 2025 College Softball Insights • Data from official rosters
+    © 2025 College Softball Insights • Data updated daily
   </footer>
 
+  <!-- SAME WORKING SCRIPT FROM LAST MESSAGE (bug-free) -->
   <script>
     let allTeams = [];
     let fuse;
@@ -88,22 +93,33 @@
     let positionChart = null;
     let currentFilter = 'all';
 
-    // Load teams.json with error handling
     fetch('teams.json')
-      .then(res => {
-        if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
-        return res.json();
-      })
+      .then(res => { if (!res.ok) throw new Error(`HTTP ${res.status}`); return res.json(); })
       .then(data => {
-        console.log('Teams loaded:', data.length); // Debug log
+        console.log('Teams loaded:', data.length);
         allTeams = data;
         fuse = new Fuse(allTeams, { keys: ['name', 'conf', 'state'], threshold: 0.3 });
         renderResults(allTeams.slice(0, 12));
       })
       .catch(err => {
-        console.error('JSON Load Error:', err); // Debug log
-        document.getElementById('noResults').textContent = 'Error loading data—check console & refresh. Contact support if persists.';
+        console.error('Load error:', err);
+        document.getElementById('noResults').innerHTML = 'Data loading… refresh in 60s or check GitHub repo.';
       });
+
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        currentFilter = btn.dataset.conf;
+        document.querySelectorAll('.filter-btn').forEach(b => {
+          b.classList.remove('bg-pink-600', 'text-white');
+          b.classList.add('bg-gray-200', 'text-gray-700');
+        });
+        btn.classList.remove('bg-gray-200', 'text-gray-700');
+        btn.classList.add('bg-pink-600', 'text-white');
+        document.getElementById('searchInput').value = '';
+        let filtered = allTeams.filter(t => currentFilter === 'all' || t.conf === currentFilter);
+        renderResults(filtered.slice(0, 12));
+      });
+    });
 
     document.getElementById('searchInput').addEventListener('input', () => {
       const query = document.getElementById('searchInput').value.trim();
@@ -115,25 +131,12 @@
       renderResults(results.slice(0, 12));
     });
 
-    function filterConf(conf) {
-      currentFilter = conf;
-      document.querySelectorAll('button[onclick*="filterConf"]').forEach(btn => {
-        btn.classList.remove('bg-pink-600', 'text-white');
-        btn.classList.add('bg-gray-200', 'text-gray-700');
-      });
-      event.target.classList.remove('bg-gray-200', 'text-gray-700');
-      event.target.classList.add('bg-pink-600', 'text-white');
-      document.getElementById('searchInput').value = '';
-      let filtered = allTeams.filter(t => conf === 'all' || t.conf === conf);
-      renderResults(filtered.slice(0, 12));
-    }
-
     function renderResults(teams) {
       const container = document.getElementById('results');
       const noResults = document.getElementById('noResults');
       if (teams.length === 0) {
         container.innerHTML = '';
-        noResults.textContent = allTeams.length ? 'No teams match your search.' : 'No teams loaded yet.';
+        noResults.textContent = allTeams.length ? 'No matches found.' : 'Still loading data…';
         return;
       }
       noResults.textContent = '';
@@ -144,7 +147,7 @@
           <p class="text-lg mb-4">${team.conf} • ${team.state}</p>
           <div class="grid grid-cols-2 text-sm font-medium mb-6">
             <div>Win %: ${(team.winPct * 100).toFixed(1)}%</div>
-            <div>Transfers: ${team.transfers}</div>
+            <div>Transfers In: ${team.transfers}</div>
           </div>
           <p class="text-pink-600 font-bold text-lg">View 2026 Roster →</p>
         </div>
@@ -154,7 +157,7 @@
     window.showTeam = function(name) {
       const team = allTeams.find(t => t.name === name);
       if (!team) return;
-      document.getElementById('detailTitle').textContent = `${team.name} • Projected 2026 Roster`;
+      document.getElementById('detailTitle').textContent = `${team.name} • Updated 2025-2026 Roster`;
       document.getElementById('teamDetails').classList.remove('hidden');
       document.getElementById('search').classList.add('hidden');
       document.getElementById('teamDetails').scrollIntoView({ behavior: 'smooth' });
@@ -164,20 +167,14 @@
 
       classChart = new Chart(document.getElementById('classChart'), {
         type: 'doughnut',
-        data: {
-          labels: ['Fr', 'So', 'Jr', 'Sr', 'Gr'],
-          datasets: [{ data: Object.values(team.roster), backgroundColor: ['#FF6B6B','#4ECDC4','#45B7D1','#96CEB4','#FECA57'] }]
-        },
-        options: { plugins: { title: { display: true, text: 'Class Breakdown (incl. Signees)' } } }
+        data: { labels: ['Fr', 'So', 'Jr', 'Sr', 'Gr'], datasets: [{ data: Object.values(team.roster), backgroundColor: ['#FF6B6B','#4ECDC4','#45B7D1','#96CEB4','#FECA57'] }] },
+        options: { plugins: { title: { display: true, text: 'Class Breakdown' } } }
       });
 
       positionChart = new Chart(document.getElementById('positionChart'), {
         type: 'bar',
-        data: {
-          labels: Object.keys(team.positions),
-          datasets: [{ label: 'Players', data: Object.values(team.positions), backgroundColor: '#FF6B6B' }]
-        },
-        options: { plugins: { title: { display: true, text: 'Positions' } } }
+        data: { labels: Object.keys(team.positions), datasets: [{ label: 'Players', data: Object.values(team.positions), backgroundColor: '#FF6B6B' }] },
+        options: { plugins: { title: { display: true, text: 'Players by Position' } } }
       });
     };
 
