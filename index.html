@@ -118,34 +118,31 @@
 
   <script>
     let allTeams = [], fuse, classChart = null, positionChart = null;
-    const XAI_API_KEY = 'xai-dEQaTjpf1wXo9OFgveiAksjyhZlCo59vwEhXldUdAxTquerIfvNP6p7P4RtNi0DPFppdMz4TmtyhnhpV'; // ← PASTE YOUR NEW KEY HERE AFTER REGENERATING
+    const XAI_API_KEY = 'xai-dEQaTjpf1wXo9OFgveiAksjyhZlCo59vwEhXldUdAxTquerIfvNP6p7P4RtNi0DPFppdMz4TmtyhnhpV'; // ← PASTE YOUR NEWEST KEY HERE
     const XAI_URL = 'https://api.x.ai/v1/chat/completions';
 
-    // Load data
     fetch('teams.json')
       .then(r => r.json())
       .then(data => {
         allTeams = data;
         fuse = new Fuse(allTeams, {keys: ['name','conf','state'], threshold: 0.3});
-        document.getElementById('noResults').textContent = 'Type your ideal program above to see matches...';
-        renderResults(allTeams.slice(0,12)); // Show teams immediately on load
+        document.getElementById('noResults').textContent = 'Type your ideal program above...';
+        renderResults(allTeams); // Show all teams on load
       })
       .catch(err => {
         console.error('teams.json failed:', err);
-        document.getElementById('noResults').textContent = 'Data loading...';
+        document.getElementById('noResults').textContent = 'Loading data...';
       });
 
-    // Search triggers
     document.getElementById('searchBtn').addEventListener('click', runAISearch);
     document.getElementById('aiSearchInput').addEventListener('keypress', e => { if (e.key === 'Enter') runAISearch(); });
 
     async function runAISearch() {
       const query = document.getElementById('aiSearchInput').value.trim();
-      
-      // If empty, show all teams
+
       if (!query) {
-        renderResults(allTeams.slice(0,12));
-        document.getElementById('noResults').textContent = 'Browse all 34 programs below.';
+        renderResults(allTeams);
+        document.getElementById('noResults').textContent = 'Showing all 34 programs';
         document.getElementById('explanation').classList.add('hidden');
         return;
       }
@@ -164,47 +161,54 @@
           body: JSON.stringify({
             model: 'grok-beta',
             messages: [
-              { role: 'system', content: `You are the best college softball recruiting expert. Given this dataset of 34 Power conference teams and the user's request, return ONLY valid JSON: {"matches": [team objects], "explanation": "1-2 sentence summary"}. Data: ${JSON.stringify(allTeams)}` },
+              { 
+                role: 'system', 
+                content: `You are a college softball recruiting expert. Return ONLY valid JSON with "matches" (array of team objects) and "explanation" (1-2 sentences). NEVER return empty matches — if nothing matches perfectly, return the 8-12 closest teams. Data: ${JSON.stringify(allTeams)}`
+              },
               { role: 'user', content: query }
             ],
-            temperature: 0.2,
+            temperature: 0.4,
             max_tokens: 1200
           })
         });
 
-        if (!response.ok) throw new Error(`API error: ${response.status}`);
+        if (!response.ok) throw new Error('API error');
 
         const result = await response.json();
-        const content = result.choices[0].message.content.trim();
-        const { matches, explanation } = JSON.parse(content);
+        const text = result.choices[0].message.content.trim();
+        const jsonMatch = text.match(/\{[\s\S]*\}/);
+        const parsed = jsonMatch ? JSON.parse(jsonMatch[0]) : { matches: allTeams.slice(0,12), explanation: "Here are programs that match your request." };
 
-        renderResults(matches);
-        document.getElementById('explanation').innerHTML = `<p class="text-xl">${explanation}</p>`;
+        renderResults(parsed.matches.length ? parsed.matches : allTeams.slice(0,12));
+        document.getElementById('explanation').innerHTML = `<p class="text-xl">${parsed.explanation}</p>`;
         document.getElementById('explanation').classList.remove('hidden');
         document.getElementById('noResults').textContent = '';
 
       } catch (err) {
-        console.error('AI Search failed:', err);
-        // Fallback — show all teams so site never feels broken
-        document.getElementById('noResults').innerHTML = 'AI search activating (beta delay) — showing all programs for now.';
-        renderResults(allTeams.slice(0,12));
-        document.getElementById('explanation').innerHTML = '<p class="text-lg">Grok will be ready soon. Here are all 34 SEC & Big Ten programs to explore in the meantime.</p>';
+        console.log('Grok not ready — showing all teams');
+        renderResults(allTeams);
+        document.getElementById('explanation').innerHTML = 
+          '<p class="text-xl">Grok is warming up (beta delay). Here are all 34 SEC & Big Ten programs to explore in the meantime.</p>';
         document.getElementById('explanation').classList.remove('hidden');
+        document.getElementById('noResults').textContent = '';
       }
     }
 
     function renderResults(teams) {
       const container = document.getElementById('results');
-      if (teams.length === 0) { container.innerHTML = '<p class="col-span-full text-center text-gray-500">No matches found.</p>'; return; }
+      if (!teams || teams.length === 0) {
+        container.innerHTML = '<p class="col-span-full text-center text-gray-500 text-xl">No matches found.</p>';
+        return;
+      }
 
       container.innerHTML = teams.map(team => {
-        const total = Object.values(team.roster).reduce((a,b)=>a+b,0);
+        const total = Object.values(team.roster).reduce((a,b) => a + b, 0);
         const change = team.net > 0 ? `+${team.net}` : team.net;
         const color = team.net > 0 ? 'text-green-600' : 'text-red-600';
 
         return `
           <div onclick="showTeam('${team.name.replace(/'/g, "\\'")}')" class="bg-white rounded-2xl shadow-xl p-8 hover:shadow-2xl hover:border-4 hover:border-pink-400 transition cursor-pointer text-center">
-            <h3 class="text-3xl font-bold text-pink-600 mb-3">${team.name}</h3>
+            <h3 class="text3xl font-bold text-pink-600 mb-3">${team.name}</h3>
             <p class="text-xl mb-6">${team.conf} • ${team.state}</p>
             <div class="text-lg font-medium mb-6">
               <div>Win %: ${(team.winPct*100).toFixed(1)}%</div>
@@ -219,11 +223,54 @@
       }).join('');
     }
 
-    // showTeam, closeDetails, charts — same as before (kept for brevity)
-    // Paste your existing showTeam() and closeDetails() functions here if not already present
+    window.showTeam = function(name) {
+      const team = allTeams.find(t => t.name === name);
+      if (!team) return;
+      document.getElementById('search').classList.add('hidden');
+      document.getElementById('teamDetails').classList.remove('hidden');
+      document.getElementById('detailTitle').textContent = team.name;
 
-    window.showTeam = function(name) { /* your existing showTeam code */ };
-    function closeDetails() { /* your existing closeDetails code */ };
+      const net = team.net;
+      const netEl = document.getElementById('netChange');
+      netEl.textContent = net > 0 ? `+${net} Net Growth` : `${net} Net Change`;
+      netEl.className = net > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
+      netEl.classList.add('px-6','py-3','rounded-full','font-bold','text-xl');
+
+      document.getElementById('rosterChangeTable').innerHTML = `
+        <tr><td class="p-5">${team.newcomers} added</td>
+            <td class="p-5">${team.transfersOut || '—'}</td>
+            <td class="p-5 font-bold text-2xl ${net>0?'text-green-600':'text-red-600'}">${net > 0 ? '+' : ''}${net}</td></tr>`;
+
+      document.getElementById('newcomerBreakdown').textContent = `${team.newcomers} (${team.roster.Fr} freshmen + ${team.transfersIn} transfers)`;
+
+      if (classChart) classChart.destroy();
+      if (positionChart) positionChart.destroy();
+
+      classChart = new Chart(document.getElementById('classChart'), {
+        type: 'doughnut',
+        data: { labels: ['Fr','So','Jr','Sr','Gr'], datasets: [{ data: Object.values(team.roster), backgroundColor: ['#ff69b4','#ff1493','#c71585','#db7093','#ff6eb4'] }] },
+        options: { plugins: { legend: { position: 'bottom' } } }
+      });
+      positionChart = new Chart(document.getElementById('positionChart'), {
+        type: 'doughnut',
+        data: { labels: Object.keys(team.positions), datasets: [{ data: Object.values(team.positions), backgroundColor: ['#ff69b4','#ff1493','#c71585','#db7093'] }] },
+        options: { plugins: { legend: { position: 'bottom' } } }
+      });
+
+      const tbody = document.querySelector('#rosterTable tbody');
+      tbody.innerHTML = team.players?.map(p => `
+        <tr class="hover:bg-pink-50">
+          <td class="p-5">${p.name}</td>
+          <td class="p-5 text-center font-medium">${p.pos}</td>
+          <td class="p-5 text-center">${p.class}</td>
+        </tr>`).join('') || '<tr><td colspan="3" class="p-12 text-center text-gray-500">Full roster coming soon</td></tr>';
+    };
+
+    function closeDetails() {
+      document.getElementById('teamDetails').classList.add('hidden');
+      document.getElementById('search').classList.remove('hidden');
+      window.scrollTo(0,0);
+    }
   </script>
 </body>
 </html>
