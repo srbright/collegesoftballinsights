@@ -8,10 +8,7 @@
   <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    .hero {
-      background: linear-gradient(rgba(0,0,0,0.58), rgba(0,0,0,0.58)),
-                  url('https://justwomenssports.com/wp-content/uploads/2025/06/GettyImages-2219054470-1024x683.jpg') center/cover no-repeat fixed;
-    }
+    .hero { background: linear-gradient(rgba(0,0,0,0.58), rgba(0,0,0,0.58)), url('https://justwomenssports.com/wp-content/uploads/2025/06/GettyImages-2219054470-1024x683.jpg') center/cover no-repeat fixed; }
   </style>
 </head>
 <body class="font-sans text-gray-800">
@@ -61,11 +58,11 @@
         <div id="netChange" class="inline-flex items-center px-4 py-2 rounded-full font-bold text-lg"></div>
       </div>
 
-      <!-- Roster Change Summary (neutral & accurate) -->
+      <!-- Roster Change Summary -->
       <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
         <h3 class="text-2xl font-bold mb-4 text-center">2025 → 2026 Roster Change Summary</h3>
         <p class="text-center text-gray-600 mb-6 text-sm">Includes returning players, freshmen, transfers, and walk-ons</p>
-        <table class="w-full border-collapse text-lg">
+        <table class="w-full border-collapse text-lg mb-6">
           <thead>
             <tr class="bg-gray-100">
               <th class="p-4 text-left">Added to Roster</th>
@@ -75,16 +72,16 @@
           </thead>
           <tbody id="rosterChangeTable"></tbody>
         </table>
+        <div class="text-center text-sm text-gray-600">
+          <strong>Breakdown of the added players:</strong><br>
+          <span id="newcomerBreakdown"></span>
+        </div>
       </div>
 
       <!-- Charts -->
       <div class="grid md:grid-cols-2 gap-12 mb-12">
-        <div class="bg-white p-8 rounded-xl shadow-lg">
-          <canvas id="classChart"></canvas>
-        </div>
-        <div class="bg-white p-8 rounded-xl shadow-lg">
-          <canvas id="positionChart"></canvas>
-        </div>
+        <div class="bg-white p-8 rounded-xl shadow-lg"><canvas id="classChart"></canvas></div>
+        <div class="bg-white p-8 rounded-xl shadow-lg"><canvas id="positionChart"></canvas></div>
       </div>
 
       <!-- Full Roster Table -->
@@ -110,7 +107,7 @@
     </div>
   </section>
 
-  <!-- CTA -->
+  <!-- CTA & Footer -->
   <section class="py-20 bg-pink-600 text-white text-center">
     <div class="max-w-4xl mx-auto px-4">
       <h2 class="text-5xl font-bold mb-6">Launch Special: $99 First Year</h2>
@@ -118,49 +115,35 @@
       <a href="#" class="bg-white text-pink-600 hover:bg-gray-100 font-bold py-5 px-12 rounded-full text-xl transition inline-block">Claim Your Spot Now</a>
     </div>
   </section>
-
-  <footer class="bg-gray-900 text-white py-10 text-center">
-    © 2025 College Softball Insights • Data updated daily
-  </footer>
+  <footer class="bg-gray-900 text-white py-10 text-center">© 2025 College Softball Insights • Data updated daily</footer>
 
   <script>
-    let allTeams = [];
-    let fuse;
-    let classChart = null;
-    let positionChart = null;
-    let currentFilter = 'all';
+    let allTeams = [], fuse, classChart = null, positionChart = null, currentFilter = 'all';
 
-    // Load teams.json
     fetch('teams.json')
       .then(res => { if (!res.ok) throw new Error(`HTTP ${res.status}`); return res.json(); })
       .then(data => {
         console.log('Teams loaded:', data.length);
         allTeams = data;
-        fuse = new Fuse(allTeams, { keys: ['name', 'conf', 'state'], threshold: 0.3 });
-        renderResults(allTeams.slice(0, 12));
+        fuse = new Fuse(allTeams, { keys: ['name','conf','state'], threshold: 0.3 });
+        renderResults(allTeams.slice(0,12));
       })
       .catch(err => {
         console.error('Load error:', err);
-        document.getElementById('noResults').innerHTML = 'Data loading… refresh in 60s or check GitHub repo.';
+        document.getElementById('noResults').innerHTML = 'Data loading… refresh in 60s.';
       });
 
-    // Filter buttons
     document.querySelectorAll('.filter-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         currentFilter = btn.dataset.conf;
-        document.querySelectorAll('.filter-btn').forEach(b => {
-          b.classList.remove('bg-pink-600', 'text-white');
-          b.classList.add('bg-gray-200', 'text-gray-700');
-        });
-        btn.classList.remove('bg-gray-200', 'text-gray-700');
-        btn.classList.add('bg-pink-600', 'text-white');
+        document.querySelectorAll('.filter-btn').forEach(b => { b.classList.remove('bg-pink-600','text-white'); b.classList.add('bg-gray-200','text-gray-700'); });
+        btn.classList.remove('bg-gray-200','text-gray-700'); btn.classList.add('bg-pink-600','text-white');
         document.getElementById('searchInput').value = '';
         let filtered = allTeams.filter(t => currentFilter === 'all' || t.conf === currentFilter);
-        renderResults(filtered.slice(0, 12));
+        renderResults(filtered.slice(0,12));
       });
     });
 
-    // Search
     document.getElementById('searchInput').addEventListener('input', () => {
       const query = document.getElementById('searchInput').value.trim();
       let results = allTeams.filter(t => currentFilter === 'all' || t.conf === currentFilter);
@@ -168,98 +151,28 @@
         const fuseResults = fuse.search(query).map(r => r.item);
         results = results.filter(t => fuseResults.some(fr => fr.name === t.name));
       }
-      renderResults(results.slice(0, 12));
+      renderResults(results.slice(0,12));
     });
 
     function renderResults(teams) {
       const container = document.getElementById('results');
       const noResults = document.getElementById('noResults');
-      if (teams.length === 0) {
-        container.innerHTML = '';
-        noResults.textContent = allTeams.length ? 'No matches found.' : 'Still loading data…';
-        return;
-      }
+      if (teams.length === 0) { container.innerHTML = ''; noResults.textContent = allTeams.length ? 'No matches.' : 'Loading...'; return; }
       noResults.textContent = '';
       container.innerHTML = teams.map(team => {
-        const netClass = team.net > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
-        const netText = team.net > 0 ? `↑ ${team.net} Growth` : `↓ ${Math.abs(team.net)} Loss`;
+        const total2026 = Object.values(team.roster).reduce((a, b) => a + b, 0);
+        const change = team.net > 0 ? `+${team.net}` : team.net < 0 ? `${team.net}` : 'no change';
+        const changeColor = team.net > 0 ? 'text-green-600' : team.net < 0 ? 'text-red-600' : 'text-gray-600';
+
         return `
-          <div onclick="showTeam('${team.name.replace(/'/g, "\\'")}')" 
-               class="border-2 border-gray-200 rounded-xl p-8 hover:border-pink-600 hover:shadow-2xl transition cursor-pointer bg-white text-center">
+          <div onclick="showTeam('${team.name.replace(/'/g, "\\'")}')" class="border-2 border-gray-200 rounded-xl p-8 hover:border-pink-600 hover:shadow-2xl transition cursor-pointer bg-white text-center">
             <h3 class="font-bold text-2xl text-pink-600 mb-2">${team.name}</h3>
             <p class="text-lg mb-4">${team.conf} • ${team.state}</p>
             <div class="grid grid-cols-2 text-sm font-medium mb-4">
-              <div>Win %: ${(team.winPct * 100).toFixed(1)}%</div>
-              <div>Transfers In: ${team.transfersIn}</div>
+              <div>Win %: ${(team.winPct*100).toFixed(1)}%</div>
+              <div class="font-semibold">Newcomers: ${team.newcomers}</div>
             </div>
-            <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold ${netClass}">${netText}</span>
-            <p class="text-pink-600 font-bold text-lg mt-6">View Full Roster →</p>
-          </div>
-        `;
-      }).join('');
-    }
-
-    window.showTeam = function(name) {
-      const team = allTeams.find(t => t.name === name);
-      if (!team) return;
-
-      document.getElementById('detailTitle').textContent = `${team.name} • Updated 2025-2026 Roster`;
-      const netEl = document.getElementById('netChange');
-      netEl.textContent = `Net Roster Change: ${team.net > 0 ? '+' : ''}${team.net}`;
-      netEl.className = `inline-flex items-center px-4 py-2 rounded-full font-bold text-lg ${team.net > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`;
-
-      // Roster Change Summary
-      document.getElementById('rosterChangeTable').innerHTML = `
-        <tr>
-          <td class="p-4 border-t text-green-600 font-medium">+${team.transfersIn + (team.roster.Fr || 0)} players</td>
-          <td class="p-4 border-t text-red-600 font-medium">–${team.transfersOut} players</td>
-          <td class="p-4 border-t font-bold text-xl ${team.net > 0 ? 'text-green-600' : 'text-red-600'}">
-            ${team.net > 0 ? '+' : ''}${team.net}
-          </td>
-        </tr>
-      `;
-
-      // Full Roster Table
-      const tbody = document.querySelector('#rosterTable tbody');
-      if (team.players && team.players.length > 0) {
-        tbody.innerHTML = team.players.map(p => `
-          <tr class="hover:bg-gray-50">
-            <td class="p-4 border-t">${p.name}</td>
-            <td class="p-4 border-t text-center">${p.pos}</td>
-            <td class="p-4 border-t text-center font-medium">${p.class}</td>
-          </tr>
-        `).join('');
-      } else {
-        tbody.innerHTML = `<tr><td colspan="3" class="p-12 text-center text-gray-500 italic">Full roster coming soon — updated daily!</td></tr>`;
-      }
-
-      // Charts
-      const totalPlayers = Object.values(team.roster).reduce((a, b) => a + b, 0);
-      if (classChart) classChart.destroy();
-      if ( scallopsChart) positionChart.destroy();
-
-      classChart = new Chart(document.getElementById('classChart'), {
-        type: 'doughnut',
-        data: { labels: ['Fr', 'So', 'Jr', 'Sr', 'Gr'], datasets: [{ data: Object.values(team.roster), backgroundColor: ['#FF6B6B','#4ECDC4','#45B7D1','#96CEB4','#FECA57'] }] },
-        options: { plugins: { title: { display: true, text: `Class Breakdown (${totalPlayers} players)` } } }
-      });
-
-      positionChart = new Chart(document.getElementById('positionChart'), {
-        type: 'bar',
-        data: { labels: Object.keys(team.positions), datasets: [{ label: 'Players', data: Object.values(team.positions), backgroundColor: '#FF6B6B' }] },
-        options: { plugins: { title: { display: true, text: 'Players by Position' } } }
-      });
-
-      document.getElementById('teamDetails').classList.remove('hidden');
-      document.getElementById('search').classList.add('hidden');
-      document.getElementById('teamDetails').scrollIntoView({ behavior: 'smooth' });
-    };
-
-    window.closeDetails = function() {
-      document.getElementById('teamDetails').classList.add('hidden');
-      document.getElementById('search').classList.remove('hidden');
-      document.getElementById('searchInput').focus();
-    };
-  </script>
-</body>
-</html>
+            <span class="inline-flex items-center px-5 py-3 rounded-full text-lg font-bold bg-gray-100 text-gray-800">
+              2026 Total Roster: 
+              <span class="mx-2 text-pink-600 font-extrabold">${total2026}</span> players 
+              <
