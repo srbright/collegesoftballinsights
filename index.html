@@ -4,7 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>College Softball Insights</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- PRODUCTION TAILWIND (no more CDN warning) -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.1/dist/tailwind.min.css" rel="stylesheet">
+
   <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
@@ -60,7 +63,7 @@
 
     <div id="explanation" class="max-w-4xl mx-auto mt-12 p-8 bg-blue-50 rounded-2xl text-lg font-medium hidden"></div>
     <div id="results" class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10 mt-16 px-6"></div>
-    <p class="text-center text-gray-500 mt-12 text-lg" id="noResults">Type your ideal program above to see matches...</p>
+    <p class="text-center text-gray-500 mt-12 text-lg" id="noResults">Loading programs...</p>
   </section>
 
   <!-- TEAM DETAIL -->
@@ -118,118 +121,83 @@
 
   <script>
     let allTeams = [], fuse, classChart = null, positionChart = null;
-    const XAI_API_KEY = 'xai-dEQaTjpf1wXo9OFgveiAksjyhZlCo59vwEhXldUdAxTquerIfvNP6p7P4RtNi0DPFppdMz4TmtyhnhpV'; // ← Your key (will work when activated)
+    const XAI_API_KEY = 'xai-dEQaTjpf1wXo9OFgveiAksjyhZlCo59vwEhXldUdAxTquerIfvNP6p7P4RtNi0DPFppdMz4TmtyhnhpV'; // ← Replace with your fresh key
     const XAI_URL = 'https://api.x.ai/v1/chat/completions';
 
-    // Load teams
     fetch('teams.json')
       .then(r => r.json())
       .then(data => {
         allTeams = data;
         fuse = new Fuse(allTeams, {keys: ['name','conf','state'], threshold: 0.3});
-        showAllTeams(); // Show all on load
+        renderResults(allTeams);
+        document.getElementById('noResults').textContent = '34 programs loaded — type above to search';
       })
       .catch(err => {
-        console.error('teams.json error:', err);
-        document.getElementById('noResults').textContent = 'Loading data...';
+        console.error('Data error:', err);
+        document.getElementById('noResults').textContent = 'teams.json missing — re-upload to repo';
       });
 
-    function showAllTeams() {
-      renderResults(allTeams);
-      document.getElementById('noResults').textContent = '';
-      document.getElementById('explanation').innerHTML = 
-        '<p class="text-xl">Here are all 34 SEC & Big Ten programs to explore.</p>';
-      document.getElementById('explanation').classList.remove('hidden');
-    }
+    document.getElementById('searchBtn').onclick = runAISearch;
+    document.getElementById('aiSearchInput').onkeypress = e => { if (e.key === 'Enter') runAISearch(); };
 
-    document.getElementById('searchBtn').addEventListener('click', runSearch);
-    document.getElementById('aiSearchInput').addEventListener('keypress', e => { if (e.key === 'Enter') runSearch(); });
-
-    async function runSearch() {
+    async function runAISearch() {
       const query = document.getElementById('aiSearchInput').value.trim();
-
-      if (!query) {
-        showAllTeams();
-        return;
-      }
+      if (!query) { renderResults(allTeams); return; }
 
       document.getElementById('noResults').textContent = 'Searching...';
       document.getElementById('results').innerHTML = '';
-      document.getElementById('explanation').classList.add('hidden');
 
-      // Try Grok first
       try {
-        const response = await fetch(XAI_URL, {
+        const res = await fetch(XAI_URL, {
           method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${XAI_API_KEY}`,
-            'Content-Type': 'application/json'
-          },
+          headers: { 'Authorization': `Bearer ${XAI_API_KEY}`, 'Content-Type': 'application/json' },
           body: JSON.stringify({
             model: 'grok-beta',
             messages: [
-              { role: 'system', content: `Return ONLY valid JSON with "matches" (array of team objects) and "explanation" (1-2 sentences). If no perfect match, return closest 8-12. Data: ${JSON.stringify(allTeams)}` },
+              { role: 'system', content: `Return ONLY valid JSON {"matches": [teams], "explanation": "short text"} from this data: ${JSON.stringify(allTeams)}` },
               { role: 'user', content: query }
             ],
-            temperature: 0.4,
-            max_tokens: 1200
+            temperature: 0.2,
+            max_tokens: 1000
           })
         });
 
-        if (!response.ok) throw new Error('API error');
+        const json = await res.json();
+        const text = json.choices[0].message.content.trim();
+        const { matches, explanation } = JSON.parse(text);
 
-        const result = await response.json();
-        const text = result.choices[0].message.content.trim();
-        const json = text.match(/\{[\s\S]*\}/) ? JSON.parse(text.match(/\{[\s\S]*\}/)[0]) : null;
+        renderResults(matches.length ? matches : allTeams.slice(0,8));
+        document.getElementById('explanation').innerHTML = `<p class="text-xl">${explanation}</p>`;
+        document.getElementById('explanation').classList.remove('hidden');
 
-        if (json && json.matches && json.matches.length > 0) {
-          renderResults(json.matches);
-          document.getElementById('explanation').innerHTML = `<p class="text-xl">${json.explanation}</p>`;
-          document.getElementById('explanation').classList.remove('hidden');
-          document.getElementById('noResults').textContent = '';
-          return;
-        }
       } catch (err) {
-        console.log('Grok not ready — using smart fallback');
+        console.error('AI failed:', err);
+        const fallback = fuse.search(query).map(r => r.item);
+        renderResults(fallback.length ? fallback : allTeams);
+        document.getElementById('explanation').innerHTML = '<p class="text-xl">Grok activating — showing keyword matches.</p>';
+        document.getElementById('explanation').classList.remove('hidden');
       }
-
-      // Fuse.js fallback
-      const fuseResult = fuse.search(query);
-      const teams = fuseResult.length > 0 ? fuseResult.map(r => r.item) : allTeams;
-
-      renderResults(teams);
-      document.getElementById('explanation').innerHTML = 
-        `<p class="text-xl">Found ${teams.length} program${teams.length === 1 ? '' : 's'} matching "${query}"</p>`;
-      document.getElementById('explanation').classList.remove('hidden
-
-      document.getElementById('noResults').textContent = '';
     }
 
     function renderResults(teams) {
-      const container = document.getElementById('results');
-      if (!teams || teams.length === 0) {
-        container.innerHTML = '<p class="col-span-full text-center text-gray-500 text-xl">No matches found.</p>';
-        return;
-      }
-
-      container.innerHTML = teams.map(team => {
-        const total = Object.values(team.roster).reduce((a,b) => a + b, 0);
-        const change = team.net > 0 ? `+${team.net}` : team.net;
-        const color = team.net > 0 ? 'text-green-600' : 'text-red-600';
-
+      const c = document.getElementById('results');
+      c.innerHTML = teams.map(t => {
+        const total = Object.values(t.roster).reduce((a,b)=>a+b,0);
+        const change = t.net > 0 ? `+${t.net}` : t.net;
+        const color = t.net > 0 ? 'text-green-600' : 'text-red-600';
         return `
-          <div onclick="showTeam('${team.name.replace(/'/g, "\\'")}')" class="bg-white rounded-2xl shadow-xl p-8 hover:shadow-2xl hover:border-4 hover:border-pink-400 transition cursor-pointer text-center">
-            <h3 class="text-3xl font-bold text-pink-600 mb-3">${team.name}</h3>
-            <p class="text-xl mb-6">${team.conf} • ${team.state}</p>
+          <div onclick="showTeam('${t.name.replace(/'/g, "\\'")}')" class="bg-white rounded-2xl shadow-xl p-8 hover:shadow-2xl hover:border-4 hover:border-pink-400 transition cursor-pointer text-center">
+            <h3 class="text-3xl font-bold text-pink-600 mb-3">${t.name}</h3>
+            <p class="text-xl mb-6">${t.conf} • ${t.state}</p>
             <div class="text-lg font-medium mb-6">
-              <div>Win %: ${(team.winPct*100).toFixed(1)}%</div>
-              <div>Newcomers: <strong>${team.newcomers}</strong></div>
+              <div>Win %: ${(t.winPct*100).toFixed(1)}%</div>
+              <div>Newcomers: <strong>${t.newcomers}</strong></div>
             </div>
             <div class="text-2xl font-black bg-gray-100 rounded-full py-4 px-6 inline-block">
               ${total} <span class="text-pink-600">players</span> in 2026 
               <span class="${color}">(${change})</span>
             </div>
-            <p class="mt-6 text-pink-600 font-bold">Tap for full roster →</p>
+            <p class="mt-6 text-pink-600 font-bold">Tap for full roster</p>
           </div>`;
       }).join('');
     }
@@ -243,39 +211,39 @@
 
       const net = team.net;
       const netEl = document.getElementById('netChange');
-      netEl.textContent = net > 0 ? `+${net} Net Growth` : `${net} Net Change`;
+      netEl.textContent = net > 0 ? `+${net} Net Growth` : `${net} Change`;
       netEl.className = net > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
       netEl.classList.add('px-6','py-3','rounded-full','font-bold','text-xl');
 
       document.getElementById('rosterChangeTable').innerHTML = `
         <tr><td class="p-5">${team.newcomers} added</td>
             <td class="p-5">${team.transfersOut || '—'}</td>
-            <td class="p-5 font-bold text-2xl ${net>0?'text-green-600':'text-red-600'}">${net > 0 ? '+' : ''}${net}</td></tr>`;
+            <td class="p-5 font-bold text-2xl ${net>0?'text-green-600':'text-red-600'}">${net>0?'+'+net:net}</td></tr>`;
 
-      document.getElementById('newcomerBreakdown').textContent = `${team.newcomers} (${team.roster.Fr} freshmen + ${team.transfersIn} transfers)`;
+      document.getElementById('newcomerBreakdown').textContent = `${team.newcomers} total (${team.roster.Fr} freshmen + ${team.transfersIn} transfers)`;
 
       if (classChart) classChart.destroy();
       if (positionChart) positionChart.destroy();
-
+      const total = Object.values(team.roster).reduce((a,b)=>a+b,0);
       classChart = new Chart(document.getElementById('classChart'), {
         type: 'doughnut',
-        data: { labels: ['Fr','So','Jr','Sr','Gr'], datasets: [{ data: Object.values(team.roster), backgroundColor: ['#ff69b4','#ff1493','#c71585','#db7093','#ff6eb4'] }] },
-        options: { plugins: { legend: { position: 'bottom' } } }
+        data: { labels: ['Fr','So','Jr','Sr','Gr'], datasets: [{ data: Object.values(team.roster), backgroundColor: ['#FF6B6B','#4ECDC4','#45B7D1','#96CEB4','#FECA57'] }] },
+        options: { plugins: { title: { display: true, text: `Class Breakdown (${total} players)` } } }
       });
       positionChart = new Chart(document.getElementById('positionChart'), {
-        type: 'doughnut',
-        data: { labels: Object.keys(team.positions), datasets: [{ data: Object.values(team.positions), backgroundColor: ['#ff69b4','#ff1493','#c71585','#db7093'] }] },
-        options: { plugins: { legend: { position: 'bottom' } } }
+        type: 'bar',
+        data: { labels: Object.keys(team.positions), datasets: [{ label: 'Players', data: Object.values(team.positions), backgroundColor: '#FF6B6B' }] },
+        options: { plugins: { title: { display: true, text: 'By Position' } } }
       });
 
       const tbody = document.querySelector('#rosterTable tbody');
-      tbody.innerHTML = team.players?.map(p => `
+      tbody.innerHTML = (team.players || []).map(p => `
         <tr class="hover:bg-pink-50">
           <td class="p-5">${p.name}</td>
           <td class="p-5 text-center font-medium">${p.pos}</td>
           <td class="p-5 text-center">${p.class}</td>
-        </tr>`).join('') || '<tr><td colspan="3" class="p-12 text-center text-gray-500">Full roster coming soon</td></tr>';
-    };
+        </tr>`).join('') || '<tr><td colspan="3" class="p-12 text-center text-gray-500">Roster loading...</td></tr>';
+    }
 
     function closeDetails() {
       document.getElementById('teamDetails').classList.add('hidden');
