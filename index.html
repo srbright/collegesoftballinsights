@@ -118,39 +118,46 @@
 
   <script>
     let allTeams = [], fuse, classChart = null, positionChart = null;
-    const XAI_API_KEY = 'xai-dEQaTjpf1wXo9OFgveiAksjyhZlCo59vwEhXldUdAxTquerIfvNP6p7P4RtNi0DPFppdMz4TmtyhnhpV'; // ← PASTE YOUR NEWEST KEY HERE
+    const XAI_API_KEY = 'xai-dEQaTjpf1wXo9OFgveiAksjyhZlCo59vwEhXldUdAxTquerIfvNP6p7P4RtNi0DPFppdMz4TmtyhnhpV'; // ← Your key (will work when activated)
     const XAI_URL = 'https://api.x.ai/v1/chat/completions';
 
+    // Load teams
     fetch('teams.json')
       .then(r => r.json())
       .then(data => {
         allTeams = data;
         fuse = new Fuse(allTeams, {keys: ['name','conf','state'], threshold: 0.3});
-        document.getElementById('noResults').textContent = 'Type your ideal program above...';
-        renderResults(allTeams); // Show all teams on load
+        showAllTeams(); // Show all on load
       })
       .catch(err => {
-        console.error('teams.json failed:', err);
+        console.error('teams.json error:', err);
         document.getElementById('noResults').textContent = 'Loading data...';
       });
 
-    document.getElementById('searchBtn').addEventListener('click', runAISearch);
-    document.getElementById('aiSearchInput').addEventListener('keypress', e => { if (e.key === 'Enter') runAISearch(); });
+    function showAllTeams() {
+      renderResults(allTeams);
+      document.getElementById('noResults').textContent = '';
+      document.getElementById('explanation').innerHTML = 
+        '<p class="text-xl">Here are all 34 SEC & Big Ten programs to explore.</p>';
+      document.getElementById('explanation').classList.remove('hidden');
+    }
 
-    async function runAISearch() {
+    document.getElementById('searchBtn').addEventListener('click', runSearch);
+    document.getElementById('aiSearchInput').addEventListener('keypress', e => { if (e.key === 'Enter') runSearch(); });
+
+    async function runSearch() {
       const query = document.getElementById('aiSearchInput').value.trim();
 
       if (!query) {
-        renderResults(allTeams);
-        document.getElementById('noResults').textContent = 'Showing all 34 programs';
-        document.getElementById('explanation').classList.add('hidden');
+        showAllTeams();
         return;
       }
 
-      document.getElementById('noResults').textContent = 'Grok is thinking...';
+      document.getElementById('noResults').textContent = 'Searching...';
       document.getElementById('results').innerHTML = '';
       document.getElementById('explanation').classList.add('hidden');
 
+      // Try Grok first
       try {
         const response = await fetch(XAI_URL, {
           method: 'POST',
@@ -161,10 +168,7 @@
           body: JSON.stringify({
             model: 'grok-beta',
             messages: [
-              { 
-                role: 'system', 
-                content: `You are a college softball recruiting expert. Return ONLY valid JSON with "matches" (array of team objects) and "explanation" (1-2 sentences). NEVER return empty matches — if nothing matches perfectly, return the 8-12 closest teams. Data: ${JSON.stringify(allTeams)}`
-              },
+              { role: 'system', content: `Return ONLY valid JSON with "matches" (array of team objects) and "explanation" (1-2 sentences). If no perfect match, return closest 8-12. Data: ${JSON.stringify(allTeams)}` },
               { role: 'user', content: query }
             ],
             temperature: 0.4,
@@ -176,22 +180,29 @@
 
         const result = await response.json();
         const text = result.choices[0].message.content.trim();
-        const jsonMatch = text.match(/\{[\s\S]*\}/);
-        const parsed = jsonMatch ? JSON.parse(jsonMatch[0]) : { matches: allTeams.slice(0,12), explanation: "Here are programs that match your request." };
+        const json = text.match(/\{[\s\S]*\}/) ? JSON.parse(text.match(/\{[\s\S]*\}/)[0]) : null;
 
-        renderResults(parsed.matches.length ? parsed.matches : allTeams.slice(0,12));
-        document.getElementById('explanation').innerHTML = `<p class="text-xl">${parsed.explanation}</p>`;
-        document.getElementById('explanation').classList.remove('hidden');
-        document.getElementById('noResults').textContent = '';
-
+        if (json && json.matches && json.matches.length > 0) {
+          renderResults(json.matches);
+          document.getElementById('explanation').innerHTML = `<p class="text-xl">${json.explanation}</p>`;
+          document.getElementById('explanation').classList.remove('hidden');
+          document.getElementById('noResults').textContent = '';
+          return;
+        }
       } catch (err) {
-        console.log('Grok not ready — showing all teams');
-        renderResults(allTeams);
-        document.getElementById('explanation').innerHTML = 
-          '<p class="text-xl">Grok is warming up (beta delay). Here are all 34 SEC & Big Ten programs to explore in the meantime.</p>';
-        document.getElementById('explanation').classList.remove('hidden');
-        document.getElementById('noResults').textContent = '';
+        console.log('Grok not ready — using smart fallback');
       }
+
+      // Fuse.js fallback
+      const fuseResult = fuse.search(query);
+      const teams = fuseResult.length > 0 ? fuseResult.map(r => r.item) : allTeams;
+
+      renderResults(teams);
+      document.getElementById('explanation').innerHTML = 
+        `<p class="text-xl">Found ${teams.length} program${teams.length === 1 ? '' : 's'} matching "${query}"</p>`;
+      document.getElementById('explanation').classList.remove('hidden
+
+      document.getElementById('noResults').textContent = '';
     }
 
     function renderResults(teams) {
@@ -208,7 +219,7 @@
 
         return `
           <div onclick="showTeam('${team.name.replace(/'/g, "\\'")}')" class="bg-white rounded-2xl shadow-xl p-8 hover:shadow-2xl hover:border-4 hover:border-pink-400 transition cursor-pointer text-center">
-            <h3 class="text3xl font-bold text-pink-600 mb-3">${team.name}</h3>
+            <h3 class="text-3xl font-bold text-pink-600 mb-3">${team.name}</h3>
             <p class="text-xl mb-6">${team.conf} • ${team.state}</p>
             <div class="text-lg font-medium mb-6">
               <div>Win %: ${(team.winPct*100).toFixed(1)}%</div>
