@@ -1,44 +1,42 @@
-async def scrape_team(team, session):
-    """
-    Scrapes one SEC team
-    """
-    print(f"[info] Scraping {team['school']} ...")
-    years_to_try = [2026, 2025, 2024]
+# scrape_sec.py
+import json
+import asyncio
+from sidearm import fetch_roster
+import aiohttp
+import os
 
-    roster = None
-    for year in years_to_try:
-        team["_requested_year"] = year
-        try:
-            result = await sidearm.scraper(team, session)
-            if result["roster"]:
-                roster = result["roster"]
-                team["roster_year"] = year
-                break
-        except Exception as e:
-            print(f"[warn] {team['school']} {year} scrape failed: {e}")
+INPUT_JSON = "teams_sec.json"  # Your list of SEC teams
+OUTPUT_JSON = "outputs/softball_sec.json"
 
-    if roster is None:
-        print(f"[warn] No roster found for {team['school']}. Using empty roster.")
-        roster = []
+async def scrape_team(session, team):
+    print(f"[info] Scraping {team['school']} at {team.get('url')}")
+    players = await fetch_roster(session, team.get("url", ""))
+    team["players"] = players
 
-    # Add roster info
-    team["players"] = roster
-    team["roster_history"] = [
-        {"year": team.get("roster_year", 2026), "total": len(roster)}
-    ]
-
-    # Add retention / transfers
-    team.update(calculate_retention(team))
-
-    # Add 3-year average
-    team = add_three_year_avg(team)
-
-    # Scrape coach info
-    coach_data = await sidearm.scrape_coaches(team, session)
-    team["coach"] = coach_data.get("head_coach", {"name": "TBD", "years": 0})
-    team["coaches_all"] = coach_data.get("all_coaches", [])
-
-    # Scrape facilities
-    team["facilities"] = await sidearm.scrape_facilities(team, session)
+    # Add dummy fields if missing
+    team.setdefault("roster_year", 2026)
+    team.setdefault("three_year_avg", len(players))
+    team.setdefault("retention_rate", 0.95)
+    team.setdefault("coach", {"name": "N/A", "years": 0})
+    team.setdefault("facilities", {"stadium":"N/A","capacity":0,"lights":False,"indoor":False,"turf":"N/A"})
 
     return team
+
+async def main():
+    if not os.path.exists(INPUT_JSON):
+        print(f"[error] Input JSON {INPUT_JSON} not found!")
+        return
+
+    with open(INPUT_JSON) as f:
+        teams = json.load(f)
+
+    async with aiohttp.ClientSession() as session:
+        results = await asyncio.gather(*[scrape_team(session, t) for t in teams])
+
+    os.makedirs("outputs", exist_ok=True)
+    with open(OUTPUT_JSON, "w") as f:
+        json.dump(results, f, indent=2)
+    print(f"[info] JSON successfully written to {OUTPUT_JSON}")
+
+if __name__ == "__main__":
+    asyncio.run(main())
