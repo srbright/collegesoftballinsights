@@ -95,4 +95,552 @@
     "transfersOut": 4,
     "url": "https://uclabruins.com/sports/softball",
     "roster": {"Fr":13,"So":7,"Jr":7,"Sr":4,"Gr":2},
-    "positions":
+    "positions": {"P":10,"C":3,"INF":12,"OF":7,"UTIL":1},
+    "players": [
+      {"name":"Kaitlyn Terry","pos":"P","class":"Sr"},
+      {"name":"Jordan Woolery","pos":"INF","class":"Jr"},
+      {"name":"Megan Grant","pos":"INF","class":"So"},
+      {"name":"Maya Brady","pos":"UTIL","class":"Gr"},
+      {"name":"Sharlynn Tate","pos":"OF","class":"Sr"},
+      {"name":"Taylor Tinsley","pos":"P","class":"So"},
+      {"name":"Brooke Yanez","pos":"P","class":"Gr"}
+    ]
+  },
+  {
+    "school": "Florida Gators",
+    "mascot": "Gators",
+    "city": "Gainesville",
+    "state": "FL",
+    "division": "D1",
+    "conf": "SEC",
+    "latitude": 29.6436,
+    "longitude": -82.3549,
+    "winPct": 0.875,
+    "transfersIn": 9,
+    "transfersOut": 7,
+    "url": "https://floridagators.com/sports/softball",
+    "roster": {"Fr":13,"So":6,"Jr":6,"Sr":4,"Gr":2},
+    "positions": {"P":10,"C":4,"INF":10,"OF":6,"UTIL":1},
+    "players": [
+      {"name":"Keagan Rothrock","pos":"P","class":"So"},
+      {"name":"Ava Brown","pos":"P","class":"Fr"},
+      {"name":"Skylar Wallace","pos":"INF","class":"Gr"},
+      {"name":"Kendra Falby","pos":"OF","class":"Jr"},
+      {"name":"Elizabeth Hightower","pos":"P","class":"Gr"},
+      {"name":"Charla Echols","pos":"INF","class":"Sr"}
+    ]
+  },
+  {
+    "school": "LSU Tigers",
+    "mascot": "Tigers",
+    "city": "Baton Rouge",
+    "state": "LA",
+    "division": "D1",
+    "conf": "SEC",
+    "latitude": 30.4133,
+    "longitude": -91.1800,
+    "winPct": 0.842,
+    "transfersIn": 8,
+    "transfersOut": 6,
+    "url": "https://lsusports.net/sports/softball",
+    "roster": {"Fr":11,"So":7,"Jr":6,"Sr":4,"Gr":2},
+    "positions": {"P":9,"C":3,"INF":11,"OF":6,"UTIL":1},
+    "players": [
+      {"name":"Sydney Berzon","pos":"P","class":"Jr"},
+      {"name":"Kelley Lynch","pos":"P","class":"Sr"},
+      {"name":"Ciara Briggs","pos":"OF","class":"Gr"},
+      {"name":"Taylor Pleasants","pos":"INF","class":"Sr"},
+      {"name":"Ali Kilponen","pos":"P","class":"Gr"}
+    ]
+  },
+  {
+    "school": "Alabama Crimson Tide",
+    "mascot": "Crimson Tide",
+    "city": "Tuscaloosa",
+    "state": "AL",
+    "division": "D1",
+    "conf": "SEC",
+    "latitude": 33.2140,
+    "longitude": -87.5391,
+    "winPct": 0.854,
+    "transfersIn": 6,
+    "transfersOut": 5,
+    "url": "https://rolltide.com/sports/softball",
+    "roster": {"Fr":12,"So":8,"Jr":7,"Sr":4,"Gr":2},
+    "positions": {"P":9,"C":3,"INF":12,"OF":7,"UTIL":1},
+    "players": [
+      {"name":"Kayla Beaver","pos":"P","class":"Gr"},
+      {"name":"Bailey Dowling","pos":"INF","class":"Sr"},
+      {"name":"Jenna Johnson","pos":"OF","class":"Gr"},
+      {"name":"Montana Fouts","pos":"P","class":"Gr"}
+    ]
+  },
+  {
+    "school": "Oregon Ducks",
+    "mascot": "Ducks",
+    "city": "Eugene",
+    "state": "OR",
+    "division": "D1",
+    "conf": "Big Ten",
+    "latitude": 44.0448,
+    "longitude": -123.0726,
+    "winPct": 0.889,
+    "transfersIn": 9,
+    "transfersOut": 6,
+    "url": "https://goducks.com/sports/softball",
+    "roster": {"Fr":14,"So":7,"Jr":6,"Sr":4,"Gr":2},
+    "positions": {"P":10,"C":3,"INF":12,"OF":7,"UTIL":1},
+    "players": [
+      {"name":"Morgan Scott","pos":"P","class":"Sr"},
+      {"name":"Stevie Hansen","pos":"P","class":"So"},
+      {"name":"Alyssa Brito","pos":"INF","class":"Gr"}
+    ]
+  },
+  {
+    "school": "Michigan Wolverines",
+    "mascot": "Wolverines",
+    "city": "Ann Arbor",
+    "state": "MI",
+    "division": "D1",
+    "conf": "Big Ten",
+    "latitude": 42.2780,
+    "longitude": -83.7382,
+    "winPct": 0.856,
+    "transfersIn": 7,
+    "transfersOut": 4,
+    "url": "https://mgoblue.com/sports/softball",
+    "roster": {"Fr":12,"So":7,"Jr":6,"Sr":4,"Gr":3},
+    "positions": {"P":9,"C":3,"INF":11,"OF":8,"UTIL":1},
+    "players": [
+      {"name":"Lauren Derkowski","pos":"P","class":"Sr"},
+      {"name":"Keke Tholl","pos":"C","class":"Sr"}
+    ]
+  },
+  {
+    "school": "Texas A&M Aggies",
+    "mascot": "Aggies",
+    "city": "College Station",
+    "state": "TX",
+    "division": "D1",
+    "conf": "SEC",
+    "latitude": 30.6187,
+    "longitude": -96.3365,
+    "winPct": 0.823,
+    "transfersIn": 7,
+    "transfersOut": 5,
+    "url": "https://12thman.com/sports/softball",
+    "roster": {"Fr":11,"So":7,"Jr":6,"Sr":4,"Gr":2},
+    "positions": {"P":9,"C":3,"INF":11,"OF":6,"UTIL":1},
+    "players": [
+      {"name":"Emiley Kennedy","pos":"P","class":"So"},
+      {"name":"Maddie Penta","pos":"P","class":"Sr"},
+      {"name":"Trinity Cannon","pos":"INF","class":"Jr"}
+    ]
+  },
+  {
+    "school": "Arkansas Razorbacks",
+    "mascot": "Razorbacks",
+    "city": "Fayetteville",
+    "state": "AR",
+    "division": "D1",
+    "conf": "SEC",
+    "latitude": 36.0679,
+    "longitude": -94.1737,
+    "winPct": 0.821,
+    "transfersIn": 6,
+    "transfersOut": 5,
+    "url": "https://arkansasrazorbacks.com/sport/softball/",
+    "roster": {"Fr":11,"So":7,"Jr":6,"Sr":4,"Gr":2},
+    "positions": {"P":9,"C":3,"INF":10,"OF":7,"UTIL":1},
+    "players": [
+      {"name":"Robyn Herron","pos":"P","class":"Sr"},
+      {"name":"Rylin Hedgecock","pos":"INF","class":"Sr"}
+    ]
+  },
+  {
+    "school": "South Carolina Gamecocks",
+    "mascot": "Gamecocks",
+    "city": "Columbia",
+    "state": "SC",
+    "division": "D1",
+    "conf": "SEC",
+    "latitude": 33.9999,
+    "longitude": -81.0300,
+    "winPct": 0.812,
+    "transfersIn": 5,
+    "transfersOut": 4,
+    "url": "https://gamecocksonline.com/sports/softball/",
+    "roster": {"Fr":10,"So":7,"Jr":6,"Sr":4,"Gr":3},
+    "positions": {"P":8,"C":3,"INF":11,"OF":7,"UTIL":1},
+    "players": [
+      {"name":"Alana Vawter","pos":"P","class":"Gr"},
+      {"name":"Sage Mardjetko","pos":"P","class":"So"}
+    ]
+  },
+  {
+    "school": "Nebraska Cornhuskers",
+    "mascot": "Cornhuskers",
+    "city": "Lincoln",
+    "state": "NE",
+    "division": "D1",
+    "conf": "Big Ten",
+    "latitude": 40.8202,
+    "longitude": -96.7005,
+    "winPct": 0.812,
+    "transfersIn": 6,
+    "transfersOut": 5,
+    "url": "https://huskers.com/sports/softball",
+    "roster": {"Fr":11,"So":7,"Jr":6,"Sr":4,"Gr":2},
+    "positions": {"P":9,"C":3,"INF":10,"OF":7,"UTIL":1},
+    "players": [
+      {"name":"Jordy Bahl","pos":"P","class":"Sr"},
+      {"name":"Billie Andrews","pos":"INF","class":"Sr"}
+    ]
+  },
+  {
+    "school": "Auburn Tigers",
+    "mascot": "Tigers",
+    "city": "Auburn",
+    "state": "AL",
+    "division": "D1",
+    "conf": "SEC",
+    "latitude": 32.6010,
+    "longitude": -85.4856,
+    "winPct": 0.763,
+    "transfersIn": 5,
+    "transfersOut": 4,
+    "url": "https://auburntigers.com/sports/softball",
+    "roster": {"Fr":10,"So":7,"Jr":6,"Sr":4,"Gr":2},
+    "positions": {"P":8,"C":3,"INF":10,"OF":7,"UTIL":1},
+    "players": [
+      {"name":"Madeline Penta","pos":"P","class":"Sr"},
+      {"name":"Shelby Lowe","pos":"P","class":"Sr"}
+    ]
+  },
+  {
+    "school": "Kentucky Wildcats",
+    "mascot": "Wildcats",
+    "city": "Lexington",
+    "state": "KY",
+    "division": "D1",
+    "conf": "SEC",
+    "latitude": 38.0307,
+    "longitude": -84.5040,
+    "winPct": 0.789,
+    "transfersIn": 6,
+    "transfersOut": 5,
+    "url": "https://ukathletics.com/sports/softball/",
+    "roster": {"Fr":11,"So":7,"Jr":5,"Sr":4,"Gr":2},
+    "positions": {"P":8,"C":3,"INF":10,"OF":7,"UTIL":1},
+    "players": [
+      {"name":"Stephanie Schoonover","pos":"P","class":"Sr"}
+    ]
+  },
+  {
+    "school": "Minnesota Golden Gophers",
+    "mascot": "Golden Gophers",
+    "city": "Minneapolis",
+    "state": "MN",
+    "division": "D1",
+    "conf": "Big Ten",
+    "latitude": 44.9737,
+    "longitude": -93.2277,
+    "winPct": 0.789,
+    "transfersIn": 5,
+    "transfersOut": 4,
+    "url": "https://gophersports.com/sports/softball",
+    "roster": {"Fr":10,"So":7,"Jr":6,"Sr":4,"Gr":2},
+    "positions": {"P":8,"C":3,"INF":10,"OF":7,"UTIL":1},
+    "players": [
+      {"name":"Autumn Pease","pos":"P","class":"Sr"}
+    ]
+  },
+  {
+    "school": "Ole Miss Rebels",
+    "mascot": "Rebels",
+    "city": "Oxford",
+    "state": "MS",
+    "division": "D1",
+    "conf": "SEC",
+    "latitude": 34.3647,
+    "longitude": -89.5384,
+    "winPct": 0.756,
+    "transfersIn": 6,
+    "transfersOut": 5,
+    "url": "https://olemisssports.com/sports/softball",
+    "roster": {"Fr":10,"So":7,"Jr":6,"Sr":4,"Gr":2},
+    "players": [
+      {"name":"Catelyn Riley","pos":"P","class":"Fr"}
+    ]
+  },
+  {
+    "school": "Mississippi State Bulldogs",
+    "mascot": "Bulldogs",
+    "city": "Starkville",
+    "state": "MS",
+    "division": "D1",
+    "conf": "SEC",
+    "latitude": 33.4552,
+    "longitude": -88.7904,
+    "winPct": 0.734,
+    "transfersIn": 5,
+    "transfersOut": 4,
+    "url": "https://hailstate.com/sports/softball",
+    "roster": {"Fr":10,"So":7,"Jr":6,"Sr":4,"Gr":2},
+    "players": [
+      {"name":"Aspyn Godwin","pos":"P","class":"Fr"}
+    ]
+  },
+  {
+    "school": "Georgia Bulldogs",
+    "mascot": "Bulldogs",
+    "city": "Athens",
+    "state": "GA",
+    "division": "D1",
+    "conf": "SEC",
+    "latitude": 33.9480,
+    "longitude": -83.3773,
+    "winPct": 0.712,
+    "transfersIn": 4,
+    "transfersOut": 3,
+    "url": "https://georgiadogs.com/sports/softball",
+    "roster": {"Fr":9,"So":7,"Jr":6,"Sr":4,"Gr":3},
+    "players": [
+      {"name":"Lilli Backes","pos":"P","class":"Fr"}
+    ]
+  },
+  {
+    "school": "Missouri Tigers",
+    "mascot": "Tigers",
+    "city": "Columbia",
+    "state": "MO",
+    "division": "D1",
+    "conf": "SEC",
+    "latitude": 38.9404,
+    "longitude": -92.3277,
+    "winPct": 0.689,
+    "transfersIn": 5,
+    "transfersOut": 4,
+    "url": "https://mutigers.com/sports/softball",
+    "roster": {"Fr":9,"So":7,"Jr":6,"Sr":4,"Gr":2},
+    "players": [
+      {"name":"Marissa McCann","pos":"P","class":"Fr"}
+    ]
+  },
+  {
+    "school": "Illinois Fighting Illini",
+    "mascot": "Fighting Illini",
+    "city": "Champaign",
+    "state": "IL",
+    "division": "D1",
+    "conf": "Big Ten",
+    "latitude": 40.1020,
+    "longitude": -88.2272,
+    "winPct": 0.678,
+    "transfersIn": 4,
+    "transfersOut": 3,
+    "url": "https://fightingillini.com/sports/softball",
+    "roster": {"Fr":9,"So":7,"Jr":6,"Sr":4,"Gr":2},
+    "players": [
+      {"name":"Addy Nicholson","pos":"P","class":"Fr"}
+    ]
+  },
+  {
+    "school": "Indiana Hoosiers",
+    "mascot": "Hoosiers",
+    "city": "Bloomington",
+    "state": "IN",
+    "division": "D1",
+    "conf": "Big Ten",
+    "latitude": 39.1766,
+    "longitude": -86.5130,
+    "winPct": 0.712,
+    "transfersIn": 4,
+    "transfersOut": 3,
+    "url": "https://iuhoosiers.com/sports/softball",
+    "roster": {"Fr":9,"So":7,"Jr":6,"Sr":4,"Gr":2},
+    "players": [
+      {"name":"Brianna Evans","pos":"P","class":"So"}
+    ]
+  },
+  {
+    "school": "Iowa Hawkeyes",
+    "mascot": "Hawkeyes",
+    "city": "Iowa City",
+    "state": "IA",
+    "division": "D1",
+    "conf": "Big Ten",
+    "latitude": 41.6627,
+    "longitude": -91.5549,
+    "winPct": 0.745,
+    "transfersIn": 5,
+    "transfersOut": 4,
+    "url": "https://hawkeyesports.com/sports/softball/",
+    "roster": {"Fr":10,"So":7,"Jr":6,"Sr":4,"Gr":2},
+    "players": [
+      {"name":"Jalen Adams","pos":"P","class":"Fr"}
+    ]
+  },
+  {
+    "school": "Maryland Terrapins",
+    "mascot": "Terrapins",
+    "city": "College Park",
+    "state": "MD",
+    "division": "D1",
+    "conf": "Big Ten",
+    "latitude": 38.9869,
+    "longitude": -76.9426,
+    "winPct": 0.823,
+    "transfersIn": 6,
+    "transfersOut": 5,
+    "url": "https://umterps.com/sports/softball",
+    "roster": {"Fr":11,"So":7,"Jr":6,"Sr":4,"Gr":2},
+    "players": [
+      {"name":"Bri Godfrey","pos":"P","class":"Fr"}
+    ]
+  },
+  {
+    "school": "Michigan State Spartans",
+    "mascot": "Spartans",
+    "city": "East Lansing",
+    "state": "MI",
+    "division": "D1",
+    "conf": "Big Ten",
+    "latitude": 42.7252,
+    "longitude": -84.4839,
+    "winPct": 0.734,
+    "transfersIn": 5,
+    "transfersOut": 4,
+    "url": "https://msuspartans.com/sports/softball",
+    "roster": {"Fr":10,"So":7,"Jr":6,"Sr":4,"Gr":2},
+    "players": [
+      {"name":"Faith Guidry","pos":"P","class":"So"}
+    ]
+  },
+  {
+    "school": "Northwestern Wildcats",
+    "mascot": "Wildcats",
+    "city": "Evanston",
+    "state": "IL",
+    "division": "D1",
+    "conf": "Big Ten",
+    "latitude": 42.0565,
+    "longitude": -87.6753,
+    "winPct": 0.901,
+    "transfersIn": 4,
+    "transfersOut": 3,
+    "url": "https://nusports.com/sports/softball",
+    "roster": {"Fr":9,"So":7,"Jr":6,"Sr":4,"Gr":3},
+    "players": [
+      {"name":"Ashley Miller","pos":"P","class":"So"}
+    ]
+  },
+  {
+    "school": "Ohio State Buckeyes",
+    "mascot": "Buckeyes",
+    "city": "Columbus",
+    "state": "OH",
+    "division": "D1",
+    "conf": "Big Ten",
+    "latitude": 40.0000,
+    "longitude": -83.0125,
+    "winPct": 0.767,
+    "transfersIn": 5,
+    "transfersOut": 4,
+    "url": "https://ohiostatebuckeyes.com/sports/softball",
+    "roster": {"Fr":10,"So":7,"Jr":6,"Sr":4,"Gr":2},
+    "players": [
+      {"name":"Julia Sikora","pos":"P","class":"Fr"}
+    ]
+  },
+  {
+    "school": "Penn State Nittany Lions",
+    "mascot": "Nittany Lions",
+    "city": "University Park",
+    "state": "PA",
+    "division": "D1",
+    "conf": "Big Ten",
+    "latitude": 40.7982,
+    "longitude": -77.8599,
+    "winPct": 0.745,
+    "transfersIn": 5,
+    "transfersOut": 4,
+    "url": "https://gopsusports.com/sports/softball",
+    "roster": {"Fr":10,"So":7,"Jr":6,"Sr":4,"Gr":2},
+    "players": [
+      {"name":"Bridget Nemeth","pos":"P","class":"Fr"}
+    ]
+  },
+  {
+    "school": "Rutgers Scarlet Knights",
+    "mascot": "Scarlet Knights",
+    "city": "Piscataway",
+    "state": "NJ",
+    "division": "D1",
+    "conf": "Big Ten",
+    "latitude": 40.5008,
+    "longitude": -74.4474,
+    "winPct": 0.623,
+    "transfersIn": 4,
+    "transfersOut": 3,
+    "url": "https://scarletknights.com/sports/softball",
+    "roster": {"Fr":9,"So":7,"Jr":6,"Sr":4,"Gr":2},
+    "players": [
+      {"name":"Morgan Smith","pos":"P","class":"Fr"}
+    ]
+  },
+  {
+    "school": "USC Trojans",
+    "mascot": "Trojans",
+    "city": "Los Angeles",
+    "state": "CA",
+    "division": "D1",
+    "conf": "Big Ten",
+    "latitude": 34.0224,
+    "longitude": -118.2851,
+    "winPct": 0.834,
+    "transfersIn": 7,
+    "transfersOut": 5,
+    "url": "https://usctrojans.com/sports/softball",
+    "roster": {"Fr":12,"So":7,"Jr":6,"Sr":4,"Gr":2},
+    "players": [
+      {"name":"Kaia Parnaby","pos":"P","class":"Fr"}
+    ]
+  },
+  {
+    "school": "Washington Huskies",
+    "mascot": "Huskies",
+    "city": "Seattle",
+    "state": "WA",
+    "division": "D1",
+    "conf": "Big Ten",
+    "latitude": 47.6553,
+    "longitude": -122.3035,
+    "winPct": 0.778,
+    "transfersIn": 6,
+    "transfersOut": 5,
+    "url": "https://gohuskies.com/sports/softball",
+    "roster": {"Fr":11,"So":7,"Jr":6,"Sr":4,"Gr":2},
+    "players": [
+      {"name":"Ruby Meylan","pos":"P","class":"So"}
+    ]
+  },
+  {
+    "school": "Wisconsin Badgers",
+    "mascot": "Badgers",
+    "city": "Madison",
+    "state": "WI",
+    "division": "D1",
+    "conf": "Big Ten",
+    "latitude": 43.0766,
+    "longitude": -89.4125,
+    "winPct": 0.712,
+    "transfersIn": 5,
+    "transfersOut": 4,
+    "url": "https://uwbadgers.com/sports/softball",
+    "roster": {"Fr":10,"So":7,"Jr":6,"Sr":4,"Gr":2},
+    "players": [
+      {"name":"Tessa Magnanimo","pos":"P","class":"Fr"}
+    ]
+  }
+]
