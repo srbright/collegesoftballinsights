@@ -1,105 +1,93 @@
 # platforms/sidearm.py
 import aiohttp
 from bs4 import BeautifulSoup
-import asyncio
 import re
 
-async def scrape_sidearm_roster(team, session):
+async def scrape_coaches(team, session):
     """
-    Scrapes Sidearm-hosted roster pages for NCAA softball.
-    team: dict with 'softball_url' and optional '_requested_year' (2026, 2025, etc.)
-    session: aiohttp.ClientSession
-    Returns:
-        {
-            "roster": [
-                {"name": str, "pos": str, "class": str, "number": str, "hometown": str, "highschool": str, ...}
-            ],
-            "scraped_url": final_url
-        }
+    Scrapes Sidearm Coaches tab for head coach info.
+    Returns: {"head_coach": {"name": str, "years": int}, "all_coaches": [...]}
     """
     base_url = team.get("softball_url")
-    year = team.get("_requested_year", None)
-    final_url = base_url
+    # Often coaches are at /staff
+    staff_url = base_url.rstrip("/") + "/staff/"
 
-    # Try to append season query if year is provided
-    if year:
-        # Sidearm often uses /season/YYYY
-        if base_url.endswith("/"):
-            final_url = f"{base_url}{year}/"
-        else:
-            final_url = f"{base_url}/{year}/"
-
-    async with session.get(final_url) as resp:
-        if resp.status != 200:
-            # fallback: try base URL without year
-            final_url = base_url
-            async with session.get(final_url) as resp2:
-                if resp2.status != 200:
-                    raise Exception(f"Sidearm scrape failed for {team.get('school')} ({final_url})")
-                html = await resp2.text()
-        else:
+    try:
+        async with session.get(staff_url) as resp:
+            if resp.status != 200:
+                return {"head_coach": {"name": "TBD", "years": 0}, "all_coaches": []}
             html = await resp.text()
+    except Exception:
+        return {"head_coach": {"name": "TBD", "years": 0}, "all_coaches": []}
 
     soup = BeautifulSoup(html, "lxml")
+    coaches = []
 
-    roster_list = []
-
-    # Sidearm roster table is usually in a div with class 'sidearm-roster-player' or table row 'tr'
-    players = soup.find_all("tr")
-    if not players:
-        # fallback: look for 'div' cards
-        players = soup.find_all("div", class_=re.compile(r"sidearm-roster-player"))
-
-    for p in players:
+    # heuristic: div with class 'sidearm-roster-player' or 'staff-card'
+    staff_cards = soup.find_all("div", class_=re.compile(r"staff-card|sidearm-roster-player"))
+    for card in staff_cards:
         try:
-            name = None
-            pos = None
-            class_year = None
-            number = None
-            hometown = None
-            highschool = None
+            name_tag = card.find("h3") or card.find("a")
+            name = name_tag.get_text(strip=True) if name_tag else "Unknown"
 
-            # Extract text fields heuristically
-            # common Sidearm structure: <td class="sidearm-roster-player-name"><a>Player Name</a></td>
-            td_name = p.find("td", class_=re.compile(r"name"))
-            if td_name:
-                name = td_name.get_text(strip=True)
+            title_tag = card.find("p", class_=re.compile(r"title"))
+            title = title_tag.get_text(strip=True) if title_tag else ""
 
-            td_pos = p.find("td", class_=re.compile(r"position"))
-            if td_pos:
-                pos = td_pos.get_text(strip=True)
+            # Try to extract years from text like "Head Coach (5th season)"
+            years_match = re.search(r"(\d+)(?:th|rd|st|nd)\s*season", title, re.I)
+            years = int(years_match.group(1)) if years_match else 0
 
-            td_class = p.find("td", class_=re.compile(r"class"))
-            if td_class:
-                class_year = td_class.get_text(strip=True)
+            coaches.append({"name": name, "title": title, "years": years})
+        except:
+            continue
 
-            td_number = p.find("td", class_=re.compile(r"number"))
-            if td_number:
-                number = td_number.get_text(strip=True)
+    # Pick head coach heuristically
+    head = next((c for c in coaches if "head coach" in c.get("title", "").lower()), None)
+    if not head and coaches:
+        head = coaches[0]
 
-            td_hometown = p.find("td", class_=re.compile(r"hometown"))
-            if td_hometown:
-                hometown = td_hometown.get_text(strip=True)
-
-            td_highschool = p.find("td", class_=re.compile(r"highschool|school"))
-            if td_highschool:
-                highschool = td_highschool.get_text(strip=True)
-
-            if name:  # only include valid entries
-                roster_list.append({
-                    "name": name,
-                    "pos": pos or "Unknown",
-                    "class": class_year or "Unknown",
-                    "number": number or None,
-                    "hometown": hometown or None,
-                    "highschool": highschool or None
-                })
-        except Exception as e:
-            print(f"[warn] parsing player: {e}")
-
-    return {"roster": roster_list, "scraped_url": final_url}
+    return {"head_coach": head or {"name": "TBD", "years": 0}, "all_coaches": coaches}
 
 
-# async wrapper to integrate with scrape_sec.py
-async def scraper(team, session):
-    return await scrape_sidearm_roster(team, session)
+async def scrape_facilities(team, session):
+    """
+    Scrapes facilities info for the team. Returns dict:
+    {"stadium": str, "capacity": int, "lights": bool, "indoor": bool, "turf": str}
+    """
+    base_url = team.get("softball_url")
+    # Many Sidearm sites have /facilities page
+    fac_url = base_url.rstrip("/") + "/facilities/"
+
+    try:
+        async with session.get(fac_url) as resp:
+            if resp.status != 200:
+                return {}
+            html = await resp.text()
+    except Exception:
+        return {}
+
+    soup = BeautifulSoup(html, "lxml")
+    facilities = {}
+
+    # Heuristic: look for stadium name
+    name_tag = soup.find(["h1", "h2", "h3"], string=re.compile(r"stadium|field", re.I))
+    facilities["stadium"] = name_tag.get_text(strip=True) if name_tag else "Unknown"
+
+    # Capacity
+    cap_tag = soup.find(string=re.compile(r"Capacity", re.I))
+    if cap_tag:
+        match = re.search(r"(\d[\d,]*)", cap_tag)
+        if match:
+            facilities["capacity"] = int(match.group(1).replace(",", ""))
+        else:
+            facilities["capacity"] = 0
+
+    # Lights (simple keyword search)
+    facilities["lights"] = bool(re.search(r"lights", html, re.I))
+    # Indoor (simple keyword search)
+    facilities["indoor"] = bool(re.search(r"indoor", html, re.I))
+    # Turf type
+    turf_match = re.search(r"(grass|turf|artificial)", html, re.I)
+    facilities["turf"] = turf_match.group(1).capitalize() if turf_match else "Unknown"
+
+    return facilities
