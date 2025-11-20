@@ -1,0 +1,25 @@
+name: Daily Softball Scrape
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Midnight UTC
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+      - run: pip install requests beautifulsoup4
+      - run: python scraper.py
+      - run: |
+          git config user.name "Auto Scraper"
+          git config user.email "scraper@github.com"
+          git add all_teams.json
+          git commit -m "Daily roster update $(date +%Y-%m-%d)" || echo "No changes"
+          git push
+
+permissions:
+  contents: write
