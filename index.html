@@ -194,349 +194,223 @@
     © 2025 College Softball Insights • Real-time roster data • Powered by Grok AI
   </footer>
 
-  <script>
-    let allTeams = [], fuse, classChart = null, positionChart = null;
-    const XAI_API_KEY = 'xai-dEQaTjpf1wXo9OFgveiAksjyhZlCo59vwEhXldUdAxTquerIfvNP6p7P4RtNi0DPFppdMz4TmtyhnhpV';
-    const XAI_URL = 'https://api.x.ai/v1/chat/completions';
-
+ <script>
+    // --- GLOBAL VARIABLES ---
+    let allTeams = [];
+    
+    // --- 1. LOAD DATA ON PAGE START ---
+    // This is the most important part. It loads the file, THEN fills the dropdowns.
     fetch('teams.json')
-      .then(r => r.json())
-      .then(data => {
-        allTeams = data;
-        populateDropdowns(data);
-        fuse = new Fuse(allTeams, {keys: ['name','conf','state'], threshold: 0.3});
-        renderResults(allTeams.slice(0,12));
-        document.getElementById('noResults').textContent = '34 programs loaded — type above to search';
-      })
-      .catch(err => {
-        console.error('Data error:', err);
-        document.getElementById('noResults').textContent = 'teams.json missing — re-upload to repo';
-      });
-
-    document.getElementById('searchBtn').addEventListener('click', runAISearch);
-    document.getElementById('aiSearchInput').addEventListener('keypress', e => { if (e.key === 'Enter') runAISearch(); });
-
-    async function runAISearch() {
-      const query = document.getElementById('aiSearchInput').value.trim();
-      if (!query) {
-        renderResults(allTeams.slice(0,12));
-        return;
-      }
-
-      document.getElementById('noResults').textContent = 'Grok is thinking...';
-      document.getElementById('results').innerHTML = '';
-      document.getElementById('explanation').classList.add('hidden');
-
-      try {
-        const response = await fetch(XAI_URL, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${XAI_API_KEY}`,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            model: 'grok-beta',
-            messages: [
-              { role: 'system', content: `You are a softball recruiting expert. Filter this data for the query. Return ONLY JSON: {"matches": [teams], "explanation": "short summary"}. Data: ${JSON.stringify(allTeams)}` },
-              { role: 'user', content: query }
-            ],
-            temperature: 0.2,
-            max_tokens: 1200
-          })
+        .then(response => {
+            if (!response.ok) throw new Error("Could not load teams.json");
+            return response.json();
+        })
+        .then(data => {
+            console.log("Data loaded successfully:", data.length, "teams found.");
+            allTeams = data; // 1. Save data to global variable
+            populateDropdowns(data); // 2. Fill the filter menus
+            renderResults(data); // 3. Show the list
+        })
+        .catch(err => {
+            console.error('Error loading data:', err);
+            document.getElementById('locationStatus').textContent = "Error loading teams.json. Check Console.";
         });
 
-        const result = await response.json();
-        const content = result.choices[0].message.content.trim();
-        const { matches, explanation } = JSON.parse(content);
+    // --- 2. POPULATE DROPDOWNS ---
+    function populateDropdowns(data) {
+        // Get unique values
+        const conferences = [...new Set(data.map(t => t.conf || t.conference).filter(Boolean))].sort();
+        const states = [...new Set(data.map(t => t.state).filter(Boolean))].sort();
 
-        renderResults(matches.length ? matches : allTeams.slice(0,8));
-        document.getElementById('explanation').innerHTML = `<p class="text-xl">${explanation}</p>`;
-        document.getElementById('explanation').classList.remove('hidden');
-        document.getElementById('noResults').textContent = '';
+        // Helper to create checkboxes
+        const fill = (id, items) => {
+            const container = document.getElementById(id);
+            if (!container) return; // Safety check
+            container.innerHTML = ''; 
+            items.forEach(item => {
+                container.innerHTML += `
+                    <label class="flex items-center p-2 hover:bg-blue-50 rounded cursor-pointer">
+                        <input type="checkbox" class="mr-3 h-4 w-4 text-blue-600 rounded border-gray-300" value="${item}">
+                        <span class="text-gray-700">${item}</span>
+                    </label>`;
+            });
+        };
 
-      } catch (err) {
-        console.error('AI failed:', err);
-        const fallback = fuse.search(query).map(r => r.item);
-        renderResults(fallback.length ? fallback : allTeams.slice(0,8));
-        document.getElementById('explanation').innerHTML = '<p class="text-xl">Grok activating — showing keyword matches.</p>';
-        document.getElementById('explanation').classList.remove('hidden');
-      }
+        fill('confDropdown', conferences);
+        fill('stateDropdown', states);
     }
 
+    // --- 3. UI HELPERS (Toggle Menus) ---
+    function toggleDropdown(id) {
+        const el = document.getElementById(id);
+        // Close all other dropdowns first
+        ['divDropdown', 'confDropdown', 'stateDropdown'].forEach(name => {
+            if (name !== id) {
+                const other = document.getElementById(name);
+                if (other) other.classList.add('hidden');
+            }
+        });
+        if (el) el.classList.toggle('hidden');
+    }
+
+    // Close menus when clicking outside
+    window.onclick = function(event) {
+        if (!event.target.closest('.relative')) {
+            document.querySelectorAll('[id$="Dropdown"]').forEach(el => el.classList.add('hidden'));
+        }
+    }
+
+    // --- 4. FILTER LOGIC (The Brains) ---
+    async function applyFilters() {
+        console.log("Applying filters...");
+        
+        // 1. Get selected checkboxes
+        const getChecked = (id) => {
+            const el = document.getElementById(id);
+            if (!el) return [];
+            return Array.from(el.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+        }
+
+        const selectedDivs = getChecked('divDropdown');
+        const selectedConfs = getChecked('confDropdown');
+        const selectedStates = getChecked('stateDropdown');
+        
+        // 2. Update Button Labels (Visual Feedback)
+        const setLabel = (id, arr, defaultText) => {
+            const el = document.getElementById(id);
+            if (el) el.textContent = arr.length ? `${arr.length} Selected` : defaultText;
+        }
+        setLabel('divLabel', selectedDivs, 'All Divisions');
+        setLabel('confLabel', selectedConfs, 'All Conferences');
+        setLabel('stateLabel', selectedStates, 'All States');
+
+        // 3. Handle Zip Code / Radius
+        const zip = document.getElementById('zipInput').value.trim();
+        const radiusInput = document.getElementById('radiusInput').value;
+        const radius = radiusInput ? parseFloat(radiusInput) : 0;
+        
+        let userLat = null, userLon = null;
+
+        if (zip && radius > 0) {
+            const statusEl = document.getElementById('locationStatus');
+            statusEl.textContent = "📍 Locating...";
+            try {
+                const res = await fetch(`https://api.zippopotam.us/us/${zip}`);
+                if (!res.ok) throw new Error("Zip not found");
+                const d = await res.json();
+                userLat = parseFloat(d.places[0].latitude);
+                userLon = parseFloat(d.places[0].longitude);
+                statusEl.textContent = `📍 searching within ${radius} miles of ${zip} (${d.places[0]['place name']})`;
+            } catch (e) {
+                statusEl.textContent = "❌ Invalid Zip Code";
+                return; // Stop if zip is bad
+            }
+        } else {
+            document.getElementById('locationStatus').textContent = "";
+        }
+
+        // 4. The Loop - Filter the Teams
+        const filtered = allTeams.filter(team => {
+            // Division
+            if (selectedDivs.length > 0) {
+                const teamDiv = team.division || 'D1'; // Default to D1 if missing
+                if (!selectedDivs.includes(teamDiv)) return false;
+            }
+
+            // Conference
+            if (selectedConfs.length > 0) {
+                const teamConf = team.conf || team.conference;
+                if (!selectedConfs.includes(teamConf)) return false;
+            }
+
+            // State
+            if (selectedStates.length > 0) {
+                if (!selectedStates.includes(team.state)) return false;
+            }
+
+            // Radius
+            if (userLat && radius > 0) {
+                if (!team.latitude || !team.longitude) return false; // Skip if no coords
+                const dist = getDistance(userLat, userLon, team.latitude, team.longitude);
+                if (dist > radius) return false;
+            }
+
+            return true; // Team passed all tests
+        });
+
+        console.log("Filtered down to:", filtered.length);
+        renderResults(filtered);
+    }
+
+    function clearFilters() {
+        // Uncheck boxes
+        document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+        // Clear inputs
+        document.getElementById('zipInput').value = "";
+        document.getElementById('radiusInput').value = "";
+        // Reset Labels
+        document.getElementById('divLabel').textContent = "All Divisions";
+        document.getElementById('confLabel').textContent = "All Conferences";
+        document.getElementById('stateLabel').textContent = "All States";
+        document.getElementById('locationStatus').textContent = "";
+        // Show all
+        renderResults(allTeams);
+    }
+
+    // --- 5. MATH HELPER (Distance) ---
+    function getDistance(lat1, lon1, lat2, lon2) {
+        const R = 3958.8; // Earth radius in miles
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLon = (lon2 - lon1) * Math.PI / 180;
+        const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                  Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+                  Math.sin(dLon/2) * Math.sin(dLon/2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        return R * c;
+    }
+
+    // --- 6. RENDER (Draw the Table) ---
     function renderResults(teams) {
-    const tableBody = document.getElementById('resultsBody');
-    const noResults = document.getElementById('noResults');
-    const resultCount = document.getElementById('resultCount');
+        const tableBody = document.getElementById('resultsBody');
+        const noResults = document.getElementById('noResults');
+        const resultCount = document.getElementById('resultCount');
 
-    // Update the counter
-    if (resultCount) resultCount.textContent = `Found ${teams.length} teams`;
+        if (resultCount) resultCount.textContent = `Found ${teams.length} teams`;
 
-    // Handle Empty List
-    if (teams.length === 0) {
-        if (noResults) noResults.classList.remove('hidden');
-        if (tableBody) tableBody.innerHTML = '';
-        return;
-    }
+        if (!tableBody) return;
 
-    // Hide the "No Results" text
-    if (noResults) noResults.classList.add('hidden');
+        if (teams.length === 0) {
+            if (noResults) noResults.classList.remove('hidden');
+            tableBody.innerHTML = '';
+            return;
+        }
 
-    // Render the Table
-    if (tableBody) {
-        tableBody.innerHTML = teams.map(team => {
-            // STRICT STANDARDS: We assume teams.json is correct now.
-            // If a field is missing, we show a dash (-)
-            return `
+        if (noResults) noResults.classList.add('hidden');
+
+        tableBody.innerHTML = teams.map(team => `
             <tr class="hover:bg-gray-50 transition border-b border-gray-100">
                 <td class="px-6 py-4 font-medium text-gray-900">
-                    ${team.school || 'Unknown School'}
+                    ${team.school || team.name || 'Unknown'}
                 </td>
                 <td class="px-6 py-4 text-gray-600">
                     ${team.mascot || '-'}
                 </td>
                 <td class="px-6 py-4 text-gray-600">
                     <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">
-                        ${team.conf || '-'}
+                        ${team.conf || team.conference || '-'}
                     </span>
                 </td>
                 <td class="px-6 py-4 text-gray-600">
                     ${team.city ? team.city + ', ' : ''}${team.state || '-'}
                 </td>
                 <td class="px-6 py-4">
-                    <a href="${team.url || '#'}" target="_blank" class="text-blue-600 hover:text-blue-800 font-medium hover:underline">
+                    <a href="${team.url || '#'}" target="_blank" class="text-blue-600 hover:underline font-medium">
                         Visit
                     </a>
                 </td>
             </tr>
-            `;
-        }).join('');
-    }
-}
-
-    window.showTeam = function(name) {
-      const team = allTeams.find(t => t.name === name);
-      if (!team) return;
-      document.getElementById('search').classList.add('hidden');
-      document.getElementById('teamDetails').classList.remove('hidden');
-      document.getElementById('detailTitle').textContent = team.name;
-
-      const net = team.net;
-      const netEl = document.getElementById('netChange');
-      netEl.textContent = net > 0 ? `+${net} Net Growth` : `${net} Change`;
-      netEl.className = net > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
-      netEl.classList.add('px-6','py-3','rounded-full','font-bold','text-xl');
-
-      document.getElementById('rosterChangeTable').innerHTML = `
-        <tr><td class="p-5">${team.newcomers} added</td>
-            <td class="p-5">${team.transfersOut || '—'}</td>
-            <td class="p-5 font-bold text-2xl ${net>0?'text-green-600':'text-red-600'}">${net>0?'+'+net:net}</td></tr>`;
-
-      document.getElementById('newcomerBreakdown').textContent = `${team.newcomers} total (${team.roster.Fr} freshmen + ${team.transfersIn} transfers)`;
-
-      if (classChart) classChart.destroy();
-      if (positionChart) positionChart.destroy();
-      const total = Object.values(team.roster).reduce((a,b)=>a+b,0);
-      classChart = new Chart(document.getElementById('classChart'), {
-        type: 'doughnut',
-        data: { labels: ['Fr','So','Jr','Sr','Gr'], datasets: [{ data: Object.values(team.roster), backgroundColor: ['#FF6B6B','#4ECDC4','#45B7D1','#96CEB4','#FECA57'] }] },
-        options: { plugins: { title: { display: true, text: `Class Breakdown (${total} players)` } } }
-      });
-      positionChart = new Chart(document.getElementById('positionChart'), {
-        type: 'bar',
-        data: { labels: Object.keys(team.positions), datasets: [{ label: 'Players', data: Object.values(team.positions), backgroundColor: '#FF6B6B' }] },
-        options: { plugins: { title: { display: true, text: 'By Position' } } }
-      });
-
-      const tbody = document.querySelector('#rosterTable tbody');
-      tbody.innerHTML = (team.players || []).map(p => `
-        <tr class="hover:bg-pink-50">
-          <td class="p-5">${p.name}</td>
-          <td class="p-5 text-center font-medium">${p.pos}</td>
-          <td class="p-5 text-center">${p.class}</td>
-        </tr>`).join('') || '<tr><td colspan="3" class="p-12 text-center text-gray-500">Roster loading...</td></tr>';
-    }
-
-    function closeDetails() {
-      document.getElementById('teamDetails').classList.add('hidden');
-      document.getElementById('search').classList.remove('hidden');
-      window.scrollTo(0,0);
-    }
- // --- MULTI-SELECT FILTER LOGIC ---
-
-// 1. Helper to Toggle Dropdowns
-function toggleDropdown(id) {
-    const el = document.getElementById(id);
-    // Close others
-    document.querySelectorAll('[id$="Dropdown"]').forEach(d => {
-        if(d.id !== id) d.classList.add('hidden');
-    });
-    el.classList.toggle('hidden');
-}
-
-// Close dropdowns if clicking outside
-window.onclick = function(event) {
-    if (!event.target.closest('.relative')) {
-        document.querySelectorAll('[id$="Dropdown"]').forEach(el => el.classList.add('hidden'));
-    }
-}
-
-// === START OF NEW LOGIC ===
-
-// 1. HELPER: Toggle Dropdowns
-function toggleDropdown(id) {
-    const el = document.getElementById(id);
-    ['divDropdown', 'confDropdown', 'stateDropdown'].forEach(name => {
-        if(name !== id) document.getElementById(name).classList.add('hidden');
-    });
-    el.classList.toggle('hidden');
-}
-
-// Close dropdowns if clicking outside
-window.onclick = function(event) {
-    if (!event.target.closest('.relative')) {
-        document.querySelectorAll('[id$="Dropdown"]').forEach(el => el.classList.add('hidden'));
-    }
-}
-
-// 2. POPULATE: Fill the lists
-function populateDropdowns(data) {
-    // Get unique conferences and states
-    const conferences = [...new Set(data.map(t => t.conf || t.conference).filter(Boolean))].sort();
-    const states = [...new Set(data.map(t => t.state).filter(Boolean))].sort();
-
-    const fill = (id, items) => {
-        const container = document.getElementById(id);
-        container.innerHTML = ''; 
-        items.forEach(item => {
-            container.innerHTML += `
-                <label class="flex items-center p-2 hover:bg-blue-50 rounded cursor-pointer">
-                    <input type="checkbox" class="mr-3 h-4 w-4 text-blue-600 rounded" value="${item}"> ${item}
-                </label>`;
-        });
-    };
-    fill('confDropdown', conferences);
-    fill('stateDropdown', states);
-}
-
-// Helper: Get checked boxes
-function getCheckedValues(id) {
-    const container = document.getElementById(id);
-    const checkboxes = container.querySelectorAll('input[type="checkbox"]:checked');
-    return Array.from(checkboxes).map(cb => cb.value);
-}
-
-// 3. FILTER: The main logic
-async function applyFilters() {
-    const selectedDivs = getCheckedValues('divDropdown');
-    const selectedConfs = getCheckedValues('confDropdown');
-    const selectedStates = getCheckedValues('stateDropdown');
-    const zip = document.getElementById('zipInput').value;
-    const radius = parseFloat(document.getElementById('radiusInput').value);
-    let userLat = null, userLon = null;
-
-    // Update Labels
-    document.getElementById('divLabel').textContent = selectedDivs.length ? `${selectedDivs.length} Selected` : 'All Divisions';
-    document.getElementById('confLabel').textContent = selectedConfs.length ? `${selectedConfs.length} Selected` : 'All Conferences';
-    document.getElementById('stateLabel').textContent = selectedStates.length ? `${selectedStates.length} Selected` : 'All States';
-
-    // Zip Code Logic
-    if (zip && radius) {
-        document.getElementById('locationStatus').textContent = "📍 Locating...";
-        try {
-            const res = await fetch(`https://api.zippopotam.us/us/${zip}`);
-            if (!res.ok) throw new Error();
-            const d = await res.json();
-            userLat = parseFloat(d.places[0].latitude);
-            userLon = parseFloat(d.places[0].longitude);
-            document.getElementById('locationStatus').textContent = `📍 Searching within ${radius} miles of ${zip}`;
-        } catch (e) {
-            document.getElementById('locationStatus').textContent = "❌ Invalid Zip";
-            return;
-        }
-    } else {
-        document.getElementById('locationStatus').textContent = "";
-    }
-
-    // Filtering the list
-    const filtered = allTeams.filter(team => {
-        // Check Division
-        if (selectedDivs.length > 0 && !selectedDivs.includes(team.division || 'D1')) return false;
-        
-        // Check Conference
-        if (selectedConfs.length > 0 && !selectedConfs.includes(team.conf || team.conference)) return false;
-        
-        // Check State
-        if (selectedStates.length > 0 && !selectedStates.includes(team.state)) return false;
-
-        // Check Radius
-        if (userLat && radius) {
-            if (!team.latitude || !team.longitude) return false; 
-            const dist = getDistance(userLat, userLon, team.latitude, team.longitude);
-            if (dist > radius) return false;
-        }
-        return true;
-    });
-
-    renderResults(filtered);
-}
-
-function clearFilters() {
-    document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
-    document.getElementById('zipInput').value = "";
-    document.getElementById('radiusInput').value = "";
-    document.getElementById('divLabel').textContent = "All Divisions";
-    document.getElementById('confLabel').textContent = "All Conferences";
-    document.getElementById('stateLabel').textContent = "All States";
-    document.getElementById('locationStatus').textContent = "";
-    renderResults(allTeams);
-}
-
-// Distance Math
-function getDistance(lat1, lon1, lat2, lon2) {
-    const R = 3958.8; 
-    const dLat = (lat2 - lat1) * Math.PI / 180;
-    const dLon = (lon2 - lon1) * Math.PI / 180;
-    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
-              Math.sin(dLon/2) * Math.sin(dLon/2);
-    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-}
-
-// 4. RENDER: Draw the table
-function renderResults(teams) {
-    const tableBody = document.getElementById('resultsBody');
-    const noResults = document.getElementById('noResults');
-    const resultCount = document.getElementById('resultCount');
-
-    if (resultCount) resultCount.textContent = `Found ${teams.length} teams`;
-
-    if (teams.length === 0) {
-        if (noResults) noResults.classList.remove('hidden');
-        if (tableBody) tableBody.innerHTML = '';
-        return;
-    }
-
-    if (noResults) noResults.classList.add('hidden');
-
-    if (tableBody) {
-        tableBody.innerHTML = teams.map(team => `
-            <tr class="hover:bg-gray-50 transition border-b border-gray-100">
-                <td class="px-6 py-4 font-medium text-gray-900">${team.school || team.name || 'Unknown'}</td>
-                <td class="px-6 py-4 text-gray-600">${team.mascot || '-'}</td>
-                <td class="px-6 py-4 text-gray-600">
-                    <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">
-                        ${team.conf || team.conference || '-'}
-                    </span>
-                </td>
-                <td class="px-6 py-4 text-gray-600">${team.city ? team.city + ', ' : ''}${team.state || '-'}</td>
-                <td class="px-6 py-4">
-                    <a href="${team.url || '#'}" target="_blank" class="text-blue-600 hover:underline">Visit</a>
-                </td>
-            </tr>
         `).join('');
     }
-}
-// === END OF NEW LOGIC ===
-  </script>
+</script>
 </body>
 </html>
