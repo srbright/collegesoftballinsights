@@ -7,37 +7,53 @@
     
     <!-- 1. LIBRARIES -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js for Graphs -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js"></script>
-
+    
     <style>
-        /* Custom Scrollbar for Dropdowns */
+        /* Hide scrollbar for cleaner dropdowns */
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Smooth Modal Transition */
+        #teamModal { transition: opacity 0.2s ease-in-out; }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans">
 
-    <!-- HERO SECTION -->
-    <div class="bg-gradient-to-r from-blue-900 to-blue-700 text-white py-12 shadow-md">
-        <div class="container mx-auto px-4 text-center">
-            <h1 class="text-4xl md:text-5xl font-extrabold mb-2 tracking-tight">College Softball Insights</h1>
-            <p class="text-blue-100 text-lg font-light">Data-driven recruiting research tool</p>
+    <!-- === HERO SECTION (Background Image) === -->
+    <div class="relative bg-gray-900 text-white py-24 shadow-xl overflow-hidden">
+        <!-- Background Image -->
+        <div class="absolute inset-0">
+            <img src="https://images.unsplash.com/photo-1628891339286-c5cb07d83872?q=80&w=1920&auto=format&fit=crop" 
+                 alt="Softball Field" 
+                 class="w-full h-full object-cover opacity-40">
+            <!-- Gradient Overlay -->
+            <div class="absolute inset-0 bg-gradient-to-b from-gray-900/60 via-gray-900/40 to-gray-900/90"></div>
+        </div>
+
+        <!-- Content -->
+        <div class="relative z-10 container mx-auto px-4 text-center">
+            <h1 class="text-5xl md:text-6xl font-extrabold mb-4 tracking-tight drop-shadow-lg">
+                College Softball Insights
+            </h1>
+            <p class="text-blue-200 text-xl font-light max-w-2xl mx-auto drop-shadow-md">
+                Data-driven recruiting research & transfer portal analysis.
+            </p>
         </div>
     </div>
 
-    <!-- MAIN CONTAINER -->
-    <div class="container mx-auto px-4 py-8 max-w-7xl">
+    <!-- === MAIN CONTAINER === -->
+    <div class="container mx-auto px-4 py-10 max-w-7xl">
 
-        <!-- === FILTER SECTION === -->
-        <div class="bg-white p-8 rounded-xl shadow-lg mb-10 border border-gray-100">
-            
+        <!-- FILTER SECTION -->
+        <div class="bg-white p-8 rounded-xl shadow-lg mb-10 border border-gray-100 relative z-10">
             <h2 class="text-3xl font-bold mb-8 text-center text-gray-800">Find Potential Colleges</h2>
 
-            <!-- FILTERS GRID -->
+            <!-- Filters Grid -->
             <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
                 
-                <!-- Division Dropdown -->
+                <!-- Division -->
                 <div class="relative group">
                     <label class="block text-xs font-bold text-gray-500 uppercase mb-1 ml-1">Division</label>
                     <button onclick="toggleDropdown('divDropdown')" class="w-full text-left border border-gray-300 rounded-lg p-2.5 bg-gray-50 hover:bg-white transition flex justify-between items-center">
@@ -53,7 +69,7 @@
                     </div>
                 </div>
 
-                <!-- Conference Dropdown -->
+                <!-- Conference -->
                 <div class="relative group">
                     <label class="block text-xs font-bold text-gray-500 uppercase mb-1 ml-1">Conference</label>
                     <button onclick="toggleDropdown('confDropdown')" class="w-full text-left border border-gray-300 rounded-lg p-2.5 bg-gray-50 hover:bg-white transition flex justify-between items-center">
@@ -61,11 +77,11 @@
                         <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </button>
                     <div id="confDropdown" class="hidden absolute z-20 w-full bg-white border border-gray-200 rounded-lg shadow-xl max-h-60 overflow-y-auto mt-2 p-2">
-                        <!-- JS fills this -->
+                        <!-- JS Fills This -->
                     </div>
                 </div>
 
-                <!-- State Dropdown -->
+                <!-- State -->
                 <div class="relative group">
                     <label class="block text-xs font-bold text-gray-500 uppercase mb-1 ml-1">State</label>
                     <button onclick="toggleDropdown('stateDropdown')" class="w-full text-left border border-gray-300 rounded-lg p-2.5 bg-gray-50 hover:bg-white transition flex justify-between items-center">
@@ -73,7 +89,7 @@
                         <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </button>
                     <div id="stateDropdown" class="hidden absolute z-20 w-full bg-white border border-gray-200 rounded-lg shadow-xl max-h-60 overflow-y-auto mt-2 p-2">
-                        <!-- JS fills this -->
+                        <!-- JS Fills This -->
                     </div>
                 </div>
 
@@ -90,7 +106,7 @@
                 </div>
             </div>
 
-            <!-- ACTION BUTTONS -->
+            <!-- Buttons -->
             <div class="mt-8 flex justify-center gap-4">
                 <button onclick="applyFilters()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-3 rounded-lg shadow-md transition transform hover:-translate-y-0.5">
                     Apply Filters
@@ -103,7 +119,7 @@
         </div>
 
         <!-- RESULTS TABLE -->
-        <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
+        <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden relative z-0">
             <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50">
                 <h3 class="text-lg font-bold text-gray-800">Search Results</h3>
                 <span id="resultCount" class="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full">Loading...</span>
@@ -117,16 +133,16 @@
                             <th scope="col" class="px-6 py-3">Mascot</th>
                             <th scope="col" class="px-6 py-3">Conference</th>
                             <th scope="col" class="px-6 py-3">Location</th>
-                            <th scope="col" class="px-6 py-3">Link</th>
+                            <th scope="col" class="px-6 py-3">Details</th>
                         </tr>
                     </thead>
                     <tbody id="resultsBody">
-                        <!-- Rows injected here by JS -->
+                        <!-- Rows injected by JS -->
                     </tbody>
                 </table>
             </div>
             
-            <!-- No Results State -->
+            <!-- Empty State -->
             <div id="noResults" class="hidden p-12 text-center">
                 <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                 <h3 class="mt-2 text-sm font-medium text-gray-900">No teams found</h3>
@@ -134,30 +150,111 @@
             </div>
         </div>
 
-    </div> <!-- End Container -->
+    </div> <!-- End Main Container -->
+
+    <!-- === TEAM DETAILS MODAL === -->
+    <div id="teamModal" class="fixed inset-0 bg-gray-900 bg-opacity-75 hidden flex items-center justify-center z-50 backdrop-blur-sm p-4">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-5xl max-h-[90vh] overflow-hidden flex flex-col">
+            
+            <!-- Modal Header -->
+            <div class="bg-blue-900 p-6 text-white flex justify-between items-center shrink-0">
+                <div>
+                    <h2 id="modalTitle" class="text-2xl font-bold">School Name</h2>
+                    <p id="modalSubtitle" class="text-blue-200">Conference • City, State</p>
+                </div>
+                <button onclick="closeModal()" class="text-white hover:text-gray-300 text-4xl leading-none">&times;</button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="p-6 overflow-y-auto bg-gray-50">
+                
+                <!-- Top Stats Grid -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                    <div class="bg-white p-4 rounded-lg shadow-sm text-center border border-gray-100">
+                        <div class="text-xs text-gray-500 font-bold uppercase tracking-wider">Win %</div>
+                        <div id="modalWin" class="text-2xl font-black text-blue-900">-</div>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-sm text-center border border-gray-100">
+                        <div class="text-xs text-gray-500 font-bold uppercase tracking-wider">Roster Size</div>
+                        <div id="modalSize" class="text-2xl font-black text-blue-900">-</div>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-sm text-center border border-gray-100">
+                        <div class="text-xs text-green-600 font-bold uppercase tracking-wider">Transfers In</div>
+                        <div id="modalIn" class="text-2xl font-black text-green-700">-</div>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-sm text-center border border-gray-100">
+                        <div class="text-xs text-red-600 font-bold uppercase tracking-wider">Transfers Out</div>
+                        <div id="modalOut" class="text-2xl font-black text-red-700">-</div>
+                    </div>
+                </div>
+
+                <!-- CHARTS SECTION -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <!-- Class Breakdown -->
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+                        <h4 class="text-sm font-bold text-gray-500 uppercase text-center mb-4">Class Breakdown</h4>
+                        <div class="relative h-56">
+                            <canvas id="modalClassChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Position Breakdown -->
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+                        <h4 class="text-sm font-bold text-gray-500 uppercase text-center mb-4">Position Breakdown</h4>
+                        <div class="relative h-56">
+                            <canvas id="modalPosChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Roster Table -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                    <h3 class="text-md font-bold px-6 py-3 bg-gray-100 border-b border-gray-200 text-gray-700">Full Roster</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-left">
+                            <thead class="bg-gray-50 text-xs uppercase font-bold text-gray-500">
+                                <tr>
+                                    <th class="px-6 py-3">Player Name</th>
+                                    <th class="px-6 py-3">Position</th>
+                                    <th class="px-6 py-3">Class</th>
+                                </tr>
+                            </thead>
+                            <tbody id="modalRosterBody" class="divide-y divide-gray-100 bg-white">
+                                <!-- JS Fills This -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
 
     <!-- === JAVASCRIPT LOGIC === -->
     <script>
+        // --- GLOBAL VARIABLES ---
         let allTeams = [];
+        let classChartInstance = null;
+        let posChartInstance = null;
 
-        // 1. LOAD DATA
+        // --- 1. LOAD DATA ---
         fetch('teams.json')
-            .then(response => {
-                if (!response.ok) throw new Error("Failed to load teams.json");
-                return response.json();
+            .then(r => {
+                if (!r.ok) throw new Error("Failed to load teams.json");
+                return r.json();
             })
             .then(data => {
-                console.log("Data loaded:", data.length);
+                console.log("Loaded teams:", data.length);
                 allTeams = data;
                 populateDropdowns(data);
                 renderResults(data);
             })
             .catch(err => {
                 console.error(err);
-                document.getElementById('resultCount').textContent = "Error loading data";
+                document.getElementById('resultCount').textContent = "Error loading data.";
             });
 
-        // 2. POPULATE DROPDOWNS
+        // --- 2. DROPDOWN & UI HELPERS ---
         function populateDropdowns(data) {
             const conferences = [...new Set(data.map(t => t.conf || t.conference).filter(Boolean))].sort();
             const states = [...new Set(data.map(t => t.state).filter(Boolean))].sort();
@@ -165,7 +262,7 @@
             const fill = (id, items) => {
                 const container = document.getElementById(id);
                 if(!container) return;
-                container.innerHTML = '';
+                container.innerHTML = ''; 
                 items.forEach(item => {
                     container.innerHTML += `
                         <label class="flex items-center p-2 hover:bg-blue-50 rounded cursor-pointer">
@@ -178,7 +275,6 @@
             fill('stateDropdown', states);
         }
 
-        // 3. UI TOGGLES
         function toggleDropdown(id) {
             const el = document.getElementById(id);
             ['divDropdown', 'confDropdown', 'stateDropdown'].forEach(name => {
@@ -187,38 +283,35 @@
             el.classList.toggle('hidden');
         }
 
-        window.onclick = function(event) {
-            if (!event.target.closest('.relative')) {
+        window.onclick = function(e) {
+            if (!e.target.closest('.relative')) {
                 document.querySelectorAll('[id$="Dropdown"]').forEach(el => el.classList.add('hidden'));
             }
         }
 
-        // 4. HELPER: Get Checked Boxes
         function getCheckedValues(id) {
-            const container = document.getElementById(id);
-            if(!container) return [];
-            return Array.from(container.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+            const el = document.getElementById(id);
+            if(!el) return [];
+            return Array.from(el.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
         }
 
-        // 5. APPLY FILTERS
+        // --- 3. FILTER LOGIC ---
         async function applyFilters() {
             const selectedDivs = getCheckedValues('divDropdown');
             const selectedConfs = getCheckedValues('confDropdown');
             const selectedStates = getCheckedValues('stateDropdown');
             const zip = document.getElementById('zipInput').value.trim();
             const radius = parseFloat(document.getElementById('radiusInput').value);
-            
-            // UI Label Updates
-            const setLabel = (id, arr, def) => {
-                document.getElementById(id).textContent = arr.length ? `${arr.length} Selected` : def;
-            };
+
+            // Update Labels
+            const setLabel = (id, arr, def) => document.getElementById(id).textContent = arr.length ? `${arr.length} Selected` : def;
             setLabel('divLabel', selectedDivs, 'All Divisions');
             setLabel('confLabel', selectedConfs, 'All Conferences');
             setLabel('stateLabel', selectedStates, 'All States');
 
             let userLat = null, userLon = null;
 
-            // Zip Code Search
+            // Zip Search
             if (zip && radius) {
                 document.getElementById('locationStatus').textContent = "📍 Locating...";
                 try {
@@ -238,23 +331,12 @@
 
             // Filter Loop
             const filtered = allTeams.filter(team => {
-                // Division
-                if (selectedDivs.length > 0) {
-                    const teamDiv = team.division || 'D1'; 
-                    if (!selectedDivs.includes(teamDiv)) return false;
-                }
-                // Conference
-                if (selectedConfs.length > 0) {
-                    const teamConf = team.conf || team.conference;
-                    if (!selectedConfs.includes(teamConf)) return false;
-                }
-                // State
-                if (selectedStates.length > 0) {
-                    if (!selectedStates.includes(team.state)) return false;
-                }
-                // Radius
+                if (selectedDivs.length > 0 && !selectedDivs.includes(team.division || 'D1')) return false;
+                if (selectedConfs.length > 0 && !selectedConfs.includes(team.conf || team.conference)) return false;
+                if (selectedStates.length > 0 && !selectedStates.includes(team.state)) return false;
+                
                 if (userLat && radius) {
-                    if (!team.latitude || !team.longitude) return false;
+                    if (!team.latitude || !team.longitude) return false; 
                     const dist = getDistance(userLat, userLon, team.latitude, team.longitude);
                     if (dist > radius) return false;
                 }
@@ -264,7 +346,6 @@
             renderResults(filtered);
         }
 
-        // 6. CLEAR FILTERS
         function clearFilters() {
             document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
             document.getElementById('zipInput').value = "";
@@ -276,7 +357,6 @@
             renderResults(allTeams);
         }
 
-        // 7. MATH (Distance)
         function getDistance(lat1, lon1, lat2, lon2) {
             const R = 3958.8; 
             const dLat = (lat2 - lat1) * Math.PI / 180;
@@ -287,7 +367,7 @@
             return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
         }
 
-        // 8. RENDER TABLE
+        // --- 4. RENDER TABLE ---
         function renderResults(teams) {
             const tableBody = document.getElementById('resultsBody');
             const noResults = document.getElementById('noResults');
@@ -304,19 +384,128 @@
             noResults.classList.add('hidden');
             tableBody.innerHTML = teams.map(team => `
                 <tr class="hover:bg-gray-50 transition border-b border-gray-100">
-                    <td class="px-6 py-4 font-medium text-gray-900">${team.school || team.name || 'Unknown'}</td>
+                    <td class="px-6 py-4 font-medium text-gray-900">
+                        <div class="font-bold text-base">${team.school || team.name || 'Unknown'}</div>
+                        <div class="text-xs text-gray-400 font-normal uppercase mt-0.5">${team.mascot || ''}</div>
+                    </td>
                     <td class="px-6 py-4 text-gray-600">${team.mascot || '-'}</td>
-                    <td class="px-6 py-4 text-gray-600">
-                        <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">
+                    <td class="px-6 py-4">
+                        <span class="bg-blue-100 text-blue-800 text-xs font-bold px-2.5 py-0.5 rounded border border-blue-200">
                             ${team.conf || team.conference || '-'}
                         </span>
                     </td>
                     <td class="px-6 py-4 text-gray-600">${team.city ? team.city + ', ' : ''}${team.state || '-'}</td>
                     <td class="px-6 py-4">
-                        <a href="${team.url || '#'}" target="_blank" class="text-blue-600 hover:underline font-medium">Visit</a>
+                        <div class="flex gap-3">
+                            <button onclick="openModal('${team.school || team.name}')" class="text-white bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded text-sm font-medium transition shadow-sm">
+                                View Roster
+                            </button>
+                            <a href="${team.url || '#'}" target="_blank" class="text-gray-400 hover:text-blue-600 flex items-center" title="Visit Website">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                            </a>
+                        </div>
                     </td>
                 </tr>
             `).join('');
+        }
+
+        // --- 5. MODAL LOGIC (CHARTS & DATA) ---
+        function openModal(schoolName) {
+            const team = allTeams.find(t => (t.school || t.name) === schoolName);
+            if (!team) return;
+
+            // Text Data
+            document.getElementById('modalTitle').textContent = team.school || team.name;
+            document.getElementById('modalSubtitle').textContent = `${team.conf || team.conference} • ${team.city}, ${team.state}`;
+            
+            // Stats
+            document.getElementById('modalWin').textContent = team.winPct ? (team.winPct * 100).toFixed(1) + '%' : '-';
+            document.getElementById('modalIn').textContent = team.transfersIn || 0;
+            document.getElementById('modalOut').textContent = team.transfersOut || 0;
+            document.getElementById('modalSize').textContent = (team.players || []).length;
+
+            // Draw Charts
+            drawModalCharts(team);
+
+            // Fill Roster
+            const tbody = document.getElementById('modalRosterBody');
+            tbody.innerHTML = '';
+            if (team.players && team.players.length > 0) {
+                team.players.forEach(p => {
+                    tbody.innerHTML += `
+                        <tr class="hover:bg-gray-50 border-b border-gray-50">
+                            <td class="px-6 py-3 font-medium text-gray-900">${p.name}</td>
+                            <td class="px-6 py-3"><span class="bg-gray-100 text-gray-700 text-xs font-bold px-2 py-1 rounded">${p.pos}</span></td>
+                            <td class="px-6 py-3 text-gray-600">${p.class}</td>
+                        </tr>`;
+                });
+            } else {
+                tbody.innerHTML = '<tr><td colspan="3" class="p-6 text-center text-gray-400">No roster data available</td></tr>';
+            }
+
+            document.getElementById('teamModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; // Stop background scroll
+        }
+
+        function closeModal() {
+            document.getElementById('teamModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === "Escape") closeModal();
+        });
+
+        // --- CHART DRAWING ---
+        function drawModalCharts(team) {
+            // Prepare Data safely
+            const r = team.roster || {};
+            const classLabels = ['Fr', 'So', 'Jr', 'Sr', 'Gr'];
+            const classData = [r.Fr||0, r.So||0, r.Jr||0, r.Sr||0, r.Gr||0];
+
+            const p = team.positions || {};
+            const posLabels = ['P', 'C', 'INF', 'OF', 'UTIL'];
+            const posData = [p.P||0, p.C||0, p.INF||0, p.OF||0, p.UTIL||0];
+
+            // Destroy old instances
+            if (classChartInstance) classChartInstance.destroy();
+            if (posChartInstance) posChartInstance.destroy();
+
+            // Class Chart
+            const ctxClass = document.getElementById('modalClassChart').getContext('2d');
+            classChartInstance = new Chart(ctxClass, {
+                type: 'doughnut',
+                data: {
+                    labels: classLabels,
+                    datasets: [{
+                        data: classData,
+                        backgroundColor: ['#bfdbfe', '#60a5fa', '#3b82f6', '#2563eb', '#1e40af'],
+                        borderWidth: 0
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right' } } }
+            });
+
+            // Position Chart
+            const ctxPos = document.getElementById('modalPosChart').getContext('2d');
+            posChartInstance = new Chart(ctxPos, {
+                type: 'bar',
+                data: {
+                    labels: posLabels,
+                    datasets: [{
+                        label: 'Players',
+                        data: posData,
+                        backgroundColor: '#fbbf24',
+                        borderRadius: 4
+                    }]
+                },
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false,
+                    scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } },
+                    plugins: { legend: { display: false } }
+                }
+            });
         }
     </script>
 </body>
