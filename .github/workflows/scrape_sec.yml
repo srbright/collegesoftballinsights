@@ -2,11 +2,11 @@ name: Scrape SEC Softball
 
 on:
   schedule:
-    - cron: '0 6 * * *'     # runs daily at 6AM UTC
-  workflow_dispatch:         # allows manual runs
+    - cron: '0 6 * * *'     # runs daily at 6 AM UTC
+  workflow_dispatch:         # allows manual trigger
 
 permissions:
-  contents: write            # REQUIRED so the bot can push JSON
+  contents: write            # REQUIRED so actions bot can push back to repo
 
 jobs:
   scrape:
@@ -16,12 +16,12 @@ jobs:
     - name: Checkout repo
       uses: actions/checkout@v3
       with:
-        persist-credentials: true   # REQUIRED for push to work
+        persist-credentials: true
 
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: 3.11
+        python-version: '3.11'
 
     - name: Install dependencies
       run: |
@@ -30,9 +30,11 @@ jobs:
 
     - name: Run scraper
       run: |
-        python scrape_sec.py || echo "[ERROR] scrape_sec.py failed!"
+        echo "Running scrape_sec.py..."
+        python scrape_sec.py
+        echo "Scraper completed."
 
-    - name: Move JSON if exists
+    - name: Move JSON to root
       run: |
         mkdir -p outputs
         if [ -f outputs/softball_sec.json ]; then
@@ -46,6 +48,8 @@ jobs:
       run: |
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
         git add softball_sec.json || echo "nothing to add"
-        git commit -m "Update SEC JSON [skip ci]" || echo "No changes to commit"
+        git commit -m "Auto-update SEC roster data [skip ci]" || echo "No changes to commit"
+
         git push || echo "[WARN] Push failed"
