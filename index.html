@@ -44,6 +44,52 @@
   <!-- SEARCH SECTION -->
   <section id="search" class="py-24 bg-gradient-to-b from-white to-gray-50">
     <div class="max-w-5xl mx-auto px-6 text-center">
+      <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+    <h2 class="text-xl font-bold mb-4">Filter Teams</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+        <!-- Division -->
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Division</label>
+            <select id="divisionFilter" class="mt-1 block w-full border border-gray-300 rounded-md p-2">
+                <option value="">All Divisions</option>
+                <option value="D1">NCAA D1</option>
+                <option value="D2">NCAA D2</option>
+                <option value="D3">NCAA D3</option>
+                <option value="NAIA">NAIA</option>
+                <option value="JUCO">JUCO</option>
+            </select>
+        </div>
+        <!-- Conference -->
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Conference</label>
+            <select id="conferenceFilter" class="mt-1 block w-full border border-gray-300 rounded-md p-2">
+                <option value="">All Conferences</option>
+            </select>
+        </div>
+        <!-- State -->
+        <div>
+            <label class="block text-sm font-medium text-gray-700">State</label>
+            <select id="stateFilter" class="mt-1 block w-full border border-gray-300 rounded-md p-2">
+                <option value="">All States</option>
+            </select>
+        </div>
+        <!-- Zip Code -->
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Zip Code</label>
+            <input type="text" id="zipInput" placeholder="e.g. 90210" class="mt-1 block w-full border border-gray-300 rounded-md p-2">
+        </div>
+        <!-- Radius -->
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Radius (Miles)</label>
+            <input type="number" id="radiusInput" placeholder="e.g. 100" class="mt-1 block w-full border border-gray-300 rounded-md p-2">
+        </div>
+    </div>
+    <div class="mt-4 flex gap-2">
+        <button onclick="applyFilters()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Apply Filters</button>
+        <button onclick="clearFilters()" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Clear</button>
+    </div>
+    <p id="locationStatus" class="text-sm text-gray-500 mt-2"></p>
+</div>
       <h2 class="text-5xl md:text-7xl font-black mb-8 tracking-tight">
         Find Potential Colleges
       </h2>
@@ -133,6 +179,7 @@
       .then(r => r.json())
       .then(data => {
         allTeams = data;
+        populateDropdowns(data);
         fuse = new Fuse(allTeams, {keys: ['name','conf','state'], threshold: 0.3});
         renderResults(allTeams.slice(0,12));
         document.getElementById('noResults').textContent = '34 programs loaded — type above to search';
@@ -266,6 +313,109 @@
       document.getElementById('search').classList.remove('hidden');
       window.scrollTo(0,0);
     }
+  // --- FILTER FUNCTIONS ---
+function populateDropdowns(data) {
+    const conferences = [...new Set(data.map(t => t.conference || t.conf).filter(Boolean))].sort();
+    const states = [...new Set(data.map(t => t.state).filter(Boolean))].sort();
+    
+    const confSelect = document.getElementById('conferenceFilter');
+    confSelect.innerHTML = '<option value="">All Conferences</option>';
+    conferences.forEach(c => confSelect.innerHTML += `<option value="${c}">${c}</option>`);
+
+    const stateSelect = document.getElementById('stateFilter');
+    stateSelect.innerHTML = '<option value="">All States</option>';
+    states.forEach(s => stateSelect.innerHTML += `<option value="${s}">${s}</option>`);
+}
+
+async function applyFilters() {
+    const div = document.getElementById('divisionFilter').value;
+    const conf = document.getElementById('conferenceFilter').value;
+    const state = document.getElementById('stateFilter').value;
+    const zip = document.getElementById('zipInput').value;
+    const radius = parseFloat(document.getElementById('radiusInput').value);
+    let userLat = null, userLon = null;
+
+    if (zip && radius) {
+        document.getElementById('locationStatus').textContent = "📍 Locating zip code...";
+        try {
+            const res = await fetch(`https://api.zippopotam.us/us/${zip}`);
+            if (!res.ok) throw new Error();
+            const d = await res.json();
+            userLat = parseFloat(d.places[0].latitude);
+            userLon = parseFloat(d.places[0].longitude);
+            document.getElementById('locationStatus').textContent = `📍 Found: ${d.places[0]['place name']}, ${d.places[0]['state abbreviation']}`;
+        } catch (e) {
+            document.getElementById('locationStatus').textContent = "❌ Invalid Zip Code";
+            return;
+        }
+    } else {
+        document.getElementById('locationStatus').textContent = "";
+    }
+
+    const filtered = allTeams.filter(team => {
+        if (div && (team.division || 'D1') !== div) return false;
+        if (conf && (team.conference || team.conf) !== conf) return false;
+        if (state && team.state !== state) return false;
+        if (userLat && radius) {
+            if (!team.latitude || !team.longitude) return false;
+            const dist = getDistance(userLat, userLon, team.latitude, team.longitude);
+            if (dist > radius) return false;
+        }
+        return true;
+    });
+
+    // Re-use your existing search render function (assumes it's called renderResults or similar)
+    // If your code uses 'renderTeams' change this name below:
+    const tableBody = document.getElementById('resultsBody');
+    if(tableBody) {
+        tableBody.innerHTML = filtered.map(team => `
+            <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 font-medium">${team.school}</td>
+                <td class="px-6 py-4">${team.mascot || '-'}</td>
+                <td class="px-6 py-4">${team.conference || '-'}</td>
+                <td class="px-6 py-4">${team.city}, ${team.state}</td>
+                <td class="px-6 py-4">
+                    <a href="${team.url}" target="_blank" class="text-blue-600 hover:underline">Visit</a>
+                </td>
+            </tr>
+        `).join('');
+        document.getElementById('noResults').classList.add('hidden');
+    }
+}
+
+function clearFilters() {
+    document.getElementById('divisionFilter').value = "";
+    document.getElementById('conferenceFilter').value = "";
+    document.getElementById('stateFilter').value = "";
+    document.getElementById('zipInput').value = "";
+    document.getElementById('radiusInput').value = "";
+    document.getElementById('locationStatus').textContent = "";
+    // Reset to full list
+    const tableBody = document.getElementById('resultsBody');
+    if(tableBody) {
+         tableBody.innerHTML = allTeams.map(team => `
+            <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 font-medium">${team.school}</td>
+                <td class="px-6 py-4">${team.mascot || '-'}</td>
+                <td class="px-6 py-4">${team.conference || '-'}</td>
+                <td class="px-6 py-4">${team.city}, ${team.state}</td>
+                <td class="px-6 py-4">
+                    <a href="${team.url}" target="_blank" class="text-blue-600 hover:underline">Visit</a>
+                </td>
+            </tr>
+        `).join('');
+    }
+}
+
+function getDistance(lat1, lon1, lat2, lon2) {
+    const R = 3958.8; 
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+              Math.sin(dLon/2) * Math.sin(dLon/2);
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
   </script>
 </body>
 </html>
