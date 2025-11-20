@@ -40,56 +40,72 @@
       </a>
     </div>
   </header>
-
-  <!-- SEARCH SECTION -->
-  <section id="search" class="py-24 bg-gradient-to-b from-white to-gray-50">
-    <div class="max-w-5xl mx-auto px-6 text-center">
-      <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+<!-- START OF FILTER SECTION -->
+<div class="bg-white p-6 rounded-lg shadow-md mb-8">
     <h2 class="text-xl font-bold mb-4">Filter Teams</h2>
     <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
-        <!-- Division -->
-        <div>
-            <label class="block text-sm font-medium text-gray-700">Division</label>
-            <select id="divisionFilter" class="mt-1 block w-full border border-gray-300 rounded-md p-2">
-                <option value="">All Divisions</option>
-                <option value="D1">NCAA D1</option>
-                <option value="D2">NCAA D2</option>
-                <option value="D3">NCAA D3</option>
-                <option value="NAIA">NAIA</option>
-                <option value="JUCO">JUCO</option>
-            </select>
+        
+        <!-- Division Multi-Select -->
+        <div class="relative">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Division</label>
+            <button onclick="toggleDropdown('divDropdown')" class="w-full text-left border border-gray-300 rounded-md p-2 bg-white flex justify-between items-center">
+                <span id="divLabel">All Divisions</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div id="divDropdown" class="hidden absolute z-10 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto mt-1 p-2">
+                <label class="flex items-center p-2 hover:bg-gray-100 cursor-pointer"><input type="checkbox" class="mr-2" value="D1"> NCAA D1</label>
+                <label class="flex items-center p-2 hover:bg-gray-100 cursor-pointer"><input type="checkbox" class="mr-2" value="D2"> NCAA D2</label>
+                <label class="flex items-center p-2 hover:bg-gray-100 cursor-pointer"><input type="checkbox" class="mr-2" value="D3"> NCAA D3</label>
+                <label class="flex items-center p-2 hover:bg-gray-100 cursor-pointer"><input type="checkbox" class="mr-2" value="NAIA"> NAIA</label>
+                <label class="flex items-center p-2 hover:bg-gray-100 cursor-pointer"><input type="checkbox" class="mr-2" value="JUCO"> JUCO</label>
+            </div>
         </div>
-        <!-- Conference -->
-        <div>
-            <label class="block text-sm font-medium text-gray-700">Conference</label>
-            <select id="conferenceFilter" class="mt-1 block w-full border border-gray-300 rounded-md p-2">
-                <option value="">All Conferences</option>
-            </select>
+
+        <!-- Conference Multi-Select -->
+        <div class="relative">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Conference</label>
+            <button onclick="toggleDropdown('confDropdown')" class="w-full text-left border border-gray-300 rounded-md p-2 bg-white flex justify-between items-center">
+                <span id="confLabel">All Conferences</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div id="confDropdown" class="hidden absolute z-10 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto mt-1 p-2">
+                <!-- JS fills this -->
+            </div>
         </div>
-        <!-- State -->
-        <div>
-            <label class="block text-sm font-medium text-gray-700">State</label>
-            <select id="stateFilter" class="mt-1 block w-full border border-gray-300 rounded-md p-2">
-                <option value="">All States</option>
-            </select>
+
+        <!-- State Multi-Select -->
+        <div class="relative">
+            <label class="block text-sm font-medium text-gray-700 mb-1">State</label>
+            <button onclick="toggleDropdown('stateDropdown')" class="w-full text-left border border-gray-300 rounded-md p-2 bg-white flex justify-between items-center">
+                <span id="stateLabel">All States</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div id="stateDropdown" class="hidden absolute z-10 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto mt-1 p-2">
+                <!-- JS fills this -->
+            </div>
         </div>
+
         <!-- Zip Code -->
         <div>
-            <label class="block text-sm font-medium text-gray-700">Zip Code</label>
-            <input type="text" id="zipInput" placeholder="e.g. 90210" class="mt-1 block w-full border border-gray-300 rounded-md p-2">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Zip Code</label>
+            <input type="text" id="zipInput" placeholder="e.g. 90210" class="w-full border border-gray-300 rounded-md p-2">
         </div>
+
         <!-- Radius -->
         <div>
-            <label class="block text-sm font-medium text-gray-700">Radius (Miles)</label>
-            <input type="number" id="radiusInput" placeholder="e.g. 100" class="mt-1 block w-full border border-gray-300 rounded-md p-2">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Radius (Miles)</label>
+            <input type="number" id="radiusInput" placeholder="e.g. 100" class="w-full border border-gray-300 rounded-md p-2">
         </div>
     </div>
-    <div class="mt-4 flex gap-2">
-        <button onclick="applyFilters()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Apply Filters</button>
-        <button onclick="clearFilters()" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Clear</button>
+
+    <!-- Buttons -->
+    <div class="mt-6 flex gap-3">
+        <button onclick="applyFilters()" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition shadow-sm">Apply Filters</button>
+        <button onclick="clearFilters()" class="bg-gray-500 text-white px-6 py-2 rounded hover:bg-gray-600 transition shadow-sm">Clear</button>
     </div>
-    <p id="locationStatus" class="text-sm text-gray-500 mt-2"></p>
+    <p id="locationStatus" class="text-sm text-gray-500 mt-2 font-medium"></p>
 </div>
+<!-- END OF FILTER SECTION -->
       <h2 class="text-5xl md:text-7xl font-black mb-8 tracking-tight">
         Find Potential Colleges
       </h2>
@@ -313,49 +329,91 @@
       document.getElementById('search').classList.remove('hidden');
       window.scrollTo(0,0);
     }
-  // --- FILTER FUNCTIONS ---
-function populateDropdowns(data) {
-    const conferences = [...new Set(data.map(t => t.conference || t.conf).filter(Boolean))].sort();
-    const states = [...new Set(data.map(t => t.state).filter(Boolean))].sort();
-    
-    const confSelect = document.getElementById('conferenceFilter');
-    confSelect.innerHTML = '<option value="">All Conferences</option>';
-    conferences.forEach(c => confSelect.innerHTML += `<option value="${c}">${c}</option>`);
+ // --- MULTI-SELECT FILTER LOGIC ---
 
-    const stateSelect = document.getElementById('stateFilter');
-    stateSelect.innerHTML = '<option value="">All States</option>';
-    states.forEach(s => stateSelect.innerHTML += `<option value="${s}">${s}</option>`);
+// 1. Helper to Toggle Dropdowns
+function toggleDropdown(id) {
+    const el = document.getElementById(id);
+    // Close others
+    document.querySelectorAll('[id$="Dropdown"]').forEach(d => {
+        if(d.id !== id) d.classList.add('hidden');
+    });
+    el.classList.toggle('hidden');
 }
 
+// Close dropdowns if clicking outside
+window.onclick = function(event) {
+    if (!event.target.closest('.relative')) {
+        document.querySelectorAll('[id$="Dropdown"]').forEach(el => el.classList.add('hidden'));
+    }
+}
+
+// 2. Populate Checkboxes
+function populateDropdowns(data) {
+    const conferences = [...new Set(data.map(t => t.conf || t.conference).filter(Boolean))].sort();
+    const states = [...new Set(data.map(t => t.state).filter(Boolean))].sort();
+
+    const fillContainer = (id, items) => {
+        const container = document.getElementById(id);
+        container.innerHTML = ''; 
+        items.forEach(item => {
+            container.innerHTML += `
+                <label class="flex items-center p-2 hover:bg-gray-100 cursor-pointer">
+                    <input type="checkbox" class="mr-2" value="${item}"> ${item}
+                </label>`;
+        });
+    };
+
+    fillContainer('confDropdown', conferences);
+    fillContainer('stateDropdown', states);
+}
+
+// 3. Get Selected Values
+function getCheckedValues(dropdownId) {
+    const container = document.getElementById(dropdownId);
+    const checkboxes = container.querySelectorAll('input[type="checkbox"]:checked');
+    return Array.from(checkboxes).map(cb => cb.value);
+}
+
+// 4. Apply Filters
 async function applyFilters() {
-    const div = document.getElementById('divisionFilter').value;
-    const conf = document.getElementById('conferenceFilter').value;
-    const state = document.getElementById('stateFilter').value;
+    const selectedDivs = getCheckedValues('divDropdown');
+    const selectedConfs = getCheckedValues('confDropdown');
+    const selectedStates = getCheckedValues('stateDropdown');
+    
+    // Update UI Labels
+    document.getElementById('divLabel').textContent = selectedDivs.length ? `${selectedDivs.length} Selected` : 'All Divisions';
+    document.getElementById('confLabel').textContent = selectedConfs.length ? `${selectedConfs.length} Selected` : 'All Conferences';
+    document.getElementById('stateLabel').textContent = selectedStates.length ? `${selectedStates.length} Selected` : 'All States';
+
+    // Handle Zip/Radius
     const zip = document.getElementById('zipInput').value;
     const radius = parseFloat(document.getElementById('radiusInput').value);
     let userLat = null, userLon = null;
 
     if (zip && radius) {
-        document.getElementById('locationStatus').textContent = "📍 Locating zip code...";
+        document.getElementById('locationStatus').textContent = "📍 Locating...";
         try {
             const res = await fetch(`https://api.zippopotam.us/us/${zip}`);
             if (!res.ok) throw new Error();
             const d = await res.json();
             userLat = parseFloat(d.places[0].latitude);
             userLon = parseFloat(d.places[0].longitude);
-            document.getElementById('locationStatus').textContent = `📍 Found: ${d.places[0]['place name']}, ${d.places[0]['state abbreviation']}`;
+            document.getElementById('locationStatus').textContent = `📍 Searching within ${radius} miles of ${zip}`;
         } catch (e) {
-            document.getElementById('locationStatus').textContent = "❌ Invalid Zip Code";
+            document.getElementById('locationStatus').textContent = "❌ Invalid Zip";
             return;
         }
     } else {
         document.getElementById('locationStatus').textContent = "";
     }
 
+    // Filter Loop
     const filtered = allTeams.filter(team => {
-        if (div && (team.division || 'D1') !== div) return false;
-        if (conf && (team.conference || team.conf) !== conf) return false;
-        if (state && team.state !== state) return false;
+        if (selectedDivs.length > 0 && !selectedDivs.includes(team.division || 'D1')) return false;
+        if (selectedConfs.length > 0 && !selectedConfs.includes(team.conf || team.conference)) return false;
+        if (selectedStates.length > 0 && !selectedStates.includes(team.state)) return false;
+
         if (userLat && radius) {
             if (!team.latitude || !team.longitude) return false;
             const dist = getDistance(userLat, userLon, team.latitude, team.longitude);
@@ -364,49 +422,38 @@ async function applyFilters() {
         return true;
     });
 
-    // Re-use your existing search render function (assumes it's called renderResults or similar)
-    // If your code uses 'renderTeams' change this name below:
+    // Render Results (Re-using your existing logic)
     const tableBody = document.getElementById('resultsBody');
     if(tableBody) {
         tableBody.innerHTML = filtered.map(team => `
             <tr class="hover:bg-gray-50">
                 <td class="px-6 py-4 font-medium">${team.school}</td>
                 <td class="px-6 py-4">${team.mascot || '-'}</td>
-                <td class="px-6 py-4">${team.conference || '-'}</td>
-                <td class="px-6 py-4">${team.city}, ${team.state}</td>
+                <td class="px-6 py-4">${team.conference || team.conf || '-'}</td>
+                <td class="px-6 py-4">${team.city || ''}, ${team.state}</td>
                 <td class="px-6 py-4">
-                    <a href="${team.url}" target="_blank" class="text-blue-600 hover:underline">Visit</a>
+                    <a href="${team.url || '#'}" target="_blank" class="text-blue-600 hover:underline">Visit</a>
                 </td>
             </tr>
         `).join('');
-        document.getElementById('noResults').classList.add('hidden');
+        document.getElementById('resultCount').textContent = `Found ${filtered.length} teams`;
     }
 }
 
 function clearFilters() {
-    document.getElementById('divisionFilter').value = "";
-    document.getElementById('conferenceFilter').value = "";
-    document.getElementById('stateFilter').value = "";
+    document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
     document.getElementById('zipInput').value = "";
     document.getElementById('radiusInput').value = "";
+    document.getElementById('divLabel').textContent = "All Divisions";
+    document.getElementById('confLabel').textContent = "All Conferences";
+    document.getElementById('stateLabel').textContent = "All States";
     document.getElementById('locationStatus').textContent = "";
-    // Reset to full list
-    const tableBody = document.getElementById('resultsBody');
-    if(tableBody) {
-         tableBody.innerHTML = allTeams.map(team => `
-            <tr class="hover:bg-gray-50">
-                <td class="px-6 py-4 font-medium">${team.school}</td>
-                <td class="px-6 py-4">${team.mascot || '-'}</td>
-                <td class="px-6 py-4">${team.conference || '-'}</td>
-                <td class="px-6 py-4">${team.city}, ${team.state}</td>
-                <td class="px-6 py-4">
-                    <a href="${team.url}" target="_blank" class="text-blue-600 hover:underline">Visit</a>
-                </td>
-            </tr>
-        `).join('');
-    }
+    
+    // Reset to all teams
+    applyFilters(); 
 }
 
+// Distance Math
 function getDistance(lat1, lon1, lat2, lon2) {
     const R = 3958.8; 
     const dLat = (lat2 - lat1) * Math.PI / 180;
