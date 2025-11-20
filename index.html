@@ -7,7 +7,6 @@
     
     <!-- 1. LIBRARIES -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Chart.js for Graphs -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     
     <style>
@@ -17,20 +16,22 @@
         
         /* Smooth Modal Transition */
         #teamModal { transition: opacity 0.2s ease-in-out; }
+
+        /* Reliable Background Image Styling */
+        .hero-bg {
+            background-image: url('https://images.unsplash.com/photo-1628891339286-c5cb07d83872?q=80&w=1920&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans">
 
-    <!-- === HERO SECTION (Background Image) === -->
-    <div class="relative bg-gray-900 text-white py-24 shadow-xl overflow-hidden">
-        <!-- Background Image -->
-        <div class="absolute inset-0">
-            <img src="https://images.unsplash.com/photo-1628891339286-c5cb07d83872?q=80&w=1920&auto=format&fit=crop" 
-                 alt="Softball Field" 
-                 class="w-full h-full object-cover opacity-40">
-            <!-- Gradient Overlay -->
-            <div class="absolute inset-0 bg-gradient-to-b from-gray-900/60 via-gray-900/40 to-gray-900/90"></div>
-        </div>
+    <!-- === HERO SECTION === -->
+    <div class="relative bg-gray-900 text-white py-24 shadow-xl overflow-hidden hero-bg">
+        <!-- Dark Overlay so text is readable -->
+        <div class="absolute inset-0 bg-gray-900/70"></div>
 
         <!-- Content -->
         <div class="relative z-10 container mx-auto px-4 text-center">
@@ -130,9 +131,8 @@
                     <thead class="text-xs text-gray-700 uppercase bg-gray-100">
                         <tr>
                             <th scope="col" class="px-6 py-3">School</th>
-                            <th scope="col" class="px-6 py-3">Mascot</th>
                             <th scope="col" class="px-6 py-3">Conference</th>
-                            <th scope="col" class="px-6 py-3">Location</th>
+                            <th scope="col" class="px-6 py-3">State</th>
                             <th scope="col" class="px-6 py-3">Details</th>
                         </tr>
                     </thead>
@@ -198,9 +198,9 @@
                         </div>
                     </div>
 
-                    <!-- Position Breakdown -->
+                    <!-- Position Breakdown (STACKED) -->
                     <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
-                        <h4 class="text-sm font-bold text-gray-500 uppercase text-center mb-4">Position Breakdown</h4>
+                        <h4 class="text-sm font-bold text-gray-500 uppercase text-center mb-4">Position Breakdown (By Class)</h4>
                         <div class="relative h-56">
                             <canvas id="modalPosChart"></canvas>
                         </div>
@@ -388,22 +388,16 @@
                         <div class="font-bold text-base">${team.school || team.name || 'Unknown'}</div>
                         <div class="text-xs text-gray-400 font-normal uppercase mt-0.5">${team.mascot || ''}</div>
                     </td>
-                    <td class="px-6 py-4 text-gray-600">${team.mascot || '-'}</td>
                     <td class="px-6 py-4">
                         <span class="bg-blue-100 text-blue-800 text-xs font-bold px-2.5 py-0.5 rounded border border-blue-200">
                             ${team.conf || team.conference || '-'}
                         </span>
                     </td>
-                    <td class="px-6 py-4 text-gray-600">${team.city ? team.city + ', ' : ''}${team.state || '-'}</td>
+                    <td class="px-6 py-4 text-gray-600">${team.state || '-'}</td>
                     <td class="px-6 py-4">
-                        <div class="flex gap-3">
-                            <button onclick="openModal('${team.school || team.name}')" class="text-white bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded text-sm font-medium transition shadow-sm">
-                                View Roster
-                            </button>
-                            <a href="${team.url || '#'}" target="_blank" class="text-gray-400 hover:text-blue-600 flex items-center" title="Visit Website">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
-                            </a>
-                        </div>
+                        <button onclick="openModal('${team.school || team.name}')" class="text-white bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded text-sm font-medium transition shadow-sm">
+                            View Roster
+                        </button>
                     </td>
                 </tr>
             `).join('');
@@ -458,20 +452,43 @@
 
         // --- CHART DRAWING ---
         function drawModalCharts(team) {
-            // Prepare Data safely
+            // Colors (Matching Class Breakdown)
+            const colors = {
+                Fr: '#bfdbfe', // Lightest Blue
+                So: '#60a5fa',
+                Jr: '#3b82f6',
+                Sr: '#2563eb',
+                Gr: '#1e40af'  // Darkest Blue
+            };
+            const colorArray = [colors.Fr, colors.So, colors.Jr, colors.Sr, colors.Gr];
+            
+            // 1. CLASS DATA
             const r = team.roster || {};
             const classLabels = ['Fr', 'So', 'Jr', 'Sr', 'Gr'];
             const classData = [r.Fr||0, r.So||0, r.Jr||0, r.Sr||0, r.Gr||0];
 
-            const p = team.positions || {};
-            const posLabels = ['P', 'C', 'INF', 'OF', 'UTIL'];
-            const posData = [p.P||0, p.C||0, p.INF||0, p.OF||0, p.UTIL||0];
+            // 2. POSITION BREAKDOWN BY CLASS (The "Stacked" Logic)
+            const positions = ['P', 'C', 'INF', 'OF', 'UTIL'];
+            const players = team.players || [];
+            
+            // We need 5 datasets (one for each class), containing data for each position
+            // Example: Dataset "Freshman" -> [P_count, C_count, INF_count...]
+            
+            const getCount = (pos, cls) => players.filter(pl => pl.pos === pos && (pl.class === cls || pl.class.includes(cls))).length;
+
+            const stackedDatasets = [
+                { label: 'Fr', data: positions.map(p => getCount(p, 'Fr')), backgroundColor: colors.Fr },
+                { label: 'So', data: positions.map(p => getCount(p, 'So')), backgroundColor: colors.So },
+                { label: 'Jr', data: positions.map(p => getCount(p, 'Jr')), backgroundColor: colors.Jr },
+                { label: 'Sr', data: positions.map(p => getCount(p, 'Sr')), backgroundColor: colors.Sr },
+                { label: 'Gr', data: positions.map(p => getCount(p, 'Gr')), backgroundColor: colors.Gr },
+            ];
 
             // Destroy old instances
             if (classChartInstance) classChartInstance.destroy();
             if (posChartInstance) posChartInstance.destroy();
 
-            // Class Chart
+            // DRAW CLASS CHART (Doughnut)
             const ctxClass = document.getElementById('modalClassChart').getContext('2d');
             classChartInstance = new Chart(ctxClass, {
                 type: 'doughnut',
@@ -479,31 +496,29 @@
                     labels: classLabels,
                     datasets: [{
                         data: classData,
-                        backgroundColor: ['#bfdbfe', '#60a5fa', '#3b82f6', '#2563eb', '#1e40af'],
+                        backgroundColor: colorArray,
                         borderWidth: 0
                     }]
                 },
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right' } } }
             });
 
-            // Position Chart
+            // DRAW POSITION CHART (Stacked Bar)
             const ctxPos = document.getElementById('modalPosChart').getContext('2d');
             posChartInstance = new Chart(ctxPos, {
                 type: 'bar',
                 data: {
-                    labels: posLabels,
-                    datasets: [{
-                        label: 'Players',
-                        data: posData,
-                        backgroundColor: '#fbbf24',
-                        borderRadius: 4
-                    }]
+                    labels: positions,
+                    datasets: stackedDatasets
                 },
                 options: { 
                     responsive: true, 
                     maintainAspectRatio: false,
-                    scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } },
-                    plugins: { legend: { display: false } }
+                    scales: { 
+                        x: { stacked: true },
+                        y: { stacked: true, beginAtZero: true, ticks: { stepSize: 1 } } 
+                    },
+                    plugins: { legend: { display: false } } // Hide legend to save space since colors match pie chart
                 }
             });
         }
