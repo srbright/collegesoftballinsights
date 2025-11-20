@@ -372,49 +372,66 @@ window.onclick = function(event) {
     }
 }
 
-// 2. Populate Checkboxes
+// === START OF NEW LOGIC ===
+
+// 1. HELPER: Toggle Dropdowns
+function toggleDropdown(id) {
+    const el = document.getElementById(id);
+    ['divDropdown', 'confDropdown', 'stateDropdown'].forEach(name => {
+        if(name !== id) document.getElementById(name).classList.add('hidden');
+    });
+    el.classList.toggle('hidden');
+}
+
+// Close dropdowns if clicking outside
+window.onclick = function(event) {
+    if (!event.target.closest('.relative')) {
+        document.querySelectorAll('[id$="Dropdown"]').forEach(el => el.classList.add('hidden'));
+    }
+}
+
+// 2. POPULATE: Fill the lists
 function populateDropdowns(data) {
+    // Get unique conferences and states
     const conferences = [...new Set(data.map(t => t.conf || t.conference).filter(Boolean))].sort();
     const states = [...new Set(data.map(t => t.state).filter(Boolean))].sort();
 
-    const fillContainer = (id, items) => {
+    const fill = (id, items) => {
         const container = document.getElementById(id);
         container.innerHTML = ''; 
         items.forEach(item => {
             container.innerHTML += `
-                <label class="flex items-center p-2 hover:bg-gray-100 cursor-pointer">
-                    <input type="checkbox" class="mr-2" value="${item}"> ${item}
+                <label class="flex items-center p-2 hover:bg-blue-50 rounded cursor-pointer">
+                    <input type="checkbox" class="mr-3 h-4 w-4 text-blue-600 rounded" value="${item}"> ${item}
                 </label>`;
         });
     };
-
-    fillContainer('confDropdown', conferences);
-    fillContainer('stateDropdown', states);
+    fill('confDropdown', conferences);
+    fill('stateDropdown', states);
 }
 
-// 3. Get Selected Values
-function getCheckedValues(dropdownId) {
-    const container = document.getElementById(dropdownId);
+// Helper: Get checked boxes
+function getCheckedValues(id) {
+    const container = document.getElementById(id);
     const checkboxes = container.querySelectorAll('input[type="checkbox"]:checked');
     return Array.from(checkboxes).map(cb => cb.value);
 }
 
-// 4. Apply Filters
+// 3. FILTER: The main logic
 async function applyFilters() {
     const selectedDivs = getCheckedValues('divDropdown');
     const selectedConfs = getCheckedValues('confDropdown');
     const selectedStates = getCheckedValues('stateDropdown');
-    
-    // Update UI Labels
-    document.getElementById('divLabel').textContent = selectedDivs.length ? `${selectedDivs.length} Selected` : 'All Divisions';
-    document.getElementById('confLabel').textContent = selectedConfs.length ? `${selectedConfs.length} Selected` : 'All Conferences';
-    document.getElementById('stateLabel').textContent = selectedStates.length ? `${selectedStates.length} Selected` : 'All States';
-
-    // Handle Zip/Radius
     const zip = document.getElementById('zipInput').value;
     const radius = parseFloat(document.getElementById('radiusInput').value);
     let userLat = null, userLon = null;
 
+    // Update Labels
+    document.getElementById('divLabel').textContent = selectedDivs.length ? `${selectedDivs.length} Selected` : 'All Divisions';
+    document.getElementById('confLabel').textContent = selectedConfs.length ? `${selectedConfs.length} Selected` : 'All Conferences';
+    document.getElementById('stateLabel').textContent = selectedStates.length ? `${selectedStates.length} Selected` : 'All States';
+
+    // Zip Code Logic
     if (zip && radius) {
         document.getElementById('locationStatus').textContent = "📍 Locating...";
         try {
@@ -432,36 +449,27 @@ async function applyFilters() {
         document.getElementById('locationStatus').textContent = "";
     }
 
-    // Filter Loop
+    // Filtering the list
     const filtered = allTeams.filter(team => {
+        // Check Division
         if (selectedDivs.length > 0 && !selectedDivs.includes(team.division || 'D1')) return false;
+        
+        // Check Conference
         if (selectedConfs.length > 0 && !selectedConfs.includes(team.conf || team.conference)) return false;
+        
+        // Check State
         if (selectedStates.length > 0 && !selectedStates.includes(team.state)) return false;
 
+        // Check Radius
         if (userLat && radius) {
-            if (!team.latitude || !team.longitude) return false;
+            if (!team.latitude || !team.longitude) return false; 
             const dist = getDistance(userLat, userLon, team.latitude, team.longitude);
             if (dist > radius) return false;
         }
         return true;
     });
 
-    // Render Results (Re-using your existing logic)
-    const tableBody = document.getElementById('resultsBody');
-    if(tableBody) {
-        tableBody.innerHTML = filtered.map(team => `
-            <tr class="hover:bg-gray-50">
-                <td class="px-6 py-4 font-medium">${team.school}</td>
-                <td class="px-6 py-4">${team.mascot || '-'}</td>
-                <td class="px-6 py-4">${team.conference || team.conf || '-'}</td>
-                <td class="px-6 py-4">${team.city || ''}, ${team.state}</td>
-                <td class="px-6 py-4">
-                    <a href="${team.url || '#'}" target="_blank" class="text-blue-600 hover:underline">Visit</a>
-                </td>
-            </tr>
-        `).join('');
-        document.getElementById('resultCount').textContent = `Found ${filtered.length} teams`;
-    }
+    renderResults(filtered);
 }
 
 function clearFilters() {
@@ -472,9 +480,7 @@ function clearFilters() {
     document.getElementById('confLabel').textContent = "All Conferences";
     document.getElementById('stateLabel').textContent = "All States";
     document.getElementById('locationStatus').textContent = "";
-    
-    // Reset to all teams
-    applyFilters(); 
+    renderResults(allTeams);
 }
 
 // Distance Math
@@ -487,6 +493,42 @@ function getDistance(lat1, lon1, lat2, lon2) {
               Math.sin(dLon/2) * Math.sin(dLon/2);
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 }
+
+// 4. RENDER: Draw the table
+function renderResults(teams) {
+    const tableBody = document.getElementById('resultsBody');
+    const noResults = document.getElementById('noResults');
+    const resultCount = document.getElementById('resultCount');
+
+    if (resultCount) resultCount.textContent = `Found ${teams.length} teams`;
+
+    if (teams.length === 0) {
+        if (noResults) noResults.classList.remove('hidden');
+        if (tableBody) tableBody.innerHTML = '';
+        return;
+    }
+
+    if (noResults) noResults.classList.add('hidden');
+
+    if (tableBody) {
+        tableBody.innerHTML = teams.map(team => `
+            <tr class="hover:bg-gray-50 transition border-b border-gray-100">
+                <td class="px-6 py-4 font-medium text-gray-900">${team.school || team.name || 'Unknown'}</td>
+                <td class="px-6 py-4 text-gray-600">${team.mascot || '-'}</td>
+                <td class="px-6 py-4 text-gray-600">
+                    <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">
+                        ${team.conf || team.conference || '-'}
+                    </span>
+                </td>
+                <td class="px-6 py-4 text-gray-600">${team.city ? team.city + ', ' : ''}${team.state || '-'}</td>
+                <td class="px-6 py-4">
+                    <a href="${team.url || '#'}" target="_blank" class="text-blue-600 hover:underline">Visit</a>
+                </td>
+            </tr>
+        `).join('');
+    }
+}
+// === END OF NEW LOGIC ===
   </script>
 </body>
 </html>
