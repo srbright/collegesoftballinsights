@@ -1,416 +1,323 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>College Softball Insights</title>
-  <!-- PRODUCTION TAILWIND (official minified build - no warnings) -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: { extend: { colors: { pink: { 600: '#db2777', 700: '#be185d' } } } }
-    }
-  </script>
-<!-- Fuse.js (Search) -->
-<script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js"></script>
-<!-- Chart.js (Graphs) - This "umd" version is required for standard websites -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <style>
-    .hero { 
-      background: linear-gradient(rgba(0,0,0,0.62), rgba(0,0,0,0.62)), 
-                   url('https://justwomenssports.com/wp-content/uploads/2025/06/GettyImages-2219054470-1024x683.jpg') center/cover no-repeat fixed;
-      background-attachment: fixed;
-    }
-    #searchBtn:hover { transform: scale(1.05); }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Softball Insights</title>
+    
+    <!-- 1. LIBRARIES -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js"></script>
+
+    <style>
+        /* Custom Scrollbar for Dropdowns */
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
 </head>
-<body class="font-sans text-gray-800">
+<body class="bg-gray-50 text-gray-800 font-sans">
 
-  <!-- HERO -->
-  <header class="hero h-screen flex items-center justify-center text-white text-center px-6">
-    <div class="max-w-5xl z-10">
-      <h1 class="text-5xl md:text-7xl font-black mb-8 tracking-tight leading-tight">
-        College Softball Insights
-      </h1>
-      <p class="text-xl md:text-2xl max-w-4xl mx-auto leading-relaxed mb-10 opacity-95">
-        Finding the right college softball program begins with clarity. Our tool helps parents and players narrow down options by location, conference, competitive level, enrollment size, class breakdown, retention rates, and coaching stability. Instead of feeling lost in endless choices, you'll have a focused starting point to explore programs that truly match your priorities — making the first step in the recruiting process simpler, smarter, and more confident.
-      </p>
-      <a href="#search" class="inline-block bg-pink-600 hover:bg-pink-700 text-white font-bold py-5 px-12 rounded-full text-xl transition transform hover:scale-105">
-        Start Your Search
-      </a>
+    <!-- HERO SECTION -->
+    <div class="bg-gradient-to-r from-blue-900 to-blue-700 text-white py-12 shadow-md">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-5xl font-extrabold mb-2 tracking-tight">College Softball Insights</h1>
+            <p class="text-blue-100 text-lg font-light">Data-driven recruiting research tool</p>
+        </div>
     </div>
-  </header>
-<!-- === START OF NEW FILTER SECTION === -->
-<div class="bg-white p-8 rounded-xl shadow-lg mb-10 border border-gray-100">
-    
-    <!-- CENTERED HEADER -->
-    <h2 class="text-3xl font-bold mb-8 text-center text-gray-800">Find Potential Colleges</h2>
 
-    <!-- FILTERS GRID -->
-    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
-        
-        <!-- Division (Multi-Select) -->
-        <div class="relative group">
-            <label class="block text-xs font-bold text-gray-500 uppercase mb-1 ml-1">Division</label>
-            <button onclick="toggleDropdown('divDropdown')" class="w-full text-left border border-gray-300 rounded-lg p-2.5 bg-gray-50 hover:bg-white transition flex justify-between items-center">
-                <span id="divLabel" class="text-gray-700 truncate font-medium">All Divisions</span>
-                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-            </button>
-            <div id="divDropdown" class="hidden absolute z-20 w-full bg-white border border-gray-200 rounded-lg shadow-xl max-h-60 overflow-y-auto mt-2 p-2">
-                <label class="flex items-center p-2 hover:bg-blue-50 rounded cursor-pointer"><input type="checkbox" class="mr-3 h-4 w-4 text-blue-600 rounded" value="D1"> NCAA D1</label>
-                <label class="flex items-center p-2 hover:bg-blue-50 rounded cursor-pointer"><input type="checkbox" class="mr-3 h-4 w-4 text-blue-600 rounded" value="D2"> NCAA D2</label>
-                <label class="flex items-center p-2 hover:bg-blue-50 rounded cursor-pointer"><input type="checkbox" class="mr-3 h-4 w-4 text-blue-600 rounded" value="D3"> NCAA D3</label>
-                <label class="flex items-center p-2 hover:bg-blue-50 rounded cursor-pointer"><input type="checkbox" class="mr-3 h-4 w-4 text-blue-600 rounded" value="NAIA"> NAIA</label>
-                <label class="flex items-center p-2 hover:bg-blue-50 rounded cursor-pointer"><input type="checkbox" class="mr-3 h-4 w-4 text-blue-600 rounded" value="JUCO"> JUCO</label>
+    <!-- MAIN CONTAINER -->
+    <div class="container mx-auto px-4 py-8 max-w-7xl">
+
+        <!-- === FILTER SECTION === -->
+        <div class="bg-white p-8 rounded-xl shadow-lg mb-10 border border-gray-100">
+            
+            <h2 class="text-3xl font-bold mb-8 text-center text-gray-800">Find Potential Colleges</h2>
+
+            <!-- FILTERS GRID -->
+            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                
+                <!-- Division Dropdown -->
+                <div class="relative group">
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1 ml-1">Division</label>
+                    <button onclick="toggleDropdown('divDropdown')" class="w-full text-left border border-gray-300 rounded-lg p-2.5 bg-gray-50 hover:bg-white transition flex justify-between items-center">
+                        <span id="divLabel" class="text-gray-700 truncate font-medium">All Divisions</span>
+                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div id="divDropdown" class="hidden absolute z-20 w-full bg-white border border-gray-200 rounded-lg shadow-xl max-h-60 overflow-y-auto mt-2 p-2">
+                        <label class="flex items-center p-2 hover:bg-blue-50 rounded cursor-pointer"><input type="checkbox" class="mr-3 h-4 w-4 text-blue-600 rounded" value="D1"> NCAA D1</label>
+                        <label class="flex items-center p-2 hover:bg-blue-50 rounded cursor-pointer"><input type="checkbox" class="mr-3 h-4 w-4 text-blue-600 rounded" value="D2"> NCAA D2</label>
+                        <label class="flex items-center p-2 hover:bg-blue-50 rounded cursor-pointer"><input type="checkbox" class="mr-3 h-4 w-4 text-blue-600 rounded" value="D3"> NCAA D3</label>
+                        <label class="flex items-center p-2 hover:bg-blue-50 rounded cursor-pointer"><input type="checkbox" class="mr-3 h-4 w-4 text-blue-600 rounded" value="NAIA"> NAIA</label>
+                        <label class="flex items-center p-2 hover:bg-blue-50 rounded cursor-pointer"><input type="checkbox" class="mr-3 h-4 w-4 text-blue-600 rounded" value="JUCO"> JUCO</label>
+                    </div>
+                </div>
+
+                <!-- Conference Dropdown -->
+                <div class="relative group">
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1 ml-1">Conference</label>
+                    <button onclick="toggleDropdown('confDropdown')" class="w-full text-left border border-gray-300 rounded-lg p-2.5 bg-gray-50 hover:bg-white transition flex justify-between items-center">
+                        <span id="confLabel" class="text-gray-700 truncate font-medium">All Conferences</span>
+                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div id="confDropdown" class="hidden absolute z-20 w-full bg-white border border-gray-200 rounded-lg shadow-xl max-h-60 overflow-y-auto mt-2 p-2">
+                        <!-- JS fills this -->
+                    </div>
+                </div>
+
+                <!-- State Dropdown -->
+                <div class="relative group">
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1 ml-1">State</label>
+                    <button onclick="toggleDropdown('stateDropdown')" class="w-full text-left border border-gray-300 rounded-lg p-2.5 bg-gray-50 hover:bg-white transition flex justify-between items-center">
+                        <span id="stateLabel" class="text-gray-700 truncate font-medium">All States</span>
+                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div id="stateDropdown" class="hidden absolute z-20 w-full bg-white border border-gray-200 rounded-lg shadow-xl max-h-60 overflow-y-auto mt-2 p-2">
+                        <!-- JS fills this -->
+                    </div>
+                </div>
+
+                <!-- Zip Code -->
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1 ml-1">Zip Code</label>
+                    <input type="text" id="zipInput" placeholder="e.g. 90210" class="w-full border border-gray-300 rounded-lg p-2.5 bg-gray-50 focus:ring-2 focus:ring-blue-500 transition font-medium">
+                </div>
+
+                <!-- Radius -->
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1 ml-1">Radius (Miles)</label>
+                    <input type="number" id="radiusInput" placeholder="e.g. 100" class="w-full border border-gray-300 rounded-lg p-2.5 bg-gray-50 focus:ring-2 focus:ring-blue-500 transition font-medium">
+                </div>
+            </div>
+
+            <!-- ACTION BUTTONS -->
+            <div class="mt-8 flex justify-center gap-4">
+                <button onclick="applyFilters()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-3 rounded-lg shadow-md transition transform hover:-translate-y-0.5">
+                    Apply Filters
+                </button>
+                <button onclick="clearFilters()" class="bg-white border border-gray-300 text-gray-700 font-bold px-8 py-3 rounded-lg hover:bg-gray-50 transition">
+                    Reset
+                </button>
+            </div>
+            <p id="locationStatus" class="text-center text-sm text-blue-600 mt-4 font-medium min-h-[20px]"></p>
+        </div>
+
+        <!-- RESULTS TABLE -->
+        <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
+            <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+                <h3 class="text-lg font-bold text-gray-800">Search Results</h3>
+                <span id="resultCount" class="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full">Loading...</span>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left text-gray-500">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-100">
+                        <tr>
+                            <th scope="col" class="px-6 py-3">School</th>
+                            <th scope="col" class="px-6 py-3">Mascot</th>
+                            <th scope="col" class="px-6 py-3">Conference</th>
+                            <th scope="col" class="px-6 py-3">Location</th>
+                            <th scope="col" class="px-6 py-3">Link</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultsBody">
+                        <!-- Rows injected here by JS -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- No Results State -->
+            <div id="noResults" class="hidden p-12 text-center">
+                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <h3 class="mt-2 text-sm font-medium text-gray-900">No teams found</h3>
+                <p class="mt-1 text-sm text-gray-500">Try adjusting your filters or search radius.</p>
             </div>
         </div>
 
-        <!-- Conference (Multi-Select) -->
-        <div class="relative group">
-            <label class="block text-xs font-bold text-gray-500 uppercase mb-1 ml-1">Conference</label>
-            <button onclick="toggleDropdown('confDropdown')" class="w-full text-left border border-gray-300 rounded-lg p-2.5 bg-gray-50 hover:bg-white transition flex justify-between items-center">
-                <span id="confLabel" class="text-gray-700 truncate font-medium">All Conferences</span>
-                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-            </button>
-            <div id="confDropdown" class="hidden absolute z-20 w-full bg-white border border-gray-200 rounded-lg shadow-xl max-h-60 overflow-y-auto mt-2 p-2">
-                <!-- Javascript fills this -->
-            </div>
-        </div>
+    </div> <!-- End Container -->
 
-        <!-- State (Multi-Select) -->
-        <div class="relative group">
-            <label class="block text-xs font-bold text-gray-500 uppercase mb-1 ml-1">State</label>
-            <button onclick="toggleDropdown('stateDropdown')" class="w-full text-left border border-gray-300 rounded-lg p-2.5 bg-gray-50 hover:bg-white transition flex justify-between items-center">
-                <span id="stateLabel" class="text-gray-700 truncate font-medium">All States</span>
-                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-            </button>
-            <div id="stateDropdown" class="hidden absolute z-20 w-full bg-white border border-gray-200 rounded-lg shadow-xl max-h-60 overflow-y-auto mt-2 p-2">
-                <!-- Javascript fills this -->
-            </div>
-        </div>
+    <!-- === JAVASCRIPT LOGIC === -->
+    <script>
+        let allTeams = [];
 
-        <!-- Zip Code -->
-        <div>
-            <label class="block text-xs font-bold text-gray-500 uppercase mb-1 ml-1">Zip Code</label>
-            <input type="text" id="zipInput" placeholder="e.g. 90210" class="w-full border border-gray-300 rounded-lg p-2.5 bg-gray-50 focus:ring-2 focus:ring-blue-500 transition font-medium">
-        </div>
-
-        <!-- Radius -->
-        <div>
-            <label class="block text-xs font-bold text-gray-500 uppercase mb-1 ml-1">Radius (Miles)</label>
-            <input type="number" id="radiusInput" placeholder="e.g. 100" class="w-full border border-gray-300 rounded-lg p-2.5 bg-gray-50 focus:ring-2 focus:ring-blue-500 transition font-medium">
-        </div>
-    </div>
-
-    <!-- BUTTONS -->
-    <div class="mt-8 flex justify-center gap-4">
-        <button onclick="applyFilters()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-3 rounded-lg shadow-md transition transform hover:-translate-y-0.5">
-            Apply Filters
-        </button>
-        <button onclick="clearFilters()" class="bg-white border border-gray-300 text-gray-700 font-bold px-8 py-3 rounded-lg hover:bg-gray-50 transition">
-            Reset
-        </button>
-    </div>
-    <p id="locationStatus" class="text-center text-sm text-blue-600 mt-4 font-medium min-h-[20px]"></p>
-</div>
-<!-- === END OF NEW FILTER SECTION === -->
-      <h2 class="text-5xl md:text-7xl font-black mb-8 tracking-tight">
-        Find Potential Colleges
-      </h2>
-      <p class="text-xl md:text-2xl text-gray-700 mb-12 max-w-4xl mx-auto">
-        Type in natural language what you are looking for in your college softball team
-      </p>
-
-      <div class="relative max-w-4xl mx-auto">
-        <input 
-          type="text" 
-          id="aiSearchInput" 
-          placeholder="e.g. SEC schools in Texas adding lots of freshmen, warm weather teams with 80% win rate..." 
-          class="w-full p-7 text-xl bg-white border-4 border-pink-200 rounded-3xl shadow-2xl focus:border-pink-600 focus:outline-none pr-24"
-          autofocus />
-        <button id="searchBtn" class="absolute right-4 top-1/2 -translate-y-1/2 bg-pink-600 hover:bg-pink-700 text-white font-bold px-10 py-5 rounded-3xl transition">
-          Search
-        </button>
-      </div>
-
-      <p class="text-sm text-gray-500 mt-6">Powered by Grok • Real-time AI understanding</p>
-    </div>
-
-    <div id="explanation" class="max-w-4xl mx-auto mt-12 p-8 bg-blue-50 rounded-2xl text-lg font-medium hidden"></div>
-    <div id="results" class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10 mt-16 px-6"></div>
-    <p class="text-center text-gray-500 mt-12 text-lg" id="noResults">Loading programs...</p>
-  </section>
-
-  <!-- TEAM DETAIL -->
-  <section id="teamDetails" class="py-20 bg-gray-50 hidden">
-    <div class="max-w-6xl mx-auto px-6">
-      <div class="text-center mb-10">
-        <h2 id="detailTitle" class="text-5xl font-bold mb-4"></h2>
-        <div id="netChange" class="inline-flex items-center px-6 py-3 rounded-full font-bold text-xl"></div>
-      </div>
-
-      <div class="bg-white rounded-2xl shadow-2xl p-8 mb-12">
-        <h3 class="text-3xl font-bold text-center mb-6">2025 to 2026 Roster Change Summary</h3>
-        <table class="w-full text-lg mb-8">
-          <thead class="bg-gray-100"><tr><th class="p-5 text-left">Added</th><th class="p-5 text-left">Left</th><th class="p-5 text-left font-bold">Net Change</th></tr></thead>
-          <tbody id="rosterChangeTable"></tbody>
-        </table>
-        <p class="text-center text-sm text-gray-600"><strong>Newcomers:</strong> <span id="newcomerBreakdown"></span></p>
-      </div>
-
-      <div class="grid md:grid-cols-2 gap-12 mb-12">
-        <div class="bg-white p-8 rounded-2xl shadow-2xl"><canvas id="classChart"></canvas></div>
-        <div class="bg-white p-8 rounded-2xl shadow-2xl"><canvas id="positionChart"></canvas></div>
-      </div>
-
-      <div class="bg-white rounded-2xl shadow-2xl overflow-hidden">
-        <h3 class="text-3xl font-bold p-8 bg-pink-50 text-center">Full 2026 Roster</h3>
-        <div class="overflow-x-auto">
-          <table class="w-full" id="rosterTable">
-            <thead class="bg-pink-100">
-              <tr><th class="p-5 text-left">Player</th><th class="p-5 text-center">Pos</th><th class="p-5 text-center">Class</th></tr>
-            </thead>
-            <tbody class="divide-y"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <button onclick="closeDetails()" class="mt-12 block mx-auto bg-pink-600 hover:bg-pink-700 text-white font-bold py-5 px-12 rounded-full text-xl transition">
-        Back to Search
-      </button>
-    </div>
-  </section>
-
-  <!-- CTA -->
-  <section class="py-24 bg-pink-600 text-white text-center">
-    <h2 class="text-5xl md:text-6xl font-black mb-6">Launch Special: $99 First Year</h2>
-    <p class="text-2xl mb-10">Limited to first 100 families</p>
-    <a href="#" class="bg-white text-pink-600 hover:bg-gray-100 font-black text-2xl py-6 px-16 rounded-full transition transform hover:scale-105">
-      Claim Your Spot Now
-    </a>
-  </section>
-
-  <footer class="bg-gray-900 text-white py-10 text-center text-sm">
-    © 2025 College Softball Insights • Real-time roster data • Powered by Grok AI
-  </footer>
-
- <script>
-    // --- GLOBAL VARIABLES ---
-    let allTeams = [];
-    
-    // --- 1. LOAD DATA ON PAGE START ---
-    // This is the most important part. It loads the file, THEN fills the dropdowns.
-    fetch('teams.json')
-        .then(response => {
-            if (!response.ok) throw new Error("Could not load teams.json");
-            return response.json();
-        })
-        .then(data => {
-            console.log("Data loaded successfully:", data.length, "teams found.");
-            allTeams = data; // 1. Save data to global variable
-            populateDropdowns(data); // 2. Fill the filter menus
-            renderResults(data); // 3. Show the list
-        })
-        .catch(err => {
-            console.error('Error loading data:', err);
-            document.getElementById('locationStatus').textContent = "Error loading teams.json. Check Console.";
-        });
-
-    // --- 2. POPULATE DROPDOWNS ---
-    function populateDropdowns(data) {
-        // Get unique values
-        const conferences = [...new Set(data.map(t => t.conf || t.conference).filter(Boolean))].sort();
-        const states = [...new Set(data.map(t => t.state).filter(Boolean))].sort();
-
-        // Helper to create checkboxes
-        const fill = (id, items) => {
-            const container = document.getElementById(id);
-            if (!container) return; // Safety check
-            container.innerHTML = ''; 
-            items.forEach(item => {
-                container.innerHTML += `
-                    <label class="flex items-center p-2 hover:bg-blue-50 rounded cursor-pointer">
-                        <input type="checkbox" class="mr-3 h-4 w-4 text-blue-600 rounded border-gray-300" value="${item}">
-                        <span class="text-gray-700">${item}</span>
-                    </label>`;
+        // 1. LOAD DATA
+        fetch('teams.json')
+            .then(response => {
+                if (!response.ok) throw new Error("Failed to load teams.json");
+                return response.json();
+            })
+            .then(data => {
+                console.log("Data loaded:", data.length);
+                allTeams = data;
+                populateDropdowns(data);
+                renderResults(data);
+            })
+            .catch(err => {
+                console.error(err);
+                document.getElementById('resultCount').textContent = "Error loading data";
             });
-        };
 
-        fill('confDropdown', conferences);
-        fill('stateDropdown', states);
-    }
+        // 2. POPULATE DROPDOWNS
+        function populateDropdowns(data) {
+            const conferences = [...new Set(data.map(t => t.conf || t.conference).filter(Boolean))].sort();
+            const states = [...new Set(data.map(t => t.state).filter(Boolean))].sort();
 
-    // --- 3. UI HELPERS (Toggle Menus) ---
-    function toggleDropdown(id) {
-        const el = document.getElementById(id);
-        // Close all other dropdowns first
-        ['divDropdown', 'confDropdown', 'stateDropdown'].forEach(name => {
-            if (name !== id) {
-                const other = document.getElementById(name);
-                if (other) other.classList.add('hidden');
-            }
-        });
-        if (el) el.classList.toggle('hidden');
-    }
-
-    // Close menus when clicking outside
-    window.onclick = function(event) {
-        if (!event.target.closest('.relative')) {
-            document.querySelectorAll('[id$="Dropdown"]').forEach(el => el.classList.add('hidden'));
+            const fill = (id, items) => {
+                const container = document.getElementById(id);
+                if(!container) return;
+                container.innerHTML = '';
+                items.forEach(item => {
+                    container.innerHTML += `
+                        <label class="flex items-center p-2 hover:bg-blue-50 rounded cursor-pointer">
+                            <input type="checkbox" class="mr-3 h-4 w-4 text-blue-600 rounded border-gray-300" value="${item}">
+                            <span class="text-gray-700">${item}</span>
+                        </label>`;
+                });
+            };
+            fill('confDropdown', conferences);
+            fill('stateDropdown', states);
         }
-    }
 
-    // --- 4. FILTER LOGIC (The Brains) ---
-    async function applyFilters() {
-        console.log("Applying filters...");
-        
-        // 1. Get selected checkboxes
-        const getChecked = (id) => {
+        // 3. UI TOGGLES
+        function toggleDropdown(id) {
             const el = document.getElementById(id);
-            if (!el) return [];
-            return Array.from(el.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+            ['divDropdown', 'confDropdown', 'stateDropdown'].forEach(name => {
+                if (name !== id) document.getElementById(name).classList.add('hidden');
+            });
+            el.classList.toggle('hidden');
         }
 
-        const selectedDivs = getChecked('divDropdown');
-        const selectedConfs = getChecked('confDropdown');
-        const selectedStates = getChecked('stateDropdown');
-        
-        // 2. Update Button Labels (Visual Feedback)
-        const setLabel = (id, arr, defaultText) => {
-            const el = document.getElementById(id);
-            if (el) el.textContent = arr.length ? `${arr.length} Selected` : defaultText;
-        }
-        setLabel('divLabel', selectedDivs, 'All Divisions');
-        setLabel('confLabel', selectedConfs, 'All Conferences');
-        setLabel('stateLabel', selectedStates, 'All States');
-
-        // 3. Handle Zip Code / Radius
-        const zip = document.getElementById('zipInput').value.trim();
-        const radiusInput = document.getElementById('radiusInput').value;
-        const radius = radiusInput ? parseFloat(radiusInput) : 0;
-        
-        let userLat = null, userLon = null;
-
-        if (zip && radius > 0) {
-            const statusEl = document.getElementById('locationStatus');
-            statusEl.textContent = "📍 Locating...";
-            try {
-                const res = await fetch(`https://api.zippopotam.us/us/${zip}`);
-                if (!res.ok) throw new Error("Zip not found");
-                const d = await res.json();
-                userLat = parseFloat(d.places[0].latitude);
-                userLon = parseFloat(d.places[0].longitude);
-                statusEl.textContent = `📍 searching within ${radius} miles of ${zip} (${d.places[0]['place name']})`;
-            } catch (e) {
-                statusEl.textContent = "❌ Invalid Zip Code";
-                return; // Stop if zip is bad
+        window.onclick = function(event) {
+            if (!event.target.closest('.relative')) {
+                document.querySelectorAll('[id$="Dropdown"]').forEach(el => el.classList.add('hidden'));
             }
-        } else {
+        }
+
+        // 4. HELPER: Get Checked Boxes
+        function getCheckedValues(id) {
+            const container = document.getElementById(id);
+            if(!container) return [];
+            return Array.from(container.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+        }
+
+        // 5. APPLY FILTERS
+        async function applyFilters() {
+            const selectedDivs = getCheckedValues('divDropdown');
+            const selectedConfs = getCheckedValues('confDropdown');
+            const selectedStates = getCheckedValues('stateDropdown');
+            const zip = document.getElementById('zipInput').value.trim();
+            const radius = parseFloat(document.getElementById('radiusInput').value);
+            
+            // UI Label Updates
+            const setLabel = (id, arr, def) => {
+                document.getElementById(id).textContent = arr.length ? `${arr.length} Selected` : def;
+            };
+            setLabel('divLabel', selectedDivs, 'All Divisions');
+            setLabel('confLabel', selectedConfs, 'All Conferences');
+            setLabel('stateLabel', selectedStates, 'All States');
+
+            let userLat = null, userLon = null;
+
+            // Zip Code Search
+            if (zip && radius) {
+                document.getElementById('locationStatus').textContent = "📍 Locating...";
+                try {
+                    const res = await fetch(`https://api.zippopotam.us/us/${zip}`);
+                    if (!res.ok) throw new Error();
+                    const d = await res.json();
+                    userLat = parseFloat(d.places[0].latitude);
+                    userLon = parseFloat(d.places[0].longitude);
+                    document.getElementById('locationStatus').textContent = `📍 Searching within ${radius} miles of ${zip}`;
+                } catch (e) {
+                    document.getElementById('locationStatus').textContent = "❌ Invalid Zip Code";
+                    return;
+                }
+            } else {
+                document.getElementById('locationStatus').textContent = "";
+            }
+
+            // Filter Loop
+            const filtered = allTeams.filter(team => {
+                // Division
+                if (selectedDivs.length > 0) {
+                    const teamDiv = team.division || 'D1'; 
+                    if (!selectedDivs.includes(teamDiv)) return false;
+                }
+                // Conference
+                if (selectedConfs.length > 0) {
+                    const teamConf = team.conf || team.conference;
+                    if (!selectedConfs.includes(teamConf)) return false;
+                }
+                // State
+                if (selectedStates.length > 0) {
+                    if (!selectedStates.includes(team.state)) return false;
+                }
+                // Radius
+                if (userLat && radius) {
+                    if (!team.latitude || !team.longitude) return false;
+                    const dist = getDistance(userLat, userLon, team.latitude, team.longitude);
+                    if (dist > radius) return false;
+                }
+                return true;
+            });
+
+            renderResults(filtered);
+        }
+
+        // 6. CLEAR FILTERS
+        function clearFilters() {
+            document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+            document.getElementById('zipInput').value = "";
+            document.getElementById('radiusInput').value = "";
+            document.getElementById('divLabel').textContent = "All Divisions";
+            document.getElementById('confLabel').textContent = "All Conferences";
+            document.getElementById('stateLabel').textContent = "All States";
             document.getElementById('locationStatus').textContent = "";
+            renderResults(allTeams);
         }
 
-        // 4. The Loop - Filter the Teams
-        const filtered = allTeams.filter(team => {
-            // Division
-            if (selectedDivs.length > 0) {
-                const teamDiv = team.division || 'D1'; // Default to D1 if missing
-                if (!selectedDivs.includes(teamDiv)) return false;
-            }
-
-            // Conference
-            if (selectedConfs.length > 0) {
-                const teamConf = team.conf || team.conference;
-                if (!selectedConfs.includes(teamConf)) return false;
-            }
-
-            // State
-            if (selectedStates.length > 0) {
-                if (!selectedStates.includes(team.state)) return false;
-            }
-
-            // Radius
-            if (userLat && radius > 0) {
-                if (!team.latitude || !team.longitude) return false; // Skip if no coords
-                const dist = getDistance(userLat, userLon, team.latitude, team.longitude);
-                if (dist > radius) return false;
-            }
-
-            return true; // Team passed all tests
-        });
-
-        console.log("Filtered down to:", filtered.length);
-        renderResults(filtered);
-    }
-
-    function clearFilters() {
-        // Uncheck boxes
-        document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
-        // Clear inputs
-        document.getElementById('zipInput').value = "";
-        document.getElementById('radiusInput').value = "";
-        // Reset Labels
-        document.getElementById('divLabel').textContent = "All Divisions";
-        document.getElementById('confLabel').textContent = "All Conferences";
-        document.getElementById('stateLabel').textContent = "All States";
-        document.getElementById('locationStatus').textContent = "";
-        // Show all
-        renderResults(allTeams);
-    }
-
-    // --- 5. MATH HELPER (Distance) ---
-    function getDistance(lat1, lon1, lat2, lon2) {
-        const R = 3958.8; // Earth radius in miles
-        const dLat = (lat2 - lat1) * Math.PI / 180;
-        const dLon = (lon2 - lon1) * Math.PI / 180;
-        const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                  Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
-                  Math.sin(dLon/2) * Math.sin(dLon/2);
-        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-        return R * c;
-    }
-
-    // --- 6. RENDER (Draw the Table) ---
-    function renderResults(teams) {
-        const tableBody = document.getElementById('resultsBody');
-        const noResults = document.getElementById('noResults');
-        const resultCount = document.getElementById('resultCount');
-
-        if (resultCount) resultCount.textContent = `Found ${teams.length} teams`;
-
-        if (!tableBody) return;
-
-        if (teams.length === 0) {
-            if (noResults) noResults.classList.remove('hidden');
-            tableBody.innerHTML = '';
-            return;
+        // 7. MATH (Distance)
+        function getDistance(lat1, lon1, lat2, lon2) {
+            const R = 3958.8; 
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+                      Math.sin(dLon/2) * Math.sin(dLon/2);
+            return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
         }
 
-        if (noResults) noResults.classList.add('hidden');
+        // 8. RENDER TABLE
+        function renderResults(teams) {
+            const tableBody = document.getElementById('resultsBody');
+            const noResults = document.getElementById('noResults');
+            const resultCount = document.getElementById('resultCount');
 
-        tableBody.innerHTML = teams.map(team => `
-            <tr class="hover:bg-gray-50 transition border-b border-gray-100">
-                <td class="px-6 py-4 font-medium text-gray-900">
-                    ${team.school || team.name || 'Unknown'}
-                </td>
-                <td class="px-6 py-4 text-gray-600">
-                    ${team.mascot || '-'}
-                </td>
-                <td class="px-6 py-4 text-gray-600">
-                    <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">
-                        ${team.conf || team.conference || '-'}
-                    </span>
-                </td>
-                <td class="px-6 py-4 text-gray-600">
-                    ${team.city ? team.city + ', ' : ''}${team.state || '-'}
-                </td>
-                <td class="px-6 py-4">
-                    <a href="${team.url || '#'}" target="_blank" class="text-blue-600 hover:underline font-medium">
-                        Visit
-                    </a>
-                </td>
-            </tr>
-        `).join('');
-    }
-</script>
+            resultCount.textContent = `Found ${teams.length} teams`;
+
+            if (teams.length === 0) {
+                noResults.classList.remove('hidden');
+                tableBody.innerHTML = '';
+                return;
+            }
+
+            noResults.classList.add('hidden');
+            tableBody.innerHTML = teams.map(team => `
+                <tr class="hover:bg-gray-50 transition border-b border-gray-100">
+                    <td class="px-6 py-4 font-medium text-gray-900">${team.school || team.name || 'Unknown'}</td>
+                    <td class="px-6 py-4 text-gray-600">${team.mascot || '-'}</td>
+                    <td class="px-6 py-4 text-gray-600">
+                        <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">
+                            ${team.conf || team.conference || '-'}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 text-gray-600">${team.city ? team.city + ', ' : ''}${team.state || '-'}</td>
+                    <td class="px-6 py-4">
+                        <a href="${team.url || '#'}" target="_blank" class="text-blue-600 hover:underline font-medium">Visit</a>
+                    </td>
+                </tr>
+            `).join('');
+        }
+    </script>
 </body>
 </html>
