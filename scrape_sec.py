@@ -1,31 +1,33 @@
 # scrape_sec.py
 import json
 import asyncio
-from platforms.sidearm import fetch_roster
 import aiohttp
 import os
+from platforms.sidearm import fetch_roster
 
 INPUT_JSON = "teams_sec.json"
 OUTPUT_JSON = "outputs/softball_sec.json"
 
-async def scrape_team(session, team):
-    url = team["softball_url"]   # ✅ THIS IS THE FIX
+async def scrape_team(session, team: dict) -> dict:
+    url = team["softball_url"]  # IMPORTANT: use softball_url from teams_sec.json
     print(f"[info] Scraping {team['school']} at {url}")
 
     players = await fetch_roster(session, url)
+    print(f"[info] {team['school']}: scraped {len(players)} players")
+
     team["players"] = players
 
-    # Basic placeholders
+    # Simple placeholders for now
     team["roster_year"] = 2026
     team["three_year_avg"] = len(players)
-    team["retention_rate"] = 0.95
-    team["coach"] = {"name": "N/A", "years": 0}
+    team["retention_rate"] = 1.0 if players else 0.0
+    team["coach"] = {"name": "TBD", "years": 0}
     team["facilities"] = {
-        "stadium": "N/A",
+        "stadium": "TBD",
         "capacity": 0,
         "lights": False,
         "indoor": False,
-        "turf": "N/A"
+        "turf": "Unknown"
     }
 
     return team
@@ -35,16 +37,17 @@ async def main():
         print(f"[error] {INPUT_JSON} not found!")
         return
 
-    with open(INPUT_JSON, "r") as f:
+    with open(INPUT_JSON, "r", encoding="utf-8") as f:
         teams = json.load(f)
 
-    async with aiohttp.ClientSession() as session:
-        results = await asyncio.gather(*[
-            scrape_team(session, t) for t in teams
-        ])
-
     os.makedirs("outputs", exist_ok=True)
-    with open(OUTPUT_JSON, "w") as f:
+
+    async with aiohttp.ClientSession() as session:
+        results = await asyncio.gather(
+            *[scrape_team(session, t) for t in teams]
+        )
+
+    with open(OUTPUT_JSON, "w", encoding="utf-8") as f:
         json.dump(results, f, indent=2)
 
     print(f"[info] JSON successfully written to {OUTPUT_JSON}")
