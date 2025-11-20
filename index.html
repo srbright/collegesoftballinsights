@@ -16,30 +16,19 @@
         
         /* Smooth Modal Transition */
         #teamModal { transition: opacity 0.2s ease-in-out; }
-
-        /* Reliable Background Image Styling */
-        .hero-bg {
-            background-image: url('https://images.unsplash.com/photo-1628891339286-c5cb07d83872?q=80&w=1920&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans">
 
-   <!-- === HERO SECTION === -->
-    <div class="relative bg-gray-900 text-white py-24 shadow-xl overflow-hidden">
-        <!-- 1. THE IMAGE (Absolute Positioned) -->
-        <div class="absolute inset-0">
-            <img src="https://images.unsplash.com/photo-1628891339286-c5cb07d83872?q=80&w=1920&auto=format&fit=crop" 
-                 alt="Softball Field" 
-                 class="w-full h-full object-cover opacity-40">
-            <!-- 2. THE DARK OVERLAY (Makes text readable) -->
-            <div class="absolute inset-0 bg-gradient-to-b from-gray-900/60 via-gray-900/40 to-gray-900/90"></div>
-        </div>
+    <!-- === HERO SECTION (FIXED: Inline CSS Background) === -->
+    <!-- We use inline style here to guarantee the image loads as a background -->
+    <div class="relative text-white py-24 shadow-xl overflow-hidden" 
+         style="background-image: url('https://images.unsplash.com/photo-1628891339286-c5cb07d83872?q=80&w=1920&auto=format&fit=crop'); background-size: cover; background-position: center;">
+        
+        <!-- Dark Overlay (So text is readable) -->
+        <div class="absolute inset-0 bg-black bg-opacity-60"></div>
 
-        <!-- 3. THE CONTENT (Sits on top) -->
+        <!-- Content -->
         <div class="relative z-10 container mx-auto px-4 text-center">
             <h1 class="text-5xl md:text-6xl font-extrabold mb-4 tracking-tight drop-shadow-lg">
                 College Softball Insights
@@ -139,7 +128,7 @@
                             <th scope="col" class="px-6 py-3">School</th>
                             <th scope="col" class="px-6 py-3">Conference</th>
                             <th scope="col" class="px-6 py-3">State</th>
-                            <th scope="col" class="px-6 py-3">Details</th>
+                            <th scope="col" class="px-6 py-3">Roster Data</th>
                         </tr>
                     </thead>
                     <tbody id="resultsBody">
@@ -402,7 +391,7 @@
                     <td class="px-6 py-4 text-gray-600">${team.state || '-'}</td>
                     <td class="px-6 py-4">
                         <button onclick="openModal('${team.school || team.name}')" class="text-white bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded text-sm font-medium transition shadow-sm">
-                            View Roster
+                            View Roster Data
                         </button>
                     </td>
                 </tr>
@@ -414,9 +403,14 @@
             const team = allTeams.find(t => (t.school || t.name) === schoolName);
             if (!team) return;
 
-            // Text Data
+            // 1. Text Data
+            // Note: Using new 'city' data but fallback to state if missing
+            const locationText = team.city 
+                ? `${team.city}, ${team.state}`
+                : `${team.state || ''}`;
+
             document.getElementById('modalTitle').textContent = team.school || team.name;
-            document.getElementById('modalSubtitle').textContent = `${team.conf || team.conference} • ${team.city}, ${team.state}`;
+            document.getElementById('modalSubtitle').textContent = `${team.conf || team.conference} • ${locationText}`;
             
             // Stats
             document.getElementById('modalWin').textContent = team.winPct ? (team.winPct * 100).toFixed(1) + '%' : '-';
@@ -477,9 +471,8 @@
             const positions = ['P', 'C', 'INF', 'OF', 'UTIL'];
             const players = team.players || [];
             
-            // We need 5 datasets (one for each class), containing data for each position
-            // Example: Dataset "Freshman" -> [P_count, C_count, INF_count...]
-            
+            // Helper: count how many players of a certain position are in a certain class
+            // Includes redshirts (e.g. "R-Fr") in the "Fr" count for cleaner graphs
             const getCount = (pos, cls) => players.filter(pl => pl.pos === pos && (pl.class === cls || pl.class.includes(cls))).length;
 
             const stackedDatasets = [
@@ -524,7 +517,7 @@
                         x: { stacked: true },
                         y: { stacked: true, beginAtZero: true, ticks: { stepSize: 1 } } 
                     },
-                    plugins: { legend: { display: false } } // Hide legend to save space since colors match pie chart
+                    plugins: { legend: { display: false } } // Hide legend since colors match pie
                 }
             });
         }
