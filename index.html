@@ -1,526 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>College Softball Insights</title>
-    
-    <!-- 1. LIBRARIES -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-    
-    <style>
-        /* Hide scrollbar for cleaner dropdowns */
-        .scrollbar-hide::-webkit-scrollbar { display: none; }
-        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
-        
-        /* Smooth Modal Transition */
-        #teamModal { transition: opacity 0.2s ease-in-out; }
-    </style>
+  <meta charset="UTF-8">
+  <title>SEC Softball Insights</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: Arial, sans-serif; background: #f9f9f9; color: #333; margin: 0; padding: 0;}
+    header { background: #c8102e; color: white; padding: 1rem; text-align: center; }
+    main { padding: 1rem; max-width: 1200px; margin: auto; }
+    .team { background: white; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    h2 { margin-top: 0; }
+    table { width: 100%; border-collapse: collapse; margin-top: 0.5rem; }
+    th, td { padding: 0.5rem; border-bottom: 1px solid #ddd; text-align: left; }
+    th { background: #f2f2f2; }
+    .facilities, .coach { margin-top: 0.5rem; }
+  </style>
 </head>
-<body class="bg-gray-50 text-gray-800 font-sans">
+<body>
+  <header>
+    <h1>SEC Softball Insights</h1>
+  </header>
+  <main id="teams-container">
+    <p>Loading SEC rosters...</p>
+  </main>
 
-    <!-- === HERO SECTION (FIXED: Inline CSS Background) === -->
-    <!-- We use inline style here to guarantee the image loads as a background -->
-    <div class="relative text-white py-24 shadow-xl overflow-hidden" 
-         style="background-image: url('https://images.unsplash.com/photo-1628891339286-c5cb07d83872?q=80&w=1920&auto=format&fit=crop'); background-size: cover; background-position: center;">
-        
-        <!-- Dark Overlay (So text is readable) -->
-        <div class="absolute inset-0 bg-black bg-opacity-60"></div>
+  <script>
+    async function loadTeams() {
+      try {
+        const response = await fetch('outputs/softball_sec.json');
+        const teams = await response.json();
+        const container = document.getElementById('teams-container');
+        container.innerHTML = '';
 
-        <!-- Content -->
-        <div class="relative z-10 container mx-auto px-4 text-center">
-            <h1 class="text-5xl md:text-6xl font-extrabold mb-4 tracking-tight drop-shadow-lg">
-                College Softball Insights
-            </h1>
-            <p class="text-blue-200 text-xl font-light max-w-2xl mx-auto drop-shadow-md">
-                Data-driven recruiting research & transfer portal analysis.
-            </p>
-        </div>
-    </div>
+        teams.forEach(team => {
+          const div = document.createElement('div');
+          div.className = 'team';
 
-    <!-- === MAIN CONTAINER === -->
-    <div class="container mx-auto px-4 py-10 max-w-7xl">
+          const rosterYear = team.roster_year || "N/A";
+          div.innerHTML = `
+            <h2>${team.school} (${team.division || 'D1'})</h2>
+            <p><strong>Conference:</strong> ${team.conf || 'N/A'}</p>
+            <p><strong>Roster Year:</strong> ${rosterYear} | <strong>3-Year Avg:</strong> ${team.three_year_avg || 'N/A'} | <strong>Retention:</strong> ${team.retention_rate || 'N/A'}</p>
 
-        <!-- FILTER SECTION -->
-        <div class="bg-white p-8 rounded-xl shadow-lg mb-10 border border-gray-100 relative z-10">
-            <h2 class="text-3xl font-bold mb-8 text-center text-gray-800">Find Potential Colleges</h2>
-
-            <!-- Filters Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
-                
-                <!-- Division -->
-                <div class="relative group">
-                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1 ml-1">Division</label>
-                    <button onclick="toggleDropdown('divDropdown')" class="w-full text-left border border-gray-300 rounded-lg p-2.5 bg-gray-50 hover:bg-white transition flex justify-between items-center">
-                        <span id="divLabel" class="text-gray-700 truncate font-medium">All Divisions</span>
-                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                    </button>
-                    <div id="divDropdown" class="hidden absolute z-20 w-full bg-white border border-gray-200 rounded-lg shadow-xl max-h-60 overflow-y-auto mt-2 p-2">
-                        <label class="flex items-center p-2 hover:bg-blue-50 rounded cursor-pointer"><input type="checkbox" class="mr-3 h-4 w-4 text-blue-600 rounded" value="D1"> NCAA D1</label>
-                        <label class="flex items-center p-2 hover:bg-blue-50 rounded cursor-pointer"><input type="checkbox" class="mr-3 h-4 w-4 text-blue-600 rounded" value="D2"> NCAA D2</label>
-                        <label class="flex items-center p-2 hover:bg-blue-50 rounded cursor-pointer"><input type="checkbox" class="mr-3 h-4 w-4 text-blue-600 rounded" value="D3"> NCAA D3</label>
-                        <label class="flex items-center p-2 hover:bg-blue-50 rounded cursor-pointer"><input type="checkbox" class="mr-3 h-4 w-4 text-blue-600 rounded" value="NAIA"> NAIA</label>
-                        <label class="flex items-center p-2 hover:bg-blue-50 rounded cursor-pointer"><input type="checkbox" class="mr-3 h-4 w-4 text-blue-600 rounded" value="JUCO"> JUCO</label>
-                    </div>
-                </div>
-
-                <!-- Conference -->
-                <div class="relative group">
-                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1 ml-1">Conference</label>
-                    <button onclick="toggleDropdown('confDropdown')" class="w-full text-left border border-gray-300 rounded-lg p-2.5 bg-gray-50 hover:bg-white transition flex justify-between items-center">
-                        <span id="confLabel" class="text-gray-700 truncate font-medium">All Conferences</span>
-                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                    </button>
-                    <div id="confDropdown" class="hidden absolute z-20 w-full bg-white border border-gray-200 rounded-lg shadow-xl max-h-60 overflow-y-auto mt-2 p-2">
-                        <!-- JS Fills This -->
-                    </div>
-                </div>
-
-                <!-- State -->
-                <div class="relative group">
-                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1 ml-1">State</label>
-                    <button onclick="toggleDropdown('stateDropdown')" class="w-full text-left border border-gray-300 rounded-lg p-2.5 bg-gray-50 hover:bg-white transition flex justify-between items-center">
-                        <span id="stateLabel" class="text-gray-700 truncate font-medium">All States</span>
-                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                    </button>
-                    <div id="stateDropdown" class="hidden absolute z-20 w-full bg-white border border-gray-200 rounded-lg shadow-xl max-h-60 overflow-y-auto mt-2 p-2">
-                        <!-- JS Fills This -->
-                    </div>
-                </div>
-
-                <!-- Zip Code -->
-                <div>
-                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1 ml-1">Zip Code</label>
-                    <input type="text" id="zipInput" placeholder="e.g. 90210" class="w-full border border-gray-300 rounded-lg p-2.5 bg-gray-50 focus:ring-2 focus:ring-blue-500 transition font-medium">
-                </div>
-
-                <!-- Radius -->
-                <div>
-                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1 ml-1">Radius (Miles)</label>
-                    <input type="number" id="radiusInput" placeholder="e.g. 100" class="w-full border border-gray-300 rounded-lg p-2.5 bg-gray-50 focus:ring-2 focus:ring-blue-500 transition font-medium">
-                </div>
+            <div class="coach">
+              <strong>Head Coach:</strong> ${team.coach.name} (${team.coach.years} yrs)
             </div>
 
-            <!-- Buttons -->
-            <div class="mt-8 flex justify-center gap-4">
-                <button onclick="applyFilters()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-3 rounded-lg shadow-md transition transform hover:-translate-y-0.5">
-                    Apply Filters
-                </button>
-                <button onclick="clearFilters()" class="bg-white border border-gray-300 text-gray-700 font-bold px-8 py-3 rounded-lg hover:bg-gray-50 transition">
-                    Reset
-                </button>
-            </div>
-            <p id="locationStatus" class="text-center text-sm text-blue-600 mt-4 font-medium min-h-[20px]"></p>
-        </div>
-
-        <!-- RESULTS TABLE -->
-        <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden relative z-0">
-            <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50">
-                <h3 class="text-lg font-bold text-gray-800">Search Results</h3>
-                <span id="resultCount" class="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full">Loading...</span>
-            </div>
-            
-            <div class="overflow-x-auto">
-                <table class="w-full text-sm text-left text-gray-500">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-100">
-                        <tr>
-                            <th scope="col" class="px-6 py-3">School</th>
-                            <th scope="col" class="px-6 py-3">Conference</th>
-                            <th scope="col" class="px-6 py-3">State</th>
-                            <th scope="col" class="px-6 py-3">Roster Data</th>
-                        </tr>
-                    </thead>
-                    <tbody id="resultsBody">
-                        <!-- Rows injected by JS -->
-                    </tbody>
-                </table>
-            </div>
-            
-            <!-- Empty State -->
-            <div id="noResults" class="hidden p-12 text-center">
-                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                <h3 class="mt-2 text-sm font-medium text-gray-900">No teams found</h3>
-                <p class="mt-1 text-sm text-gray-500">Try adjusting your filters or search radius.</p>
-            </div>
-        </div>
-
-    </div> <!-- End Main Container -->
-
-    <!-- === TEAM DETAILS MODAL === -->
-    <div id="teamModal" class="fixed inset-0 bg-gray-900 bg-opacity-75 hidden flex items-center justify-center z-50 backdrop-blur-sm p-4">
-        <div class="bg-white rounded-xl shadow-2xl w-full max-w-5xl max-h-[90vh] overflow-hidden flex flex-col">
-            
-            <!-- Modal Header -->
-            <div class="bg-blue-900 p-6 text-white flex justify-between items-center shrink-0">
-                <div>
-                    <h2 id="modalTitle" class="text-2xl font-bold">School Name</h2>
-                    <p id="modalSubtitle" class="text-blue-200">Conference • City, State</p>
-                </div>
-                <button onclick="closeModal()" class="text-white hover:text-gray-300 text-4xl leading-none">&times;</button>
+            <div class="facilities">
+              <strong>Stadium:</strong> ${team.facilities.stadium || 'N/A'} |
+              <strong>Capacity:</strong> ${team.facilities.capacity || 'N/A'} |
+              <strong>Lights:</strong> ${team.facilities.lights ? 'Yes' : 'No'} |
+              <strong>Indoor Practice:</strong> ${team.facilities.indoor ? 'Yes' : 'No'} |
+              <strong>Turf:</strong> ${team.facilities.turf || 'N/A'}
             </div>
 
-            <!-- Modal Body -->
-            <div class="p-6 overflow-y-auto bg-gray-50">
-                
-                <!-- Top Stats Grid -->
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                    <div class="bg-white p-4 rounded-lg shadow-sm text-center border border-gray-100">
-                        <div class="text-xs text-gray-500 font-bold uppercase tracking-wider">Win %</div>
-                        <div id="modalWin" class="text-2xl font-black text-blue-900">-</div>
-                    </div>
-                    <div class="bg-white p-4 rounded-lg shadow-sm text-center border border-gray-100">
-                        <div class="text-xs text-gray-500 font-bold uppercase tracking-wider">Roster Size</div>
-                        <div id="modalSize" class="text-2xl font-black text-blue-900">-</div>
-                    </div>
-                    <div class="bg-white p-4 rounded-lg shadow-sm text-center border border-gray-100">
-                        <div class="text-xs text-green-600 font-bold uppercase tracking-wider">Transfers In</div>
-                        <div id="modalIn" class="text-2xl font-black text-green-700">-</div>
-                    </div>
-                    <div class="bg-white p-4 rounded-lg shadow-sm text-center border border-gray-100">
-                        <div class="text-xs text-red-600 font-bold uppercase tracking-wider">Transfers Out</div>
-                        <div id="modalOut" class="text-2xl font-black text-red-700">-</div>
-                    </div>
-                </div>
-
-                <!-- CHARTS SECTION -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                    <!-- Class Breakdown -->
-                    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
-                        <h4 class="text-sm font-bold text-gray-500 uppercase text-center mb-4">Class Breakdown</h4>
-                        <div class="relative h-56">
-                            <canvas id="modalClassChart"></canvas>
-                        </div>
-                    </div>
-
-                    <!-- Position Breakdown (STACKED) -->
-                    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
-                        <h4 class="text-sm font-bold text-gray-500 uppercase text-center mb-4">Position Breakdown (By Class)</h4>
-                        <div class="relative h-56">
-                            <canvas id="modalPosChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Roster Table -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                    <h3 class="text-md font-bold px-6 py-3 bg-gray-100 border-b border-gray-200 text-gray-700">Full Roster</h3>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-sm text-left">
-                            <thead class="bg-gray-50 text-xs uppercase font-bold text-gray-500">
-                                <tr>
-                                    <th class="px-6 py-3">Player Name</th>
-                                    <th class="px-6 py-3">Position</th>
-                                    <th class="px-6 py-3">Class</th>
-                                </tr>
-                            </thead>
-                            <tbody id="modalRosterBody" class="divide-y divide-gray-100 bg-white">
-                                <!-- JS Fills This -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-    <!-- === JAVASCRIPT LOGIC === -->
-    <script>
-        // --- GLOBAL VARIABLES ---
-        let allTeams = [];
-        let classChartInstance = null;
-        let posChartInstance = null;
-
-        // --- 1. LOAD DATA ---
-        fetch('teams.json')
-            .then(r => {
-                if (!r.ok) throw new Error("Failed to load teams.json");
-                return r.json();
-            })
-            .then(data => {
-                console.log("Loaded teams:", data.length);
-                allTeams = data;
-                populateDropdowns(data);
-                renderResults(data);
-            })
-            .catch(err => {
-                console.error(err);
-                document.getElementById('resultCount').textContent = "Error loading data.";
-            });
-
-        // --- 2. DROPDOWN & UI HELPERS ---
-        function populateDropdowns(data) {
-            const conferences = [...new Set(data.map(t => t.conf || t.conference).filter(Boolean))].sort();
-            const states = [...new Set(data.map(t => t.state).filter(Boolean))].sort();
-
-            const fill = (id, items) => {
-                const container = document.getElementById(id);
-                if(!container) return;
-                container.innerHTML = ''; 
-                items.forEach(item => {
-                    container.innerHTML += `
-                        <label class="flex items-center p-2 hover:bg-blue-50 rounded cursor-pointer">
-                            <input type="checkbox" class="mr-3 h-4 w-4 text-blue-600 rounded border-gray-300" value="${item}">
-                            <span class="text-gray-700">${item}</span>
-                        </label>`;
-                });
-            };
-            fill('confDropdown', conferences);
-            fill('stateDropdown', states);
-        }
-
-        function toggleDropdown(id) {
-            const el = document.getElementById(id);
-            ['divDropdown', 'confDropdown', 'stateDropdown'].forEach(name => {
-                if (name !== id) document.getElementById(name).classList.add('hidden');
-            });
-            el.classList.toggle('hidden');
-        }
-
-        window.onclick = function(e) {
-            if (!e.target.closest('.relative')) {
-                document.querySelectorAll('[id$="Dropdown"]').forEach(el => el.classList.add('hidden'));
-            }
-        }
-
-        function getCheckedValues(id) {
-            const el = document.getElementById(id);
-            if(!el) return [];
-            return Array.from(el.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
-        }
-
-        // --- 3. FILTER LOGIC ---
-        async function applyFilters() {
-            const selectedDivs = getCheckedValues('divDropdown');
-            const selectedConfs = getCheckedValues('confDropdown');
-            const selectedStates = getCheckedValues('stateDropdown');
-            const zip = document.getElementById('zipInput').value.trim();
-            const radius = parseFloat(document.getElementById('radiusInput').value);
-
-            // Update Labels
-            const setLabel = (id, arr, def) => document.getElementById(id).textContent = arr.length ? `${arr.length} Selected` : def;
-            setLabel('divLabel', selectedDivs, 'All Divisions');
-            setLabel('confLabel', selectedConfs, 'All Conferences');
-            setLabel('stateLabel', selectedStates, 'All States');
-
-            let userLat = null, userLon = null;
-
-            // Zip Search
-            if (zip && radius) {
-                document.getElementById('locationStatus').textContent = "📍 Locating...";
-                try {
-                    const res = await fetch(`https://api.zippopotam.us/us/${zip}`);
-                    if (!res.ok) throw new Error();
-                    const d = await res.json();
-                    userLat = parseFloat(d.places[0].latitude);
-                    userLon = parseFloat(d.places[0].longitude);
-                    document.getElementById('locationStatus').textContent = `📍 Searching within ${radius} miles of ${zip}`;
-                } catch (e) {
-                    document.getElementById('locationStatus').textContent = "❌ Invalid Zip Code";
-                    return;
-                }
-            } else {
-                document.getElementById('locationStatus').textContent = "";
-            }
-
-            // Filter Loop
-            const filtered = allTeams.filter(team => {
-                if (selectedDivs.length > 0 && !selectedDivs.includes(team.division || 'D1')) return false;
-                if (selectedConfs.length > 0 && !selectedConfs.includes(team.conf || team.conference)) return false;
-                if (selectedStates.length > 0 && !selectedStates.includes(team.state)) return false;
-                
-                if (userLat && radius) {
-                    if (!team.latitude || !team.longitude) return false; 
-                    const dist = getDistance(userLat, userLon, team.latitude, team.longitude);
-                    if (dist > radius) return false;
-                }
-                return true;
-            });
-
-            renderResults(filtered);
-        }
-
-        function clearFilters() {
-            document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
-            document.getElementById('zipInput').value = "";
-            document.getElementById('radiusInput').value = "";
-            document.getElementById('divLabel').textContent = "All Divisions";
-            document.getElementById('confLabel').textContent = "All Conferences";
-            document.getElementById('stateLabel').textContent = "All States";
-            document.getElementById('locationStatus').textContent = "";
-            renderResults(allTeams);
-        }
-
-        function getDistance(lat1, lon1, lat2, lon2) {
-            const R = 3958.8; 
-            const dLat = (lat2 - lat1) * Math.PI / 180;
-            const dLon = (lon2 - lon1) * Math.PI / 180;
-            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
-                      Math.sin(dLon/2) * Math.sin(dLon/2);
-            return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-        }
-
-        // --- 4. RENDER TABLE ---
-        function renderResults(teams) {
-            const tableBody = document.getElementById('resultsBody');
-            const noResults = document.getElementById('noResults');
-            const resultCount = document.getElementById('resultCount');
-
-            resultCount.textContent = `Found ${teams.length} teams`;
-
-            if (teams.length === 0) {
-                noResults.classList.remove('hidden');
-                tableBody.innerHTML = '';
-                return;
-            }
-
-            noResults.classList.add('hidden');
-            tableBody.innerHTML = teams.map(team => `
-                <tr class="hover:bg-gray-50 transition border-b border-gray-100">
-                    <td class="px-6 py-4 font-medium text-gray-900">
-                        <div class="font-bold text-base">${team.school || team.name || 'Unknown'}</div>
-                        <div class="text-xs text-gray-400 font-normal uppercase mt-0.5">${team.mascot || ''}</div>
-                    </td>
-                    <td class="px-6 py-4">
-                        <span class="bg-blue-100 text-blue-800 text-xs font-bold px-2.5 py-0.5 rounded border border-blue-200">
-                            ${team.conf || team.conference || '-'}
-                        </span>
-                    </td>
-                    <td class="px-6 py-4 text-gray-600">${team.state || '-'}</td>
-                    <td class="px-6 py-4">
-                        <button onclick="openModal('${team.school || team.name}')" class="text-white bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded text-sm font-medium transition shadow-sm">
-                            View Roster Data
-                        </button>
-                    </td>
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>Position</th>
+                  <th>Class</th>
+                  <th>Hometown</th>
+                  <th>High School</th>
                 </tr>
-            `).join('');
-        }
+              </thead>
+              <tbody>
+                ${team.players.map(p => `
+                  <tr>
+                    <td>${p.number || ''}</td>
+                    <td>${p.name}</td>
+                    <td>${p.pos}</td>
+                    <td>${p.class}</td>
+                    <td>${p.hometown || ''}</td>
+                    <td>${p.highschool || ''}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          `;
 
-        // --- 5. MODAL LOGIC (CHARTS & DATA) ---
-        function openModal(schoolName) {
-            const team = allTeams.find(t => (t.school || t.name) === schoolName);
-            if (!team) return;
-
-            // 1. Text Data
-            // Note: Using new 'city' data but fallback to state if missing
-            const locationText = team.city 
-                ? `${team.city}, ${team.state}`
-                : `${team.state || ''}`;
-
-            document.getElementById('modalTitle').textContent = team.school || team.name;
-            document.getElementById('modalSubtitle').textContent = `${team.conf || team.conference} • ${locationText}`;
-            
-            // Stats
-            document.getElementById('modalWin').textContent = team.winPct ? (team.winPct * 100).toFixed(1) + '%' : '-';
-            document.getElementById('modalIn').textContent = team.transfersIn || 0;
-            document.getElementById('modalOut').textContent = team.transfersOut || 0;
-            document.getElementById('modalSize').textContent = (team.players || []).length;
-
-            // Draw Charts
-            drawModalCharts(team);
-
-            // Fill Roster
-            const tbody = document.getElementById('modalRosterBody');
-            tbody.innerHTML = '';
-            if (team.players && team.players.length > 0) {
-                team.players.forEach(p => {
-                    tbody.innerHTML += `
-                        <tr class="hover:bg-gray-50 border-b border-gray-50">
-                            <td class="px-6 py-3 font-medium text-gray-900">${p.name}</td>
-                            <td class="px-6 py-3"><span class="bg-gray-100 text-gray-700 text-xs font-bold px-2 py-1 rounded">${p.pos}</span></td>
-                            <td class="px-6 py-3 text-gray-600">${p.class}</td>
-                        </tr>`;
-                });
-            } else {
-                tbody.innerHTML = '<tr><td colspan="3" class="p-6 text-center text-gray-400">No roster data available</td></tr>';
-            }
-
-            document.getElementById('teamModal').classList.remove('hidden');
-            document.body.style.overflow = 'hidden'; // Stop background scroll
-        }
-
-        function closeModal() {
-            document.getElementById('teamModal').classList.add('hidden');
-            document.body.style.overflow = 'auto';
-        }
-
-        document.addEventListener('keydown', function(e) {
-            if (e.key === "Escape") closeModal();
+          container.appendChild(div);
         });
+      } catch (err) {
+        console.error("Error loading teams:", err);
+        document.getElementById('teams-container').innerHTML = "<p>Failed to load SEC rosters.</p>";
+      }
+    }
 
-        // --- CHART DRAWING ---
-        function drawModalCharts(team) {
-            // Colors (Matching Class Breakdown)
-            const colors = {
-                Fr: '#bfdbfe', // Lightest Blue
-                So: '#60a5fa',
-                Jr: '#3b82f6',
-                Sr: '#2563eb',
-                Gr: '#1e40af'  // Darkest Blue
-            };
-            const colorArray = [colors.Fr, colors.So, colors.Jr, colors.Sr, colors.Gr];
-            
-            // 1. CLASS DATA
-            const r = team.roster || {};
-            const classLabels = ['Fr', 'So', 'Jr', 'Sr', 'Gr'];
-            const classData = [r.Fr||0, r.So||0, r.Jr||0, r.Sr||0, r.Gr||0];
-
-            // 2. POSITION BREAKDOWN BY CLASS (The "Stacked" Logic)
-            const positions = ['P', 'C', 'INF', 'OF', 'UTIL'];
-            const players = team.players || [];
-            
-            // Helper: count how many players of a certain position are in a certain class
-            // Includes redshirts (e.g. "R-Fr") in the "Fr" count for cleaner graphs
-            const getCount = (pos, cls) => players.filter(pl => pl.pos === pos && (pl.class === cls || pl.class.includes(cls))).length;
-
-            const stackedDatasets = [
-                { label: 'Fr', data: positions.map(p => getCount(p, 'Fr')), backgroundColor: colors.Fr },
-                { label: 'So', data: positions.map(p => getCount(p, 'So')), backgroundColor: colors.So },
-                { label: 'Jr', data: positions.map(p => getCount(p, 'Jr')), backgroundColor: colors.Jr },
-                { label: 'Sr', data: positions.map(p => getCount(p, 'Sr')), backgroundColor: colors.Sr },
-                { label: 'Gr', data: positions.map(p => getCount(p, 'Gr')), backgroundColor: colors.Gr },
-            ];
-
-            // Destroy old instances
-            if (classChartInstance) classChartInstance.destroy();
-            if (posChartInstance) posChartInstance.destroy();
-
-            // DRAW CLASS CHART (Doughnut)
-            const ctxClass = document.getElementById('modalClassChart').getContext('2d');
-            classChartInstance = new Chart(ctxClass, {
-                type: 'doughnut',
-                data: {
-                    labels: classLabels,
-                    datasets: [{
-                        data: classData,
-                        backgroundColor: colorArray,
-                        borderWidth: 0
-                    }]
-                },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right' } } }
-            });
-
-            // DRAW POSITION CHART (Stacked Bar)
-            const ctxPos = document.getElementById('modalPosChart').getContext('2d');
-            posChartInstance = new Chart(ctxPos, {
-                type: 'bar',
-                data: {
-                    labels: positions,
-                    datasets: stackedDatasets
-                },
-                options: { 
-                    responsive: true, 
-                    maintainAspectRatio: false,
-                    scales: { 
-                        x: { stacked: true },
-                        y: { stacked: true, beginAtZero: true, ticks: { stepSize: 1 } } 
-                    },
-                    plugins: { legend: { display: false } } // Hide legend since colors match pie
-                }
-            });
-        }
-    </script>
+    loadTeams();
+  </script>
 </body>
 </html>
