@@ -1,6 +1,9 @@
 [
   {
-    "name": "Oklahoma Sooners",
+    "school": "Oklahoma Sooners",
+    "division": "D1",
+    "latitude": 35.2059,
+    "longitude": -97.4457,
     "conf": "SEC",
     "state": "OK",
     "winPct": 0.932,
@@ -49,7 +52,10 @@
     ]
   },
   {
-    "name": "Texas Longhorns",
+    "school": "Texas Longhorns",
+    "division": "D1",
+    "latitude": 30.2849,
+    "longitude": -97.7341,
     "conf": "SEC",
     "state": "TX",
     "winPct": 0.915,
@@ -91,7 +97,10 @@
     ]
   },
   {
-    "name": "Tennessee Lady Vols",
+    "school": "Tennessee Lady Vols",
+    "division": "D1",
+    "latitude": 35.9544,
+    "longitude": -83.9295,
     "conf": "SEC",
     "state": "TN",
     "winPct": 0.902,
@@ -107,7 +116,7 @@
       {"name":"Emma Lemley","pos":"P","class":"Fr"},
       {"name":"Lair Beautae","pos":"INF","class":"Sr"},
       {"name":"Laura Mealer","pos":"INF","class":"So"},
-            {"name":"Taylor Pannell","pos":"OF","class":"Sr"},
+      {"name":"Taylor Pannell","pos":"OF","class":"Sr"},
       {"name":"Kiki Milloy","pos":"OF","class":"Gr"},
       {"name":"Rylie West","pos":"C","class":"Fr"},
       {"name":"Sophia Nugent","pos":"UTIL","class":"Fr"},
@@ -128,7 +137,10 @@
     ]
   },
   {
-    "name": "UCLA Bruins",
+    "school": "UCLA Bruins",
+    "division": "D1",
+    "latitude": 34.0689,
+    "longitude": -118.4452,
     "conf": "Big Ten",
     "state": "CA",
     "winPct": 0.889,
@@ -166,7 +178,10 @@
     ]
   },
   {
-    "name": "Florida Gators",
+    "school": "Florida Gators",
+    "division": "D1",
+    "latitude": 29.6436,
+    "longitude": -82.3549,
     "conf": "SEC",
     "state": "FL",
     "winPct": 0.875,
@@ -202,7 +217,10 @@
     ]
   },
   {
-    "name": "LSU Tigers",
+    "school": "LSU Tigers",
+    "division": "D1",
+    "latitude": 30.4133,
+    "longitude": -91.1800,
     "conf": "SEC",
     "state": "LA",
     "winPct": 0.842,
@@ -235,7 +253,10 @@
     ]
   },
   {
-    "name": "Alabama Crimson Tide",
+    "school": "Alabama Crimson Tide",
+    "division": "D1",
+    "latitude": 33.2140,
+    "longitude": -87.5391,
     "conf": "SEC",
     "state": "AL",
     "winPct": 0.854,
@@ -267,7 +288,10 @@
     ]
   },
   {
-    "name": "Oregon Ducks",
+    "school": "Oregon Ducks",
+    "division": "D1",
+    "latitude": 44.0448,
+    "longitude": -123.0726,
     "conf": "Big Ten",
     "state": "OR",
     "winPct": 0.889,
@@ -297,7 +321,10 @@
     ]
   },
   {
-    "name": "Michigan Wolverines",
+    "school": "Michigan Wolverines",
+    "division": "D1",
+    "latitude": 42.2780,
+    "longitude": -83.7382,
     "conf": "Big Ten",
     "state": "MI",
     "winPct": 0.856,
@@ -325,7 +352,10 @@
     ]
   },
   {
-    "name": "Texas A&M Aggies",
+    "school": "Texas A&M Aggies",
+    "division": "D1",
+    "latitude": 30.6187,
+    "longitude": -96.3365,
     "conf": "SEC",
     "state": "TX",
     "winPct": 0.823,
@@ -351,7 +381,10 @@
     ]
   },
   {
-    "name": "Arkansas Razorbacks",
+    "school": "Arkansas Razorbacks",
+    "division": "D1",
+    "latitude": 36.0679,
+    "longitude": -94.1737,
     "conf": "SEC",
     "state": "AR",
     "winPct": 0.821,
@@ -376,7 +409,10 @@
     ]
   },
   {
-    "name": "South Carolina Gamecocks",
+    "school": "South Carolina Gamecocks",
+    "division": "D1",
+    "latitude": 33.9999,
+    "longitude": -81.0300,
     "conf": "SEC",
     "state": "SC",
     "winPct": 0.812,
@@ -399,7 +435,10 @@
     ]
   },
   {
-    "name": "Nebraska Cornhuskers",
+    "school": "Nebraska Cornhuskers",
+    "division": "D1",
+    "latitude": 40.8202,
+    "longitude": -96.7005,
     "conf": "Big Ten",
     "state": "NE",
     "winPct": 0.812,
@@ -421,7 +460,10 @@
     ]
   },
   {
-    "name": "Auburn Tigers",
+    "school": "Auburn Tigers",
+    "division": "D1",
+    "latitude": 32.6010,
+    "longitude": -85.4856,
     "conf": "SEC",
     "state": "AL",
     "winPct": 0.763,
@@ -443,7 +485,10 @@
     ]
   },
   {
-    "name": "Kentucky Wildcats",
+    "school": "Kentucky Wildcats",
+    "division": "D1",
+    "latitude": 38.0307,
+    "longitude": -84.5040,
     "conf": "SEC",
     "state": "KY",
     "winPct": 0.789,
@@ -464,7 +509,10 @@
     ]
   },
   {
-    "name": "Minnesota Golden Gophers",
+    "school": "Minnesota Golden Gophers",
+    "division": "D1",
+    "latitude": 44.9737,
+    "longitude": -93.2277,
     "conf": "Big Ten",
     "state": "MN",
     "winPct": 0.789,
@@ -483,7 +531,10 @@
     ]
   },
   {
-    "name": "Ole Miss Rebels",
+    "school": "Ole Miss Rebels",
+    "division": "D1",
+    "latitude": 34.3647,
+    "longitude": -89.5384,
     "conf": "SEC",
     "state": "MS",
     "winPct": 0.756,
@@ -500,7 +551,10 @@
     ]
   },
   {
-    "name": "Mississippi State Bulldogs",
+    "school": "Mississippi State Bulldogs",
+    "division": "D1",
+    "latitude": 33.4552,
+    "longitude": -88.7904,
     "conf": "SEC",
     "state": "MS",
     "winPct": 0.734,
@@ -516,7 +570,10 @@
     ]
   },
   {
-    "name": "Georgia Bulldogs",
+    "school": "Georgia Bulldogs",
+    "division": "D1",
+    "latitude": 33.9480,
+    "longitude": -83.3773,
     "conf": "SEC",
     "state": "GA",
     "winPct": 0.712,
@@ -532,7 +589,10 @@
     ]
   },
   {
-    "name": "Missouri Tigers",
+    "school": "Missouri Tigers",
+    "division": "D1",
+    "latitude": 38.9404,
+    "longitude": -92.3277,
     "conf": "SEC",
     "state": "MO",
     "winPct": 0.689,
@@ -547,7 +607,10 @@
     ]
   },
   {
-    "name": "Illinois Fighting Illini",
+    "school": "Illinois Fighting Illini",
+    "division": "D1",
+    "latitude": 40.1020,
+    "longitude": -88.2272,
     "conf": "Big Ten",
     "state": "IL",
     "winPct": 0.678,
@@ -561,7 +624,10 @@
     ]
   },
   {
-    "name": "Indiana Hoosiers",
+    "school": "Indiana Hoosiers",
+    "division": "D1",
+    "latitude": 39.1766,
+    "longitude": -86.5130,
     "conf": "Big Ten",
     "state": "IN",
     "winPct": 0.712,
@@ -575,7 +641,10 @@
     ]
   },
   {
-    "name": "Iowa Hawkeyes",
+    "school": "Iowa Hawkeyes",
+    "division": "D1",
+    "latitude": 41.6627,
+    "longitude": -91.5549,
     "conf": "Big Ten",
     "state": "IA",
     "winPct": 0.745,
@@ -589,7 +658,10 @@
     ]
   },
   {
-    "name": "Maryland Terrapins",
+    "school": "Maryland Terrapins",
+    "division": "D1",
+    "latitude": 38.9869,
+    "longitude": -76.9426,
     "conf": "Big Ten",
     "state": "MD",
     "winPct": 0.823,
@@ -603,7 +675,10 @@
     ]
   },
   {
-    "name": "Michigan State Spartans",
+    "school": "Michigan State Spartans",
+    "division": "D1",
+    "latitude": 42.7252,
+    "longitude": -84.4839,
     "conf": "Big Ten",
     "state": "MI",
     "winPct": 0.734,
@@ -617,7 +692,10 @@
     ]
   },
   {
-    "name": "Northwestern Wildcats",
+    "school": "Northwestern Wildcats",
+    "division": "D1",
+    "latitude": 42.0565,
+    "longitude": -87.6753,
     "conf": "Big Ten",
     "state": "IL",
     "winPct": 0.901,
@@ -632,7 +710,10 @@
     ]
   },
   {
-    "name": "Ohio State Buckeyes",
+    "school": "Ohio State Buckeyes",
+    "division": "D1",
+    "latitude": 40.0000,
+    "longitude": -83.0125,
     "conf": "Big Ten",
     "state": "OH",
     "winPct": 0.767,
@@ -646,7 +727,10 @@
     ]
   },
   {
-    "name": "Penn State Nittany Lions",
+    "school": "Penn State Nittany Lions",
+    "division": "D1",
+    "latitude": 40.7982,
+    "longitude": -77.8599,
     "conf": "Big Ten",
     "state": "PA",
     "winPct": 0.745,
@@ -660,7 +744,10 @@
     ]
   },
   {
-    "name": "Rutgers Scarlet Knights",
+    "school": "Rutgers Scarlet Knights",
+    "division": "D1",
+    "latitude": 40.5008,
+    "longitude": -74.4474,
     "conf": "Big Ten",
     "state": "NJ",
     "winPct": 0.623,
@@ -674,7 +761,10 @@
     ]
   },
   {
-    "name": "USC Trojans",
+    "school": "USC Trojans",
+    "division": "D1",
+    "latitude": 34.0224,
+    "longitude": -118.2851,
     "conf": "Big Ten",
     "state": "CA",
     "winPct": 0.834,
@@ -688,7 +778,10 @@
     ]
   },
   {
-    "name": "Washington Huskies",
+    "school": "Washington Huskies",
+    "division": "D1",
+    "latitude": 47.6553,
+    "longitude": -122.3035,
     "conf": "Big Ten",
     "state": "WA",
     "winPct": 0.778,
@@ -703,7 +796,10 @@
     ]
   },
   {
-    "name": "Wisconsin Badgers",
+    "school": "Wisconsin Badgers",
+    "division": "D1",
+    "latitude": 43.0766,
+    "longitude": -89.4125,
     "conf": "Big Ten",
     "state": "WI",
     "winPct": 0.712,
@@ -717,4 +813,3 @@
     ]
   }
 ]
-  
