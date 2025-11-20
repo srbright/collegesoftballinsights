@@ -2,17 +2,18 @@ name: Scrape SEC Softball
 
 on:
   schedule:
-    # Runs every day at 6 AM UTC
-    - cron: '0 6 * * *'
-  workflow_dispatch:  # allows manual trigger
+    - cron: '0 6 * * *'   # daily at 6AM UTC
+  workflow_dispatch:       # allows manual run
 
 jobs:
-  build:
+  scrape:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout repo
       uses: actions/checkout@v3
+      with:
+        persist-credentials: true
 
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -27,8 +28,14 @@ jobs:
     - name: Run scraper
       run: |
         python scrape_sec.py
-        # move JSON to root if needed
-        mv outputs/softball_sec.json ./softball_sec.json
+
+    - name: Move JSON to root if exists
+      run: |
+        if [ -f outputs/softball_sec.json ]; then
+          mv outputs/softball_sec.json ./softball_sec.json
+        else
+          echo "[warn] JSON not generated; skipping move"
+        fi
 
     - name: Commit and push JSON
       run: |
