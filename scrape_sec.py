@@ -1,7 +1,7 @@
 # scrape_sec.py
 import json
 import asyncio
-from sidearm import fetch_roster
+from platforms.sidearm import fetch_roster
 import aiohttp
 import os
 
