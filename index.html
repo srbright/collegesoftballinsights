@@ -260,41 +260,42 @@
     const noResults = document.getElementById('noResults');
     const resultCount = document.getElementById('resultCount');
 
-    // Update count
+    // Update the counter
     if (resultCount) resultCount.textContent = `Found ${teams.length} teams`;
 
-    // If no teams found
+    // Handle Empty List
     if (teams.length === 0) {
         if (noResults) noResults.classList.remove('hidden');
         if (tableBody) tableBody.innerHTML = '';
         return;
     }
 
-    // Hide "No Results" message
+    // Hide the "No Results" text
     if (noResults) noResults.classList.add('hidden');
 
-    // Render the table rows
+    // Render the Table
     if (tableBody) {
         tableBody.innerHTML = teams.map(team => {
-            // SAFE DATA CHECKING (Prevents the crash)
-            const school = team.school || team.name || "Unknown School";
-            const mascot = team.mascot || "-";
-            const conf = team.conference || team.conf || "-";
-            const location = (team.city && team.state) ? `${team.city}, ${team.state}` : (team.state || "-");
-            const url = team.url || "#";
-
+            // STRICT STANDARDS: We assume teams.json is correct now.
+            // If a field is missing, we show a dash (-)
             return `
             <tr class="hover:bg-gray-50 transition border-b border-gray-100">
-                <td class="px-6 py-4 font-medium text-gray-900">${school}</td>
-                <td class="px-6 py-4 text-gray-600">${mascot}</td>
+                <td class="px-6 py-4 font-medium text-gray-900">
+                    ${team.school || 'Unknown School'}
+                </td>
+                <td class="px-6 py-4 text-gray-600">
+                    ${team.mascot || '-'}
+                </td>
                 <td class="px-6 py-4 text-gray-600">
                     <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">
-                        ${conf}
+                        ${team.conf || '-'}
                     </span>
                 </td>
-                <td class="px-6 py-4 text-gray-600">${location}</td>
+                <td class="px-6 py-4 text-gray-600">
+                    ${team.city ? team.city + ', ' : ''}${team.state || '-'}
+                </td>
                 <td class="px-6 py-4">
-                    <a href="${url}" target="_blank" class="text-blue-600 hover:text-blue-800 font-medium hover:underline">
+                    <a href="${team.url || '#'}" target="_blank" class="text-blue-600 hover:text-blue-800 font-medium hover:underline">
                         Visit
                     </a>
                 </td>
