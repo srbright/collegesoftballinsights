@@ -31,9 +31,7 @@
       --accent: #4a8df2;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -42,11 +40,11 @@
       color: var(--text-main);
     }
 
-    /* HERO */
+    /* HERO HEADER */
 
     .hero {
       position: relative;
-      min-height: 260px;
+      min-height: 280px;
       background-image: url('hero-softball.jpg');
       background-size: cover;
       background-position: center;
@@ -70,25 +68,24 @@
     .hero-content {
       position: relative;
       max-width: 900px;
-      padding: 32px 20px 40px;
+      padding: 36px 20px 40px;
       color: #ffffff;
     }
 
-   .hero-title {
-  margin: 0 0 14px;
-  font-size: 36px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
+    .hero-title {
+      margin: 0 0 16px;
+      font-size: 36px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
 
-.hero-subtitle {
-  margin: 0;
-  font-size: 16px;
-  line-height: 1.65;
-  color: #f3f4ff;
-}
-
+    .hero-subtitle {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.65;
+      color: #f3f4ff;
+    }
 
     /* MAIN LAYOUT */
 
@@ -98,14 +95,14 @@
       padding: 0 20px;
     }
 
-    /* FILTERS */
+    /* FILTER CARDS */
 
     .filters-card {
       background: var(--card-bg);
       border-radius: 12px;
       border: 1px solid var(--border-subtle);
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-      padding: 18px 18px 16px;
+      padding: 18px;
       margin-bottom: 22px;
     }
 
@@ -115,30 +112,23 @@
       margin: 0 0 12px;
     }
 
-    .filters-section {
-      margin-bottom: 12px;
-    }
+    .filters-section { margin-bottom: 12px; }
 
     .filters-row {
       display: grid;
       gap: 10px;
     }
 
-    .filters-row + .filters-row {
-      margin-top: 10px;
-    }
+    .row-1 { grid-template-columns: 1fr; }
 
-    .filters-row-1 {
-      grid-template-columns: minmax(0, 1fr);
-    }
-
-    .filters-row-2 {
+    .row-2 {
       grid-template-columns: 1.2fr 1fr 1fr 1fr;
     }
 
-    .filters-row-3 {
-      grid-template-columns: 1fr 1fr auto auto;
-      align-items: center;
+    .row-3 {
+      grid-template-columns: auto auto;
+      justify-content: end;
+      gap: 10px;
     }
 
     input, select {
@@ -146,13 +136,13 @@
       border-radius: 8px;
       border: 1px solid #d4d7e2;
       font-size: 13px;
-      outline: none;
       background: #ffffff;
+      outline: none;
     }
 
     input:focus, select:focus {
       border-color: var(--accent);
-      box-shadow: 0 0 0 2px rgba(74, 141, 242, 0.2);
+      box-shadow: 0 0 0 2px rgba(74,141,242,0.2);
     }
 
     button {
@@ -166,10 +156,6 @@
       background: #ffffff;
       cursor: pointer;
       font-size: 13px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
       white-space: nowrap;
     }
 
@@ -179,13 +165,9 @@
       color: #ffffff;
     }
 
-    .btn-secondary {
-      background: #f7f9fc;
-    }
+    .btn-secondary { background: #f7f9fc; }
 
-    .btn:active {
-      transform: translateY(1px);
-    }
+    .btn:active { transform: translateY(1px); }
 
     .helper-text {
       margin-top: 6px;
@@ -207,7 +189,7 @@
       box-shadow: 0 1px 3px rgba(0,0,0,0.06);
     }
 
-    /* TEAMS */
+    /* RESULTS */
 
     .results-note {
       font-size: 13px;
@@ -222,19 +204,14 @@
     }
 
     .team-card {
-      background: var(--card-bg);
-      padding: 18px 18px 12px;
-      border-radius: 10px;
+      background: #ffffff;
       border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 18px;
       box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-      display: flex;
-      flex-direction: column;
     }
 
-    .team-name {
-      font-size: 16px;
-      font-weight: 600;
-    }
+    .team-name { font-size: 16px; font-weight: 600; }
 
     .team-location {
       font-size: 13px;
@@ -273,9 +250,7 @@
       transition: max-height 0.25s ease;
     }
 
-    .roster.open {
-      max-height: 330px;
-    }
+    .roster.open { max-height: 330px; }
 
     table {
       width: 100%;
@@ -287,7 +262,6 @@
       text-align: left;
       padding: 6px 4px;
       color: var(--text-muted);
-      font-size: 12px;
       border-bottom: 1px solid #e2e4ea;
     }
 
@@ -304,21 +278,20 @@
 
     @media (max-width: 900px) {
       .teams-grid { grid-template-columns: 1fr 1fr; }
-      .filters-row-2 { grid-template-columns: 1fr 1fr; }
-      .filters-row-3 { grid-template-columns: 1fr 1fr; row-gap: 8px; }
+      .row-2 { grid-template-columns: 1fr 1fr; }
     }
 
     @media (max-width: 600px) {
       .teams-grid { grid-template-columns: 1fr; }
-      .filters-row-2 { grid-template-columns: 1fr; }
-      .filters-row-3 { grid-template-columns: 1fr 1fr; }
+      .row-2 { grid-template-columns: 1fr; }
+      .row-3 { justify-content: start; }
     }
   </style>
 </head>
 
 <body>
 
-<!-- HERO HEADER -->
+<!-- HERO -->
 <section class="hero">
   <div class="hero-content">
     <h1 class="hero-title">College Softball Search</h1>
@@ -329,18 +302,19 @@
 </section>
 
 <main>
+
   <!-- FILTERS -->
   <section class="filters-card">
     <h2 class="filters-title">Filter programs</h2>
 
     <div class="filters-section">
-      <div class="filters-row filters-row-1">
+      <div class="filters-row row-1">
         <input id="search" placeholder="Search teams…" />
       </div>
     </div>
 
     <div class="filters-section">
-      <div class="filters-row filters-row-2">
+      <div class="filters-row row-2">
         <input id="zip" placeholder="ZIP (optional)" />
         <select id="radius">
           <option value="0">Any distance</option>
@@ -364,13 +338,7 @@
     </div>
 
     <div class="filters-section">
-      <div class="filters-row filters-row-3">
-        <select id="filter-pos">
-          <option value="">All positions</option>
-        </select>
-        <select id="filter-class">
-          <option value="">All classes</option>
-        </select>
+      <div class="filters-row row-3">
         <button id="toggle-map" class="btn btn-secondary">Show map</button>
         <button id="search-btn" class="btn btn-primary">Search</button>
       </div>
@@ -381,7 +349,7 @@
     </div>
   </section>
 
-  <!-- MAP (hidden until toggled) -->
+  <!-- MAP -->
   <section id="map-container">
     <div id="map"></div>
   </section>
@@ -396,6 +364,7 @@
       No programs match your current filters. Try widening your search.
     </div>
   </section>
+
 </main>
 
 <script>
@@ -404,39 +373,35 @@
   let map;
   let mapMarkers = [];
   let mapInitialized = false;
-  let originLatLng = null; // user ZIP origin if available
+  let originLatLng = null;
 
-  // Haversine distance in miles
+  // Haversine
   function distanceMiles(lat1, lon1, lat2, lon2) {
     const toRad = d => (d * Math.PI) / 180;
-    const R = 3958.8; // Earth radius in miles
+    const R = 3958.8;
     const dLat = toRad(lat2 - lat1);
     const dLon = toRad(lon2 - lon1);
     const a =
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.sin(dLat/2)**2 +
       Math.cos(toRad(lat1)) *
-        Math.cos(toRad(lat2)) *
-        Math.sin(dLon / 2) *
-        Math.sin(dLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      Math.cos(toRad(lat2)) *
+      Math.sin(dLon/2)**2;
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
     return R * c;
   }
 
-  // Real ZIP → lat/lng lookup via Zippopotam.us
+  // Real ZIP → lat/lng
   async function lookupZipLatLng(zip) {
     const url = `https://api.zippopotam.us/us/${zip}`;
     try {
       const response = await fetch(url);
       if (!response.ok) return null;
       const data = await response.json();
-      const place = data.places && data.places[0];
-      if (!place) return null;
       return {
-        lat: parseFloat(place.latitude),
-        lng: parseFloat(place.longitude)
+        lat: parseFloat(data.places[0].latitude),
+        lng: parseFloat(data.places[0].longitude)
       };
     } catch (err) {
-      console.error("ZIP lookup failed:", err);
       return null;
     }
   }
@@ -446,173 +411,108 @@
     const data = await res.json();
     allTeams = Array.isArray(data) ? data : [];
 
-    // Enrich teams
     allTeams.forEach(t => {
       t.rosterSize = (t.players || []).length;
       t.distanceMilesFromOrigin = null;
     });
 
-    buildFilterOptions();
+    buildConferenceOptions();
+    document.getElementById("toggle-map").addEventListener("click", toggleMap);
+    document.getElementById("search-btn").addEventListener("click", runSearch);
   }
 
-  function buildFilterOptions() {
-    const posSet = new Set();
-    const classSet = new Set();
+  function buildConferenceOptions() {
+    const confSelect = document.getElementById("conference");
     const confSet = new Set();
 
     allTeams.forEach(t => {
       if (t.conf) confSet.add(t.conf);
-
-      (t.players || []).forEach(p => {
-        if (p.pos) posSet.add(p.pos);
-        if (p.class) classSet.add(p.class);
-      });
     });
 
-    const posSelect = document.getElementById("filter-pos");
-    posSet.forEach(pos => {
+    confSet.forEach(conf => {
       const o = document.createElement("option");
-      o.value = pos;
-      o.textContent = pos;
-      posSelect.appendChild(o);
-    });
-
-    const classSelect = document.getElementById("filter-class");
-    classSet.forEach(cls => {
-      const o = document.createElement("option");
-      o.value = cls;
-      o.textContent = cls;
-      classSelect.appendChild(o);
-    });
-
-    const confSelect = document.getElementById("conference");
-    Array.from(confSet)
-      .sort()
-      .forEach(conf => {
-        const o = document.createElement("option");
-        o.value = conf;
-        o.textContent = conf;
-        confSelect.appendChild(o);
-      });
-
-    document.getElementById("toggle-map").addEventListener("click", toggleMap);
-    document.getElementById("search-btn").addEventListener("click", () => {
-      runSearch();
+      o.value = conf;
+      o.textContent = conf;
+      confSelect.appendChild(o);
     });
   }
 
   async function runSearch() {
-    // start with all
     filtered = [...allTeams];
 
     const q = document.getElementById("search").value.toLowerCase().trim();
-    const pos = document.getElementById("filter-pos").value;
-    const cls = document.getElementById("filter-class").value;
     const division = document.getElementById("division").value;
     const conference = document.getElementById("conference").value;
     const zip = document.getElementById("zip").value.trim();
     const radius = parseFloat(document.getElementById("radius").value || "0");
 
-    // Division filter (placeholder-ready)
+    // Division
     if (division) {
-      filtered = filtered.filter(
-        t => (t.division || "").toUpperCase() === division.toUpperCase()
-      );
+      filtered = filtered.filter(t => (t.division || "") === division);
     }
 
-    // Conference filter
+    // Conference
     if (conference) {
-      filtered = filtered.filter(t => (t.conf || "") === conference);
+      filtered = filtered.filter(t => t.conf === conference);
     }
 
-    // Team search (NO player search)
+    // Team search
     if (q) {
       filtered = filtered.filter(t => {
-        const city = (t.city || "").toLowerCase();
-        const state = (t.state || "").toLowerCase();
-        const name = (t.school || "").toLowerCase();
         return (
-          name.includes(q) ||
-          city.includes(q) ||
-          state.includes(q)
+          t.school.toLowerCase().includes(q) ||
+          (t.city || "").toLowerCase().includes(q) ||
+          (t.state || "").toLowerCase().includes(q)
         );
       });
     }
 
-    // Position filter
-    if (pos) {
-      filtered = filtered.filter(t =>
-        (t.players || []).some(p => p.pos === pos)
-      );
-    }
-
-    // Class filter
-    if (cls) {
-      filtered = filtered.filter(t =>
-        (t.players || []).some(p => p.class === cls)
-      );
-    }
-
-    // Reset previous distances
+    // ZIP filter
     originLatLng = null;
-    allTeams.forEach(t => (t.distanceMilesFromOrigin = null));
+    allTeams.forEach(t => t.distanceMilesFromOrigin = null);
 
-    // Location filter (optional)
     if (zip) {
       const origin = await lookupZipLatLng(zip);
-      if (!origin) {
-        alert("ZIP not recognized yet or lookup failed.");
-      } else {
+      if (origin) {
         originLatLng = origin;
 
         allTeams.forEach(t => {
-          if (typeof t.latitude === "number" && typeof t.longitude === "number") {
+          if (t.latitude && t.longitude) {
             t.distanceMilesFromOrigin = distanceMiles(
-              origin.lat,
-              origin.lng,
-              t.latitude,
-              t.longitude
+              origin.lat, origin.lng,
+              t.latitude, t.longitude
             );
-          } else {
-            t.distanceMilesFromOrigin = null;
           }
         });
 
-        // Reapply radius cutoff if needed
-        filtered = filtered.filter(t => {
-          if (radius > 0) {
-            return (
-              t.distanceMilesFromOrigin != null &&
-              t.distanceMilesFromOrigin <= radius
-            );
-          }
-          return true;
-        });
+        if (radius > 0) {
+          filtered = filtered.filter(t =>
+            t.distanceMilesFromOrigin != null &&
+            t.distanceMilesFromOrigin <= radius
+          );
+        }
 
-        // Sort by distance if origin provided
-        filtered.sort((a, b) => {
-          const da = a.distanceMilesFromOrigin ?? 999999;
-          const db = b.distanceMilesFromOrigin ?? 999999;
-          return da - db;
-        });
+        filtered.sort((a, b) =>
+          (a.distanceMilesFromOrigin ?? 999999) -
+          (b.distanceMilesFromOrigin ?? 999999)
+        );
+      } else {
+        alert("ZIP not found.");
       }
     }
 
     renderTeams();
     if (mapInitialized) updateMapMarkers();
 
-    const note = document.getElementById("results-note");
-    if (filtered.length) {
-      note.textContent = `Showing ${filtered.length} program(s) that match your filters.`;
-    } else {
-      note.textContent = "No results yet. Set your filters above and click Search.";
-    }
+    document.getElementById("results-note").textContent =
+      filtered.length
+        ? `Showing ${filtered.length} program(s) that match your filters.`
+        : "No results yet. Set your filters and click Search.";
   }
 
   function renderTeams() {
     const container = document.getElementById("teams");
     const emptyMsg = document.getElementById("no-results");
-
     container.innerHTML = "";
 
     if (!filtered.length) {
@@ -624,33 +524,23 @@
     filtered.forEach(t => {
       const card = document.createElement("div");
       card.className = "team-card";
-      card.id = `team-card-${t.slug || t.school.replace(/\s+/g, "-")}`;
 
-      const loc =
-        (t.city || t.state)
-          ? `${t.city || ""}${t.city && t.state ? ", " : ""}${t.state || ""}`
-          : "";
-
-      const distanceText =
-        t.distanceMilesFromOrigin != null
-          ? `<span class="pill-distance">${t.distanceMilesFromOrigin.toFixed(0)} miles away</span>`
-          : "";
+      const loc = `${t.city}, ${t.state}`;
+      const dist = t.distanceMilesFromOrigin != null
+        ? `<span class="pill-distance">${t.distanceMilesFromOrigin.toFixed(0)} miles away</span>`
+        : "";
 
       card.innerHTML = `
         <div class="team-name">${t.school}</div>
         <div class="team-location">${loc}</div>
-        <div class="pill">
-          ${t.rosterSize} players${distanceText}
-        </div>
+        <div class="pill">${t.rosterSize} players ${dist}</div>
         <button class="roster-btn">View roster</button>
-        <div class="roster">
-          ${renderRoster(t.players || [])}
-        </div>
+        <div class="roster">${renderRoster(t.players || [])}</div>
       `;
 
-      const btn = card.querySelector(".roster-btn");
+      const rosterBtn = card.querySelector(".roster-btn");
       const rosterEl = card.querySelector(".roster");
-      btn.addEventListener("click", () => {
+      rosterBtn.addEventListener("click", () => {
         rosterEl.classList.toggle("open");
       });
 
@@ -660,19 +550,17 @@
 
   function renderRoster(players) {
     if (!players.length) {
-      return "<div style='font-size:12px; color:#6d6d72;'>No roster data yet.</div>";
+      return "<div style='font-size:12px;color:#6d6d72;'>No roster data yet.</div>";
     }
 
-    const rows = players
-      .map(
-        p => `<tr>
-                <td>${p.number || ""}</td>
-                <td>${p.name}</td>
-                <td>${p.pos}</td>
-                <td>${p.class}</td>
-              </tr>`
-      )
-      .join("");
+    const rows = players.map(p => `
+      <tr>
+        <td>${p.number || ""}</td>
+        <td>${p.name}</td>
+        <td>${p.pos}</td>
+        <td>${p.class}</td>
+      </tr>
+    `).join("");
 
     return `
       <table>
@@ -690,7 +578,7 @@
     const container = document.getElementById("map-container");
     const btn = document.getElementById("toggle-map");
 
-    if (container.style.display === "none" || container.style.display === "") {
+    if (container.style.display === "none") {
       container.style.display = "block";
       btn.textContent = "Hide map";
       if (!mapInitialized) initMap();
@@ -702,8 +590,7 @@
   }
 
   function initMap() {
-    const defaultCenter = [34.0, -88.0]; // rough SE US
-    map = L.map("map").setView(defaultCenter, 5);
+    map = L.map("map").setView([34.0, -88.0], 5);
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution: "&copy; OpenStreetMap contributors"
@@ -718,34 +605,26 @@
     mapMarkers.forEach(m => map.removeLayer(m));
     mapMarkers = [];
 
-    if (!filtered.length) return;
-
     const bounds = [];
 
     filtered.forEach(t => {
-      if (typeof t.latitude !== "number" || typeof t.longitude !== "number") return;
+      if (t.latitude && t.longitude) {
+        const marker = L.marker([t.latitude, t.longitude]).addTo(map);
+        marker.bindPopup(`<strong>${t.school}</strong><br>${t.city}, ${t.state}`);
 
-      const marker = L.marker([t.latitude, t.longitude]).addTo(map);
-      marker.bindPopup(`<strong>${t.school}</strong><br>${t.city || ""}, ${t.state || ""}`);
+        marker.on("click", () => {
+          document.getElementById("teams")
+            .querySelector(`.team-card:nth-child(${filtered.indexOf(t) + 1})`)
+            ?.scrollIntoView({ behavior: "smooth" });
+        });
 
-      marker.on("click", () => {
-        const cardId = `team-card-${t.slug || t.school.replace(/\s+/g, "-")}`;
-        const el = document.getElementById(cardId);
-        if (el) {
-          el.scrollIntoView({ behavior: "smooth", block: "start" });
-          el.style.outline = "2px solid #4a8df2";
-          setTimeout(() => (el.style.outline = "none"), 1500);
-        }
-      });
-
-      mapMarkers.push(marker);
-      bounds.push([t.latitude, t.longitude]);
+        mapMarkers.push(marker);
+        bounds.push([t.latitude, t.longitude]);
+      }
     });
 
     if (bounds.length) {
-      map.fitBounds(bounds, { padding: [30, 30] });
-    } else if (originLatLng) {
-      map.setView([originLatLng.lat, originLatLng.lng], 6);
+      map.fitBounds(bounds, { padding: [30,30] });
     }
   }
 
