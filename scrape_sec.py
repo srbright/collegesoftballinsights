@@ -1,9 +1,9 @@
 # scrape_sec.py
 import json
 import asyncio
-from platforms.sidearm import fetch_roster
 import aiohttp
 import os
+from platforms.sidearm import fetch_roster
 
 INPUT_JSON = "teams_sec.json"
 OUTPUT_JSON = "softball_sec.json"
@@ -23,52 +23,64 @@ LAT_LNG = {
     "South Carolina": (33.9950, -81.0270),
     "Tennessee": (35.9545, -83.9295),
     "Texas A&M": (30.6150, -96.3400),
-    "Vanderbilt": (36.1447, -86.8027)
+    "Vanderbilt": (36.1447, -86.8027),
 }
 
+def normalize_roster_url(raw: str) -> str:
+    """
+    Make sure we hit the actual roster page.
+    If URL doesn't contain 'roster', append '/roster'.
+    """
+    if not raw:
+        return ""
+    url = raw.strip()
+    low = url.rstrip("/").lower()
+    if "roster" not in low:
+        url = url.rstrip("/") + "/roster"
+    return url
 
 async def scrape_team(session, team):
-    school = team["school"]
-
+    school = team.get("school", "Unknown")
     print(f"[info] Scraping {school}")
 
-    # 1) Add lat/lng
+    # lat/lng
     if school in LAT_LNG:
         team["latitude"], team["longitude"] = LAT_LNG[school]
     else:
         team["latitude"] = None
         team["longitude"] = None
 
-    # 2) Fetch roster
-    roster_url = team.get("softball_url") or team.get("url")
+    # figure out roster URL
+    base_url = team.get("softball_url") or team.get("url") or ""
+    roster_url = normalize_roster_url(base_url)
+
+    # fetch roster
     players = await fetch_roster(session, roster_url)
     team["players"] = players
     team["rosterSize"] = len(players)
 
-    # 3) Derive quick stats
+    # quick aggregates
     class_counts = {}
     pos_counts = {}
-
     for p in players:
-        class_counts[p.get("class", "")] = class_counts.get(p.get("class", ""), 0) + 1
-        pos_counts[p.get("pos", "")] = pos_counts.get(p.get("pos", ""), 0) + 1
+        cls = p.get("class", "").strip()
+        pos = p.get("pos", "").strip()
+        if cls:
+            class_counts[cls] = class_counts.get(cls, 0) + 1
+        if pos:
+            pos_counts[pos] = pos_counts.get(pos, 0) + 1
 
     team["classCounts"] = class_counts
     team["posCounts"] = pos_counts
 
-    # 4) Placeholder advanced recruiting data
-    team["coach"] = {
-        "name": "TBD",
-        "years": 0
-    }
-
+    # placeholders for now
+    team["coach"] = {"name": "TBD", "years": 0}
     team["retentionRate"] = 1.0
     team["transfersIn"] = 0
     team["transfersOut"] = 0
     team["rosterYear"] = 2025
 
     return team
-
 
 async def main():
     if not os.path.exists(INPUT_JSON):
@@ -79,16 +91,18 @@ async def main():
         teams = json.load(f)
 
     async with aiohttp.ClientSession() as session:
-        results = await asyncio.gather(*[
-            scrape_team(session, t)
-            for t in teams
-        ])
+        results = []
+        for t in teams:
+            try:
+                updated = await scrape_team(session, t)
+                results.append(updated)
+            except Exception as e:
+                print(f"[error] failed scraping {t.get('school')}: {e}")
 
     with open(OUTPUT_JSON, "w") as f:
         json.dump(results, f, indent=2)
 
-    print(f"[info] Wrote {OUTPUT_JSON}")
-
+    print(f"[info] Wrote {OUTPUT_JSON} with {len(results)} teams")
 
 if __name__ == "__main__":
     asyncio.run(main())
