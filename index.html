@@ -2,837 +2,421 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>College Softball Insights – SEC</title>
+  <title>College Softball Insights – SEC Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 
-  <!-- Chart.js for simple charts -->
+  <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
   <style>
-    :root {
-      --bg: #070815;
-      --bg-elevated: #111322;
-      --bg-card: #141726;
-      --accent: #ff4081;
-      --accent-soft: rgba(255, 64, 129, 0.15);
-      --accent-alt: #40c4ff;
-      --text-main: #f5f7ff;
-      --text-muted: #9ca3c7;
-      --border-subtle: #26293d;
-      --radius-lg: 16px;
-      --radius-md: 10px;
-      --shadow-soft: 0 18px 40px rgba(0, 0, 0, 0.5);
-      --transition-fast: 160ms ease-out;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
     body {
       margin: 0;
-      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      background: radial-gradient(circle at top, #1e2237 0, #050715 55%, #02030a 100%);
-      color: var(--text-main);
-      min-height: 100vh;
+      font-family: Inter, sans-serif;
+      background: #f8f9fb;
+      color: #1a1a1d;
     }
 
     header {
+      background: #ffffff;
+      border-bottom: 1px solid #e3e7ee;
+      padding: 18px 24px;
       position: sticky;
       top: 0;
-      z-index: 20;
-      backdrop-filter: blur(18px);
-      background: linear-gradient(to right, rgba(5, 7, 21, 0.96), rgba(7, 9, 25, 0.96));
-      border-bottom: 1px solid rgba(64, 196, 255, 0.16);
-      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6);
+      z-index: 100;
     }
 
-    .header-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 16px 20px 14px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-    }
-
-    .logo-group {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .logo-badge {
-      width: 40px;
-      height: 40px;
-      border-radius: 999px;
-      background: radial-gradient(circle at 30% 20%, #ff80ab, #ff4081 40%, #ffab40 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #0b0410;
-      font-weight: 800;
-      font-size: 18px;
-      box-shadow: 0 0 0 2px rgba(10, 4, 20, 0.9), 0 10px 25px rgba(0, 0, 0, 0.7);
-    }
-
-    .logo-text h1 {
+    .title {
+      font-size: 22px;
+      font-weight: 600;
       margin: 0;
-      font-size: 18px;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
     }
-
-    .logo-text span {
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-
-    .chip {
-      padding: 5px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(64, 196, 255, 0.36);
-      background: radial-gradient(circle at top left, rgba(64, 196, 255, 0.18), rgba(10, 18, 45, 0.7));
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--text-muted);
+    .subtitle {
+      font-size: 13px;
+      color: #6d6d72;
+      margin-top: 4px;
     }
 
     main {
-      max-width: 1200px;
-      margin: 18px auto 40px;
-      padding: 0 16px 40px;
+      max-width: 1100px;
+      margin: 28px auto 80px;
+      padding: 0 20px;
     }
 
-    .hero {
-      margin-bottom: 20px;
-    }
-
-    .hero-title {
-      font-size: 26px;
-      font-weight: 600;
-      margin: 0 0 6px;
-      display: flex;
-      align-items: baseline;
-      gap: 10px;
-    }
-
-    .hero-title span.highlight {
-      font-size: 13px;
-      padding: 2px 9px;
-      border-radius: 999px;
-      border: 1px solid rgba(255, 64, 129, 0.7);
-      background: radial-gradient(circle at top left, rgba(255, 64, 129, 0.18), rgba(24, 8, 32, 0.9));
-      text-transform: uppercase;
-      letter-spacing: 0.13em;
-      color: #ffb6d4;
-    }
-
-    .hero-subtitle {
-      margin: 0;
-      color: var(--text-muted);
-      font-size: 14px;
-    }
-
-    /* Summary cards */
     .summary-grid {
-      margin-top: 18px;
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 28px;
     }
 
     .summary-card {
-      border-radius: var(--radius-lg);
-      background: radial-gradient(circle at top left, rgba(64, 196, 255, 0.16), rgba(7, 8, 24, 0.96));
-      border: 1px solid rgba(64, 196, 255, 0.36);
-      padding: 10px 12px;
-      box-shadow: var(--shadow-soft);
+      background: #ffffff;
+      padding: 18px;
+      border-radius: 12px;
+      border: 1px solid #e4e7f0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
     }
 
     .summary-label {
+      font-size: 12px;
+      color: #6f7285;
       text-transform: uppercase;
-      letter-spacing: 0.12em;
-      font-size: 10px;
-      color: var(--text-muted);
-      margin-bottom: 4px;
+      letter-spacing: .07em;
+      margin-bottom: 6px;
     }
 
     .summary-value {
-      font-size: 19px;
+      font-size: 24px;
       font-weight: 600;
-    }
-
-    .summary-footnote {
-      font-size: 11px;
-      color: var(--text-muted);
-      margin-top: 2px;
     }
 
     /* Controls */
     .controls {
-      margin-top: 24px;
       display: grid;
-      grid-template-columns: minmax(0, 2fr) repeat(3, minmax(0, 1fr));
-      gap: 10px;
-      align-items: center;
+      grid-template-columns: 2fr repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 30px;
     }
 
-    .input, .select {
-      border-radius: var(--radius-md);
-      border: 1px solid var(--border-subtle);
-      background: rgba(10, 12, 28, 0.9);
-      color: var(--text-main);
-      padding: 8px 10px;
-      font-size: 13px;
+    input, select {
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid #d4d7e2;
+      font-size: 14px;
       outline: none;
-      transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast), transform 120ms ease-out;
+      background: #fff;
     }
 
-    .input:focus, .select:focus {
-      border-color: var(--accent-alt);
-      box-shadow: 0 0 0 1px rgba(64, 196, 255, 0.5);
-      background: #050614;
-      transform: translateY(-1px);
+    input:focus, select:focus {
+      border-color: #4a8df2;
+      box-shadow: 0 0 0 2px rgba(74,141,242,0.2);
     }
 
+    /* Chart Card */
     .chart-card {
-      margin-top: 20px;
-      border-radius: var(--radius-lg);
-      background: radial-gradient(circle at top left, rgba(64, 196, 255, 0.12), rgba(7, 8, 24, 0.98));
-      border: 1px solid rgba(64, 196, 255, 0.35);
-      padding: 12px 14px 8px;
-      box-shadow: var(--shadow-soft);
+      background: #ffffff;
+      border: 1px solid #e4e7f0;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 26px;
     }
-
-    .chart-card-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 13px;
-      margin-bottom: 4px;
-    }
-
     .chart-title {
-      font-weight: 500;
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 14px;
     }
 
-    .chart-caption {
-      font-size: 11px;
-      color: var(--text-muted);
+    #chartWrapper {
+      height: 260px;  /* FIXES SCROLL BUG */
+      position: relative;
     }
 
-    /* Teams grid */
+    /* Teams Grid */
     .teams-grid {
-      margin-top: 22px;
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 14px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
     }
 
     .team-card {
-      border-radius: 18px;
-      background: radial-gradient(circle at top left, rgba(255, 64, 129, 0.1), rgba(6, 8, 24, 0.98));
-      border: 1px solid rgba(255, 64, 129, 0.35);
-      padding: 12px 12px 10px;
-      box-shadow: var(--shadow-soft);
+      background: white;
+      padding: 18px 18px 12px;
+      border-radius: 10px;
+      border: 1px solid #e4e7f0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
       display: flex;
       flex-direction: column;
-      gap: 6px;
-      transform: translateY(0);
-      transition: transform 140ms ease-out, box-shadow 140ms ease-out, border-color 140ms ease-out, background 140ms ease-out;
-    }
-
-    .team-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 22px 40px rgba(0, 0, 0, 0.8);
-      border-color: rgba(255, 64, 129, 0.7);
-      background: radial-gradient(circle at top left, rgba(255, 64, 129, 0.18), rgba(4, 6, 20, 0.98));
-    }
-
-    .team-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
     }
 
     .team-name {
-      font-size: 15px;
+      font-size: 16px;
       font-weight: 600;
     }
 
-    .team-meta {
-      font-size: 11px;
-      color: var(--text-muted);
-    }
-
-    .tag {
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      padding: 3px 7px;
-      border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      background: rgba(3, 5, 18, 0.9);
-      color: var(--text-muted);
-      white-space: nowrap;
-    }
-
-    .team-stats {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      font-size: 11px;
-      color: var(--text-muted);
+    .team-location {
+      font-size: 13px;
+      color: #6d6d72;
     }
 
     .pill {
-      border-radius: 999px;
-      padding: 3px 8px;
-      background: rgba(9, 12, 30, 0.95);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      margin-top: 8px;
+      font-size: 12px;
+      background: #f1f4fa;
+      padding: 4px 8px;
+      border-radius: 6px;
+      display: inline-block;
     }
 
-    .pill strong {
-      color: var(--text-main);
-    }
-
-    .coach-line {
-      font-size: 11px;
-      color: var(--text-muted);
-      margin-top: 2px;
-    }
-
-    .card-actions {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 6px;
-      gap: 8px;
-    }
-
-    .btn {
-      border-radius: 999px;
-      border: none;
-      padding: 6px 10px;
-      font-size: 11px;
-      font-weight: 500;
+    .roster-btn {
+      margin-top: 10px;
+      padding: 8px 12px;
+      font-size: 13px;
+      border-radius: 8px;
+      border: 1px solid #d4d7e2;
+      background: #f7f9fc;
       cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      transition: background var(--transition-fast), transform 120ms ease-out, box-shadow 140ms ease-out;
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, var(--accent), var(--accent-alt));
-      color: #050310;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 16px 30px rgba(0, 0, 0, 0.9);
-    }
-
-    .btn-ghost {
-      background: transparent;
-      color: var(--text-muted);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-    }
-
-    .btn-ghost:hover {
-      background: rgba(255, 255, 255, 0.06);
-      transform: translateY(-1px);
     }
 
     .roster {
-      margin-top: 8px;
-      border-radius: 12px;
-      background: rgba(4, 6, 20, 0.96);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      margin-top: 12px;
       max-height: 0;
       overflow: hidden;
-      transition: max-height 180ms ease-out, opacity 140ms ease-out, padding 140ms ease-out;
-      opacity: 0;
-      padding: 0 6px;
+      transition: max-height 0.25s ease;
     }
 
     .roster.open {
-      max-height: 280px;
-      opacity: 1;
-      padding: 6px;
+      max-height: 330px;
     }
 
-    .roster-table {
+    table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 11px;
-    }
-
-    .roster-table th,
-    .roster-table td {
-      text-align: left;
-      padding: 4px 5px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-    .roster-table th {
-      font-weight: 500;
-      color: var(--text-muted);
-      font-size: 10px;
-    }
-
-    .empty-state {
-      margin-top: 22px;
-      text-align: center;
-      color: var(--text-muted);
       font-size: 13px;
     }
 
-    footer {
-      max-width: 1200px;
-      margin: 0 auto 20px;
-      padding: 0 16px;
-      font-size: 11px;
-      color: var(--text-muted);
-      text-align: right;
+    th {
+      text-align: left;
+      padding: 6px 4px;
+      color: #6d6d72;
+      font-size: 12px;
+      border-bottom: 1px solid #e2e4ea;
+    }
+
+    td {
+      padding: 6px 4px;
+      border-bottom: 1px solid #f2f2f4;
     }
 
     @media (max-width: 900px) {
-      .summary-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-      .controls {
-        grid-template-columns: minmax(0, 1fr);
-      }
-      .teams-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
+      .teams-grid { grid-template-columns: 1fr 1fr; }
+      .controls { grid-template-columns: 1fr; }
+      .summary-grid { grid-template-columns: 1fr 1fr; }
     }
 
-    @media (max-width: 640px) {
-      .header-inner {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      .teams-grid {
-        grid-template-columns: minmax(0, 1fr);
-      }
+    @media (max-width: 600px) {
+      .teams-grid { grid-template-columns: 1fr; }
+      .summary-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
+
 <body>
+
 <header>
-  <div class="header-inner">
-    <div class="logo-group">
-      <div class="logo-badge">SB</div>
-      <div class="logo-text">
-        <h1>College Softball Insights</h1>
-        <span>Roster intelligence for serious recruits</span>
-      </div>
-    </div>
-    <div class="chip">SEC · Beta</div>
-  </div>
+  <h1 class="title">College Softball Insights</h1>
+  <p class="subtitle">SEC Roster Analytics Dashboard</p>
 </header>
 
 <main>
-  <section class="hero">
-    <h2 class="hero-title">
-      SEC Roster Dashboard
-      <span class="highlight">Live data</span>
-    </h2>
-    <p class="hero-subtitle">
-      Scan roster sizes, classes, and depth by position across every SEC softball program.
-    </p>
 
-    <div class="summary-grid">
-      <div class="summary-card">
-        <div class="summary-label">Teams</div>
-        <div class="summary-value" id="summary-teams">–</div>
-        <div class="summary-footnote">SEC softball programs</div>
-      </div>
-      <div class="summary-card">
-        <div class="summary-label">Avg roster size</div>
-        <div class="summary-value" id="summary-avg-roster">–</div>
-        <div class="summary-footnote">Across all SEC teams</div>
-      </div>
-      <div class="summary-card">
-        <div class="summary-label">Total players</div>
-        <div class="summary-value" id="summary-total-players">–</div>
-        <div class="summary-footnote">In current SEC rosters</div>
-      </div>
+  <!-- SUMMARY -->
+  <div class="summary-grid">
+    <div class="summary-card">
+      <div class="summary-label">Teams</div>
+      <div id="summary-teams" class="summary-value">–</div>
     </div>
+    <div class="summary-card">
+      <div class="summary-label">Avg Roster Size</div>
+      <div id="summary-avg" class="summary-value">–</div>
+    </div>
+    <div class="summary-card">
+      <div class="summary-label">Total Players</div>
+      <div id="summary-total" class="summary-value">–</div>
+    </div>
+  </div>
 
-    <div class="controls">
-      <input
-        id="search-input"
-        class="input"
-        type="text"
-        placeholder="Search team, city, state, or player name..."
-      />
-      <select id="filter-position" class="select">
-        <option value="">All positions</option>
-      </select>
-      <select id="filter-class" class="select">
-        <option value="">All classes</option>
-      </select>
-      <select id="sort-teams" class="select">
-        <option value="name">Sort: Team name (A–Z)</option>
-        <option value="roster-desc">Sort: Roster size (high → low)</option>
-        <option value="roster-asc">Sort: Roster size (low → high)</option>
-      </select>
-    </div>
+  <!-- FILTERS -->
+  <div class="controls">
+    <input id="search" placeholder="Search teams or players…" />
+    <select id="filter-pos">
+      <option value="">All positions</option>
+    </select>
+    <select id="filter-class">
+      <option value="">All classes</option>
+    </select>
+    <select id="sort">
+      <option value="name">Sort: Name A–Z</option>
+      <option value="roster-desc">Sort: Roster Size Desc</option>
+      <option value="roster-asc">Sort: Roster Size Asc</option>
+    </select>
+  </div>
 
-    <div class="chart-card">
-      <div class="chart-card-header">
-        <div>
-          <div class="chart-title">Roster size by team</div>
-          <div class="chart-caption" id="chart-caption">
-            Visual snapshot of SEC roster sizes.
-          </div>
-        </div>
-      </div>
-      <canvas id="rosterChart" height="90"></canvas>
+  <!-- CHART -->
+  <div class="chart-card">
+    <div class="chart-title">Roster Size by Team</div>
+    <div id="chartWrapper">
+      <canvas id="rosterChart"></canvas>
     </div>
-  </section>
+  </div>
 
-  <section id="teams-section">
-    <div id="teams-grid" class="teams-grid"></div>
-    <div id="empty-state" class="empty-state" style="display:none;">
-      No teams match your filters. Try clearing search or changing position/class.
-    </div>
-  </section>
+  <!-- TEAM CARDS -->
+  <div id="teams" class="teams-grid"></div>
+
 </main>
 
-<footer>
-  Data updates nightly · Built for recruits who actually do their homework.
-</footer>
-
 <script>
-  let allTeams = [];
-  let filteredTeams = [];
-  let rosterChart = null;
+let teams = [];
+let filtered = [];
+let chart;
 
-  async function loadData() {
-    try {
-      const res = await fetch("softball_sec.json");
-      const data = await res.json();
-      allTeams = Array.isArray(data) ? data : [];
-      console.log("[debug] Loaded teams:", allTeams.length);
-      enhanceTeams();
-      initFilters();
-      applyFiltersAndRender();
-      initChart();
-    } catch (err) {
-      console.error("Failed to load SEC data:", err);
-      document.getElementById("teams-grid").innerHTML =
-        '<div class="empty-state">Failed to load SEC rosters.</div>';
-    }
+async function loadData() {
+  const res = await fetch("softball_sec.json");
+  teams = await res.json();
+
+  teams.forEach(t => t.rosterSize = t.players.length);
+
+  filtered = [...teams];
+
+  buildFilters();
+  updateSummary();
+  renderTeams();
+  renderChart();
+}
+
+function buildFilters() {
+  const posSet = new Set();
+  const classSet = new Set();
+
+  teams.forEach(t =>
+    t.players.forEach(p => {
+      if (p.pos) posSet.add(p.pos);
+      if (p.class) classSet.add(p.class);
+    })
+  );
+
+  for (let pos of posSet) {
+    const o = document.createElement("option");
+    o.value = pos; o.textContent = pos;
+    document.getElementById("filter-pos").appendChild(o);
   }
 
-  function enhanceTeams() {
-    for (const team of allTeams) {
-      team.rosterSize = (team.players || []).length;
-      team.city = team.city || "";
-      team.state = team.state || "";
-      team.conf = team.conf || "SEC";
-      team.division = team.division || "D1";
-    }
+  for (let c of classSet) {
+    const o = document.createElement("option");
+    o.value = c; o.textContent = c;
+    document.getElementById("filter-class").appendChild(o);
   }
 
-  function initFilters() {
-    const positionSet = new Set();
-    const classSet = new Set();
+  document.getElementById("search").addEventListener("input", filterData);
+  document.getElementById("filter-pos").addEventListener("change", filterData);
+  document.getElementById("filter-class").addEventListener("change", filterData);
+  document.getElementById("sort").addEventListener("change", sortAndRender);
+}
 
-    allTeams.forEach(team => {
-      (team.players || []).forEach(p => {
-        if (p.pos) {
-          p.pos.split(/[\/,]/).forEach(raw => {
-            const pos = raw.trim();
-            if (pos) positionSet.add(pos);
-          });
-        }
-        if (p.class) {
-          classSet.add(p.class.trim());
-        }
-      });
-    });
+function filterData() {
+  const q = document.getElementById("search").value.toLowerCase();
+  const pos = document.getElementById("filter-pos").value;
+  const cls = document.getElementById("filter-class").value;
 
-    const posSelect = document.getElementById("filter-position");
-    Array.from(positionSet).sort().forEach(pos => {
-      const opt = document.createElement("option");
-      opt.value = pos;
-      opt.textContent = pos;
-      posSelect.appendChild(opt);
-    });
+  filtered = teams.filter(t => {
+    const matchTeam = t.school.toLowerCase().includes(q);
+    const matchPlayer = t.players.some(p => p.name.toLowerCase().includes(q));
 
-    const classSelect = document.getElementById("filter-class");
-    Array.from(classSet).sort().forEach(cls => {
-      const opt = document.createElement("option");
-      opt.value = cls;
-      opt.textContent = cls;
-      classSelect.appendChild(opt);
-    });
+    let ok = q ? (matchTeam || matchPlayer) : true;
 
-    document.getElementById("search-input").addEventListener("input", () => {
-      applyFiltersAndRender();
-      updateChart();
-    });
+    if (pos) ok = ok && t.players.some(p => p.pos === pos);
+    if (cls) ok = ok && t.players.some(p => p.class === cls);
 
-    posSelect.addEventListener("change", () => {
-      applyFiltersAndRender();
-      updateChart();
-    });
+    return ok;
+  });
 
-    classSelect.addEventListener("change", () => {
-      applyFiltersAndRender();
-      updateChart();
-    });
+  sortAndRender();
+}
 
-    document.getElementById("sort-teams").addEventListener("change", () => {
-      applyFiltersAndRender();
-      updateChart();
-    });
-  }
+function sortAndRender() {
+  const s = document.getElementById("sort").value;
 
-  function applyFiltersAndRender() {
-    const q = document.getElementById("search-input").value.toLowerCase().trim();
-    const posFilter = document.getElementById("filter-position").value;
-    const classFilter = document.getElementById("filter-class").value;
-    const sort = document.getElementById("sort-teams").value;
+  if (s === "name") filtered.sort((a,b) => a.school.localeCompare(b.school));
+  if (s === "roster-desc") filtered.sort((a,b) => b.rosterSize - a.rosterSize);
+  if (s === "roster-asc") filtered.sort((a,b) => a.rosterSize - b.rosterSize);
 
-    filteredTeams = allTeams.filter(team => {
-      // Search across team + players
-      if (q) {
-        const matchTeam =
-          team.school.toLowerCase().includes(q) ||
-          (team.city || "").toLowerCase().includes(q) ||
-          (team.state || "").toLowerCase().includes(q);
+  renderTeams();
+  renderChart();
+  updateSummary();
+}
 
-        const matchPlayer = (team.players || []).some(p =>
-          (p.name || "").toLowerCase().includes(q)
-        );
+function updateSummary() {
+  const totalTeams = filtered.length;
+  const totalPlayers = filtered.reduce((a,t) => a + t.rosterSize, 0);
+  const avg = totalTeams ? (totalPlayers / totalTeams).toFixed(1) : 0;
 
-        if (!matchTeam && !matchPlayer) return false;
-      }
+  document.getElementById("summary-teams").textContent = totalTeams;
+  document.getElementById("summary-total").textContent = totalPlayers;
+  document.getElementById("summary-avg").textContent = avg;
+}
 
-      // Position filter
-      if (posFilter) {
-        const anyMatch = (team.players || []).some(p => {
-          if (!p.pos) return false;
-          return p.pos
-            .split(/[\/,]/)
-            .map(s => s.trim())
-            .includes(posFilter);
-        });
-        if (!anyMatch) return false;
-      }
+function renderTeams() {
+  const box = document.getElementById("teams");
+  box.innerHTML = "";
 
-      // Class filter
-      if (classFilter) {
-        const anyClass = (team.players || []).some(
-          p => (p.class || "").trim() === classFilter
-        );
-        if (!anyClass) return false;
-      }
+  filtered.forEach(t => {
+    const card = document.createElement("div");
+    card.className = "team-card";
 
-      return true;
-    });
-
-    // Sorting
-    if (sort === "name") {
-      filteredTeams.sort((a, b) => a.school.localeCompare(b.school));
-    } else if (sort === "roster-desc") {
-      filteredTeams.sort((a, b) => (b.rosterSize || 0) - (a.rosterSize || 0));
-    } else if (sort === "roster-asc") {
-      filteredTeams.sort((a, b) => (a.rosterSize || 0) - (b.rosterSize || 0));
-    }
-
-    renderTeams();
-    updateSummary();
-  }
-
-  function renderTeams() {
-    const grid = document.getElementById("teams-grid");
-    const empty = document.getElementById("empty-state");
-
-    grid.innerHTML = "";
-
-    if (!filteredTeams.length) {
-      empty.style.display = "block";
-      return;
-    }
-
-    empty.style.display = "none";
-
-    filteredTeams.forEach(team => {
-      const card = document.createElement("article");
-      card.className = "team-card";
-
-      const metaLine = `${team.city ? team.city + ", " : ""}${team.state}`;
-
-      const coach = team.coach || {};
-      const coachName = coach.name || "Head coach TBD";
-      const coachYears = coach.years ? `${coach.years} yrs` : "";
-
-      card.innerHTML = `
-        <div class="team-header">
-          <div>
-            <div class="team-name">${team.school}</div>
-            <div class="team-meta">${metaLine}</div>
-          </div>
-          <div class="tag">${team.conf} · ${team.division}</div>
-        </div>
-        <div class="team-stats">
-          <span class="pill"><strong>${team.rosterSize}</strong> on roster</span>
-          <span class="pill"><strong>${(team.roster_year || "–")}</strong> roster year</span>
-          ${
-            team.three_year_avg
-              ? `<span class="pill">3-yr avg: <strong>${team.three_year_avg}</strong></span>`
-              : ""
-          }
-        </div>
-        <div class="coach-line">
-          ${coachName}${coachYears ? " · " + coachYears : ""}
-        </div>
-        <div class="card-actions">
-          <button class="btn btn-primary roster-toggle">View roster</button>
-          <button class="btn btn-ghost" onclick="window.open('${team.softball_url || "#"}', '_blank')">
-            Open team site
-          </button>
-        </div>
-        <div class="roster">
-          ${renderRosterTable(team.players || [])}
-        </div>
-      `;
-
-      const toggleBtn = card.querySelector(".roster-toggle");
-      const rosterEl = card.querySelector(".roster");
-      toggleBtn.addEventListener("click", () => {
-        const open = rosterEl.classList.contains("open");
-        rosterEl.classList.toggle("open", !open);
-        toggleBtn.textContent = open ? "View roster" : "Hide roster";
-      });
-
-      grid.appendChild(card);
-    });
-  }
-
-  function renderRosterTable(players) {
-    if (!players.length) {
-      return `<div class="empty-state" style="margin:4px 0 0;font-size:11px;">No players found on this roster.</div>`;
-    }
-    const rows = players
-      .map(p => {
-        return `
-        <tr>
-          <td>${p.number || ""}</td>
-          <td>${p.name || ""}</td>
-          <td>${p.pos || ""}</td>
-          <td>${p.class || ""}</td>
-        </tr>`;
-      })
-      .join("");
-
-    return `
-      <table class="roster-table">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Player</th>
-            <th>Pos</th>
-            <th>Class</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${rows}
-        </tbody>
-      </table>
+    card.innerHTML = `
+      <div class="team-name">${t.school}</div>
+      <div class="team-location">${t.city}, ${t.state}</div>
+      <div class="pill">${t.rosterSize} players</div>
+      <button class="roster-btn">View roster</button>
+      <div class="roster">${renderRoster(t.players)}</div>
     `;
-  }
 
-  function updateSummary() {
-    const teamsCount = filteredTeams.length;
-    const totalPlayers = filteredTeams.reduce(
-      (sum, t) => sum + (t.rosterSize || 0),
-      0
-    );
-    const avgRoster =
-      teamsCount > 0 ? (totalPlayers / teamsCount).toFixed(1) : "–";
+    const btn = card.querySelector(".roster-btn");
+    const r = card.querySelector(".roster");
 
-    document.getElementById("summary-teams").textContent = teamsCount || "–";
-    document.getElementById("summary-total-players").textContent =
-      totalPlayers || "–";
-    document.getElementById("summary-avg-roster").textContent = avgRoster;
-  }
+    btn.onclick = () => r.classList.toggle("open");
 
-  function initChart() {
-    const ctx = document.getElementById("rosterChart").getContext("2d");
-    const labels = allTeams.map(t => t.school);
-    const data = allTeams.map(t => t.rosterSize || 0);
+    box.appendChild(card);
+  });
+}
 
-    rosterChart = new Chart(ctx, {
-      type: "bar",
-      data: {
-        labels,
-        datasets: [
-          {
-            label: "Roster size",
-            data,
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          x: {
-            ticks: {
-              color: "#9ca3c7",
-              maxRotation: 60,
-              minRotation: 45,
-              font: { size: 9 }
-            },
-            grid: { display: false },
-          },
-          y: {
-            ticks: {
-              color: "#9ca3c7",
-              stepSize: 2,
-            },
-            grid: {
-              color: "rgba(156, 163, 199, 0.12)",
-            },
-          },
-        },
-        plugins: {
-          legend: {
-            labels: {
-              color: "#f5f7ff",
-            },
-          },
-        },
-      },
-    });
-  }
+function renderRoster(players) {
+  return `
+    <table>
+      <thead>
+        <tr><th>#</th><th>Name</th><th>Pos</th><th>Class</th></tr>
+      </thead>
+      <tbody>
+        ${players
+          .map(
+            p => `<tr>
+                    <td>${p.number || ""}</td>
+                    <td>${p.name}</td>
+                    <td>${p.pos}</td>
+                    <td>${p.class}</td>
+                  </tr>`
+          )
+          .join("")}
+      </tbody>
+    </table>`;
+}
 
-  function updateChart() {
-    if (!rosterChart) return;
-    const labels = filteredTeams.map(t => t.school);
-    const data = filteredTeams.map(t => t.rosterSize || 0);
-    rosterChart.data.labels = labels;
-    rosterChart.data.datasets[0].data = data;
-    rosterChart.update();
-  }
+function renderChart() {
+  const ctx = document.getElementById("rosterChart").getContext("2d");
+  const labels = filtered.map(t => t.school);
+  const data = filtered.map(t => t.rosterSize);
 
-  loadData();
+  if (chart) chart.destroy();
+
+  chart = new Chart(ctx, {
+    type: "bar",
+    data: { labels, datasets: [{ label: "Roster Size", data, backgroundColor: "#4a8df2" }] },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: false,  /* prevents scroll jumps */
+      scales: {
+        x: { ticks: { maxRotation: 70, minRotation: 40 }},
+        y: { beginAtZero: true }
+      }
+    }
+  });
+}
+
+loadData();
 </script>
+
 </body>
 </html>
