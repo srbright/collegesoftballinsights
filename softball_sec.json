@@ -1,1 +1,282 @@
-
+[
+  {
+    "school": "Alabama",
+    "slug": "alabama",
+    "city": "Tuscaloosa",
+    "state": "AL",
+    "division": "D1",
+    "conf": "SEC",
+    "softball_url": "https://rolltide.com/sports/softball/roster",
+    "players": [],
+    "roster_year": 2026,
+    "three_year_avg": 0,
+    "retention_rate": 0.0,
+    "coach": {
+      "name": "TBD",
+      "years": 0
+    },
+    "facilities": {
+      "stadium": "TBD"
+    }
+  },
+  {
+    "school": "Arkansas",
+    "slug": "arkansas",
+    "city": "Fayetteville",
+    "state": "AR",
+    "division": "D1",
+    "conf": "SEC",
+    "softball_url": "https://arkansasrazorbacks.com/sport/w-softbl/roster/",
+    "players": [],
+    "roster_year": 2026,
+    "three_year_avg": 0,
+    "retention_rate": 0.0,
+    "coach": {
+      "name": "TBD",
+      "years": 0
+    },
+    "facilities": {
+      "stadium": "TBD"
+    }
+  },
+  {
+    "school": "Auburn",
+    "slug": "auburn",
+    "city": "Auburn",
+    "state": "AL",
+    "division": "D1",
+    "conf": "SEC",
+    "softball_url": "https://auburntigers.com/sports/softball/roster",
+    "players": [],
+    "roster_year": 2026,
+    "three_year_avg": 0,
+    "retention_rate": 0.0,
+    "coach": {
+      "name": "TBD",
+      "years": 0
+    },
+    "facilities": {
+      "stadium": "TBD"
+    }
+  },
+  {
+    "school": "Florida",
+    "slug": "florida",
+    "city": "Gainesville",
+    "state": "FL",
+    "division": "D1",
+    "conf": "SEC",
+    "softball_url": "https://floridagators.com/sports/softball/roster",
+    "players": [],
+    "roster_year": 2026,
+    "three_year_avg": 0,
+    "retention_rate": 0.0,
+    "coach": {
+      "name": "TBD",
+      "years": 0
+    },
+    "facilities": {
+      "stadium": "TBD"
+    }
+  },
+  {
+    "school": "Georgia",
+    "slug": "georgia",
+    "city": "Athens",
+    "state": "GA",
+    "division": "D1",
+    "conf": "SEC",
+    "softball_url": "https://georgiadogs.com/sports/softball/roster",
+    "players": [],
+    "roster_year": 2026,
+    "three_year_avg": 0,
+    "retention_rate": 0.0,
+    "coach": {
+      "name": "TBD",
+      "years": 0
+    },
+    "facilities": {
+      "stadium": "TBD"
+    }
+  },
+  {
+    "school": "Kentucky",
+    "slug": "kentucky",
+    "city": "Lexington",
+    "state": "KY",
+    "division": "D1",
+    "conf": "SEC",
+    "softball_url": "https://ukathletics.com/sports/softball/roster",
+    "players": [],
+    "roster_year": 2026,
+    "three_year_avg": 0,
+    "retention_rate": 0.0,
+    "coach": {
+      "name": "TBD",
+      "years": 0
+    },
+    "facilities": {
+      "stadium": "TBD"
+    }
+  },
+  {
+    "school": "LSU",
+    "slug": "lsu",
+    "city": "Baton Rouge",
+    "state": "LA",
+    "division": "D1",
+    "conf": "SEC",
+    "softball_url": "https://lsusports.net/sports/sb/roster",
+    "players": [],
+    "roster_year": 2026,
+    "three_year_avg": 0,
+    "retention_rate": 0.0,
+    "coach": {
+      "name": "TBD",
+      "years": 0
+    },
+    "facilities": {
+      "stadium": "TBD"
+    }
+  },
+  {
+    "school": "Mississippi State",
+    "slug": "mississippistate",
+    "city": "Starkville",
+    "state": "MS",
+    "division": "D1",
+    "conf": "SEC",
+    "softball_url": "https://hailstate.com/sports/softball/roster",
+    "players": [],
+    "roster_year": 2026,
+    "three_year_avg": 0,
+    "retention_rate": 0.0,
+    "coach": {
+      "name": "TBD",
+      "years": 0
+    },
+    "facilities": {
+      "stadium": "TBD"
+    }
+  },
+  {
+    "school": "Missouri",
+    "slug": "missouri",
+    "city": "Columbia",
+    "state": "MO",
+    "division": "D1",
+    "conf": "SEC",
+    "softball_url": "https://mutigers.com/sports/softball/roster",
+    "players": [],
+    "roster_year": 2026,
+    "three_year_avg": 0,
+    "retention_rate": 0.0,
+    "coach": {
+      "name": "TBD",
+      "years": 0
+    },
+    "facilities": {
+      "stadium": "TBD"
+    }
+  },
+  {
+    "school": "Ole Miss",
+    "slug": "olemiss",
+    "city": "Oxford",
+    "state": "MS",
+    "division": "D1",
+    "conf": "SEC",
+    "softball_url": "https://olemisssports.com/sports/softball/roster",
+    "players": [],
+    "roster_year": 2026,
+    "three_year_avg": 0,
+    "retention_rate": 0.0,
+    "coach": {
+      "name": "TBD",
+      "years": 0
+    },
+    "facilities": {
+      "stadium": "TBD"
+    }
+  },
+  {
+    "school": "South Carolina",
+    "slug": "southcarolina",
+    "city": "Columbia",
+    "state": "SC",
+    "division": "D1",
+    "conf": "SEC",
+    "softball_url": "https://gamecocks.com/sports/softball/roster",
+    "players": [],
+    "roster_year": 2026,
+    "three_year_avg": 0,
+    "retention_rate": 0.0,
+    "coach": {
+      "name": "TBD",
+      "years": 0
+    },
+    "facilities": {
+      "stadium": "TBD"
+    }
+  },
+  {
+    "school": "Tennessee",
+    "slug": "tennessee",
+    "city": "Knoxville",
+    "state": "TN",
+    "division": "D1",
+    "conf": "SEC",
+    "softball_url": "https://utsports.com/sports/softball/roster",
+    "players": [],
+    "roster_year": 2026,
+    "three_year_avg": 0,
+    "retention_rate": 0.0,
+    "coach": {
+      "name": "TBD",
+      "years": 0
+    },
+    "facilities": {
+      "stadium": "TBD"
+    }
+  },
+  {
+    "school": "Texas A&M",
+    "slug": "texasam",
+    "city": "College Station",
+    "state": "TX",
+    "division": "D1",
+    "conf": "SEC",
+    "softball_url": "https://12thman.com/sports/softball/roster",
+    "players": [],
+    "roster_year": 2026,
+    "three_year_avg": 0,
+    "retention_rate": 0.0,
+    "coach": {
+      "name": "TBD",
+      "years": 0
+    },
+    "facilities": {
+      "stadium": "TBD"
+    }
+  },
+  {
+    "school": "Vanderbilt",
+    "slug": "vanderbilt",
+    "city": "Nashville",
+    "state": "TN",
+    "division": "D1",
+    "conf": "SEC",
+    "softball_url": "https://vucommodores.com/sports/softball/roster",
+    "players": [],
+    "roster_year": 2026,
+    "three_year_avg": 0,
+    "retention_rate": 0.0,
+    "coach": {
+      "name": "TBD",
+      "years": 0
+    },
+    "facilities": {
+      "stadium": "TBD"
+    }
+  }
+]
