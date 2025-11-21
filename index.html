@@ -11,6 +11,19 @@
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
+  <!-- Leaflet (map library) -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  />
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+  ></script>
+
   <style>
     body {
       margin: 0;
@@ -78,7 +91,15 @@
       display: grid;
       grid-template-columns: 2fr repeat(3, 1fr);
       gap: 12px;
-      margin-bottom: 30px;
+      margin-bottom: 16px;
+    }
+
+    .location-controls {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr auto auto;
+      gap: 10px;
+      margin-bottom: 24px;
+      align-items: center;
     }
 
     input, select {
@@ -95,13 +116,43 @@
       box-shadow: 0 0 0 2px rgba(74,141,242,0.2);
     }
 
+    button {
+      font-family: inherit;
+    }
+
+    .btn {
+      padding: 9px 14px;
+      border-radius: 8px;
+      border: 1px solid #d4d7e2;
+      background: #ffffff;
+      cursor: pointer;
+      font-size: 13px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-primary {
+      background: #4a8df2;
+      border-color: #4a8df2;
+      color: white;
+    }
+
+    .btn-secondary {
+      background: #f7f9fc;
+    }
+
+    .btn:active {
+      transform: translateY(1px);
+    }
+
     /* Chart Card */
     .chart-card {
       background: #ffffff;
       border: 1px solid #e4e7f0;
       border-radius: 12px;
       padding: 20px;
-      margin-bottom: 26px;
+      margin-bottom: 20px;
     }
     .chart-title {
       font-size: 15px;
@@ -110,8 +161,20 @@
     }
 
     #chartWrapper {
-      height: 260px;  /* FIXES SCROLL BUG */
+      height: 260px;  /* fixed height to avoid scroll jump */
       position: relative;
+    }
+
+    /* Map */
+    #map-container {
+      margin-bottom: 26px;
+    }
+
+    #map {
+      height: 360px;        /* fixed height */
+      border-radius: 12px;
+      border: 1px solid #e4e7f0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
     }
 
     /* Teams Grid */
@@ -148,6 +211,11 @@
       padding: 4px 8px;
       border-radius: 6px;
       display: inline-block;
+    }
+
+    .pill-distance {
+      margin-left: 6px;
+      color: #3b4256;
     }
 
     .roster-btn {
@@ -194,11 +262,13 @@
       .teams-grid { grid-template-columns: 1fr 1fr; }
       .controls { grid-template-columns: 1fr; }
       .summary-grid { grid-template-columns: 1fr 1fr; }
+      .location-controls { grid-template-columns: 1fr 1fr; row-gap: 8px; }
     }
 
     @media (max-width: 600px) {
       .teams-grid { grid-template-columns: 1fr; }
       .summary-grid { grid-template-columns: 1fr; }
+      .location-controls { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -207,7 +277,7 @@
 
 <header>
   <h1 class="title">College Softball Insights</h1>
-  <p class="subtitle">SEC Roster Analytics Dashboard</p>
+  <p class="subtitle">SEC Roster Analytics & Program Finder</p>
 </header>
 
 <main>
@@ -228,7 +298,7 @@
     </div>
   </div>
 
-  <!-- FILTERS -->
+  <!-- TEXT/FILTER CONTROLS -->
   <div class="controls">
     <input id="search" placeholder="Search teams or players…" />
     <select id="filter-pos">
@@ -244,12 +314,31 @@
     </select>
   </div>
 
+  <!-- LOCATION CONTROLS -->
+  <div class="location-controls">
+    <input id="zip" placeholder="Enter ZIP (e.g. 35203)" />
+    <select id="radius">
+      <option value="0">Any distance</option>
+      <option value="50">Within 50 miles</option>
+      <option value="100">Within 100 miles</option>
+      <option value="200">Within 200 miles</option>
+      <option value="400">Within 400 miles</option>
+    </select>
+    <button id="apply-location" class="btn btn-primary">Apply location filter</button>
+    <button id="toggle-map" class="btn btn-secondary">Show map</button>
+  </div>
+
   <!-- CHART -->
   <div class="chart-card">
     <div class="chart-title">Roster Size by Team</div>
     <div id="chartWrapper">
       <canvas id="rosterChart"></canvas>
     </div>
+  </div>
+
+  <!-- MAP (hidden by default) -->
+  <div id="map-container" style="display: none; margin-bottom: 24px;">
+    <div id="map"></div>
   </div>
 
   <!-- TEAM CARDS -->
@@ -261,12 +350,46 @@
 let teams = [];
 let filtered = [];
 let chart;
+let map;
+let mapMarkers = [];
+let mapInitialized = false;
+let originLatLng = null; // user ZIP origin if available
+
+// === ZIP -> LAT/LNG LOOKUP (placeholder) ===
+// TODO: replace this with a real ZIP dataset or service.
+function lookupZipLatLng(zip) {
+  const zipMap = {
+    // example placeholders
+    "35203": { lat: 33.5186, lng: -86.8104 }, // Birmingham, AL
+    "39762": { lat: 33.4504, lng: -88.8184 }, // near Starkville, MS
+    "73301": { lat: 30.2667, lng: -97.7333 }  // Austin, TX example
+  };
+  return zipMap[zip] || null;
+}
+
+// Haversine distance in miles
+function distanceMiles(lat1, lon1, lat2, lon2) {
+  const toRad = d => (d * Math.PI) / 180;
+  const R = 3958.8; // Earth radius in miles
+  const dLat = toRad(lat2 - lat1);
+  const dLon = toRad(lon2 - lon1);
+  const a =
+    Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+    Math.sin(dLon/2) * Math.sin(dLon/2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  return R * c;
+}
 
 async function loadData() {
   const res = await fetch("softball_sec.json");
   teams = await res.json();
 
-  teams.forEach(t => t.rosterSize = t.players.length);
+  teams.forEach(t => {
+    t.rosterSize = (t.players || []).length;
+    // distanceMilesFromOrigin will be filled if user applies location filter
+    t.distanceMilesFromOrigin = null;
+  });
 
   filtered = [...teams];
 
@@ -281,7 +404,7 @@ function buildFilters() {
   const classSet = new Set();
 
   teams.forEach(t =>
-    t.players.forEach(p => {
+    (t.players || []).forEach(p => {
       if (p.pos) posSet.add(p.pos);
       if (p.class) classSet.add(p.class);
     })
@@ -303,6 +426,9 @@ function buildFilters() {
   document.getElementById("filter-pos").addEventListener("change", filterData);
   document.getElementById("filter-class").addEventListener("change", filterData);
   document.getElementById("sort").addEventListener("change", sortAndRender);
+
+  document.getElementById("apply-location").addEventListener("click", applyLocationFilter);
+  document.getElementById("toggle-map").addEventListener("click", toggleMap);
 }
 
 function filterData() {
@@ -312,12 +438,12 @@ function filterData() {
 
   filtered = teams.filter(t => {
     const matchTeam = t.school.toLowerCase().includes(q);
-    const matchPlayer = t.players.some(p => p.name.toLowerCase().includes(q));
+    const matchPlayer = (t.players || []).some(p => p.name.toLowerCase().includes(q));
 
     let ok = q ? (matchTeam || matchPlayer) : true;
 
-    if (pos) ok = ok && t.players.some(p => p.pos === pos);
-    if (cls) ok = ok && t.players.some(p => p.class === cls);
+    if (pos) ok = ok && (t.players || []).some(p => p.pos === pos);
+    if (cls) ok = ok && (t.players || []).some(p => p.class === cls);
 
     return ok;
   });
@@ -335,6 +461,7 @@ function sortAndRender() {
   renderTeams();
   renderChart();
   updateSummary();
+  if (mapInitialized) updateMapMarkers();
 }
 
 function updateSummary() {
@@ -354,13 +481,23 @@ function renderTeams() {
   filtered.forEach(t => {
     const card = document.createElement("div");
     card.className = "team-card";
+    card.id = `team-card-${t.slug || t.school.replace(/\s+/g, "-")}`;
+
+    let loc = "";
+    if (t.city || t.state) {
+      loc = `${t.city || ""}${t.city && t.state ? ", " : ""}${t.state || ""}`;
+    }
+
+    const distanceLine = t.distanceMilesFromOrigin != null
+      ? `<span class="pill pill-distance">${t.distanceMilesFromOrigin.toFixed(0)} miles away</span>`
+      : "";
 
     card.innerHTML = `
       <div class="team-name">${t.school}</div>
-      <div class="team-location">${t.city}, ${t.state}</div>
-      <div class="pill">${t.rosterSize} players</div>
+      <div class="team-location">${loc}</div>
+      <div class="pill">${t.rosterSize} players${distanceLine}</div>
       <button class="roster-btn">View roster</button>
-      <div class="roster">${renderRoster(t.players)}</div>
+      <div class="roster">${renderRoster(t.players || [])}</div>
     `;
 
     const btn = card.querySelector(".roster-btn");
@@ -373,6 +510,9 @@ function renderTeams() {
 }
 
 function renderRoster(players) {
+  if (!players.length) {
+    return "<div style='font-size:12px; color:#6d6d72;'>No roster data yet.</div>";
+  }
   return `
     <table>
       <thead>
@@ -406,13 +546,121 @@ function renderChart() {
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      animation: false,  /* prevents scroll jumps */
+      animation: false,  // avoids layout jumping
       scales: {
         x: { ticks: { maxRotation: 70, minRotation: 40 }},
         y: { beginAtZero: true }
       }
     }
   });
+}
+
+// === LOCATION FILTERING ===
+function applyLocationFilter() {
+  const zip = document.getElementById("zip").value.trim();
+  const radius = parseFloat(document.getElementById("radius").value || "0");
+
+  if (!zip) {
+    // Clear location filter
+    originLatLng = null;
+    teams.forEach(t => t.distanceMilesFromOrigin = null);
+    filterData(); // reapply text/pos/class filters
+    if (mapInitialized) updateMapMarkers();
+    return;
+  }
+
+  const origin = lookupZipLatLng(zip);
+  if (!origin) {
+    alert("ZIP not recognized yet. We’ll add support for more ZIPs soon.");
+    return;
+  }
+
+  originLatLng = origin;
+
+  // compute distance for each team
+  teams.forEach(t => {
+    if (typeof t.latitude === "number" && typeof t.longitude === "number") {
+      t.distanceMilesFromOrigin = distanceMiles(origin.lat, origin.lng, t.latitude, t.longitude);
+    } else {
+      t.distanceMilesFromOrigin = null;
+    }
+  });
+
+  // reapply existing filters first
+  filterData();
+
+  // then apply radius cut if radius > 0
+  if (radius > 0) {
+    filtered = filtered.filter(t => {
+      return t.distanceMilesFromOrigin != null && t.distanceMilesFromOrigin <= radius;
+    });
+  }
+
+  sortAndRender();
+}
+
+// === MAP ===
+function toggleMap() {
+  const container = document.getElementById("map-container");
+  const btn = document.getElementById("toggle-map");
+
+  if (container.style.display === "none" || container.style.display === "") {
+    container.style.display = "block";
+    btn.textContent = "Hide map";
+    if (!mapInitialized) initMap();
+    updateMapMarkers();
+  } else {
+    container.style.display = "none";
+    btn.textContent = "Show map";
+  }
+}
+
+function initMap() {
+  const defaultCenter = [34.0, -88.0]; // generic SE US center
+  map = L.map("map").setView(defaultCenter, 5);
+
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: "&copy; OpenStreetMap contributors"
+  }).addTo(map);
+
+  mapInitialized = true;
+}
+
+function updateMapMarkers() {
+  if (!mapInitialized) return;
+
+  // clear old markers
+  mapMarkers.forEach(m => map.removeLayer(m));
+  mapMarkers = [];
+
+  if (!filtered.length) return;
+
+  const bounds = [];
+
+  filtered.forEach(t => {
+    if (typeof t.latitude !== "number" || typeof t.longitude !== "number") return;
+
+    const marker = L.marker([t.latitude, t.longitude]).addTo(map);
+    marker.bindPopup(`<strong>${t.school}</strong><br>${t.city || ""}, ${t.state || ""}`);
+    marker.on("click", () => {
+      const cardId = `team-card-${t.slug || t.school.replace(/\s+/g, "-")}`;
+      const el = document.getElementById(cardId);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+        el.style.outline = "2px solid #4a8df2";
+        setTimeout(() => (el.style.outline = "none"), 1500);
+      }
+    });
+
+    mapMarkers.push(marker);
+    bounds.push([t.latitude, t.longitude]);
+  });
+
+  if (bounds.length) {
+    map.fitBounds(bounds, { padding: [30, 30] });
+  } else if (originLatLng) {
+    map.setView([originLatLng.lat, originLatLng.lng], 6);
+  }
 }
 
 loadData();
