@@ -1,0 +1,114 @@
+[
+  {
+    "school": "Alabama",
+    "city": "Tuscaloosa",
+    "state": "AL",
+    "division": "D1",
+    "conf": "SEC",
+    "softball_url": "https://rolltide.com/sports/softball/roster"
+  },
+  {
+    "school": "Arkansas",
+    "city": "Fayetteville",
+    "state": "AR",
+    "division": "D1",
+    "conf": "SEC",
+    "softball_url": "https://arkansasrazorbacks.com/sports/softball/roster"
+  },
+  {
+    "school": "Auburn",
+    "city": "Auburn",
+    "state": "AL",
+    "division": "D1",
+    "conf": "SEC",
+    "softball_url": "https://auburntigers.com/sports/softball/roster"
+  },
+  {
+    "school": "Florida",
+    "city": "Gainesville",
+    "state": "FL",
+    "division": "D1",
+    "conf": "SEC",
+    "softball_url": "https://floridagators.com/sports/softball/roster"
+  },
+  {
+    "school": "Georgia",
+    "city": "Athens",
+    "state": "GA",
+    "division": "D1",
+    "conf": "SEC",
+    "softball_url": "https://georgiadogs.com/sports/softball/roster"
+  },
+  {
+    "school": "Kentucky",
+    "city": "Lexington",
+    "state": "KY",
+    "division": "D1",
+    "conf": "SEC",
+    "softball_url": "https://ukathletics.com/sports/softball/roster"
+  },
+  {
+    "school": "LSU",
+    "city": "Baton Rouge",
+    "state": "LA",
+    "division": "D1",
+    "conf": "SEC",
+    "softball_url": "https://lsusports.net/sports/sb/roster"
+  },
+  {
+    "school": "Mississippi State",
+    "city": "Starkville",
+    "state": "MS",
+    "division": "D1",
+    "conf": "SEC",
+    "softball_url": "https://hailstate.com/sports/softball/roster"
+  },
+  {
+    "school": "Missouri",
+    "city": "Columbia",
+    "state": "MO",
+    "division": "D1",
+    "conf": "SEC",
+    "softball_url": "https://mutigers.com/sports/softball/roster"
+  },
+  {
+    "school": "Ole Miss",
+    "city": "Oxford",
+    "state": "MS",
+    "division": "D1",
+    "conf": "SEC",
+    "softball_url": "https://olemisssports.com/sports/softball/roster"
+  },
+  {
+    "school": "South Carolina",
+    "city": "Columbia",
+    "state": "SC",
+    "division": "D1",
+    "conf": "SEC",
+    "softball_url": "https://gamecocks.com/sports/softball/roster"
+  },
+  {
+    "school": "Tennessee",
+    "city": "Knoxville",
+    "state": "TN",
+    "division": "D1",
+    "conf": "SEC",
+    "softball_url": "https://utsports.com/sports/softball/roster"
+  },
+  {
+    "school": "Texas A&M",
+    "city": "College Station",
+    "state": "TX",
+    "division": "D1",
+    "conf": "SEC",
+    "softball_url": "https://12thman.com/sports/softball/roster"
+  },
+  {
+    "school": "Vanderbilt",
+    "city": "Nashville",
+    "state": "TN",
+    "division": "D1",
+    "conf": "SEC",
+    "softball_url": "https://vucommodores.com/sports/softball/roster"
+  }
+]
