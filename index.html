@@ -8,16 +8,14 @@
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 
-  <!-- Leaflet (map library) -->
+  <!-- Leaflet -->
   <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
     crossorigin=""
   />
   <script
     src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
     crossorigin=""
   ></script>
 
@@ -35,12 +33,12 @@
 
     body {
       margin: 0;
-      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: Inter, system-ui, sans-serif;
       background: var(--bg-page);
       color: var(--text-main);
     }
 
-    /* HERO HEADER */
+    /* HERO */
 
     .hero {
       position: relative;
@@ -87,32 +85,30 @@
       color: #f3f4ff;
     }
 
-    /* MAIN LAYOUT */
-
     main {
       max-width: 1100px;
-      margin: 26px auto 80px;
+      margin: 30px auto 80px;
       padding: 0 20px;
     }
 
-    /* FILTER CARDS */
+    /* FILTER CARD */
 
     .filters-card {
       background: var(--card-bg);
       border-radius: 12px;
       border: 1px solid var(--border-subtle);
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-      padding: 18px;
-      margin-bottom: 22px;
+      padding: 20px;
+      margin-bottom: 26px;
     }
 
     .filters-title {
       font-size: 15px;
       font-weight: 600;
-      margin: 0 0 12px;
+      margin: 0 0 14px;
     }
 
-    .filters-section { margin-bottom: 12px; }
+    .filters-section { margin-bottom: 14px; }
 
     .filters-row {
       display: grid;
@@ -120,29 +116,12 @@
     }
 
     .row-1 { grid-template-columns: 1fr; }
-
-    .row-2 {
-      grid-template-columns: 1.2fr 1fr 1fr 1fr;
-    }
-
-    .row-3 {
-      grid-template-columns: auto auto;
-      justify-content: end;
+    .row-2a { grid-template-columns: 1fr 1fr; }
+    .row-buttons {
+      display: flex;
+      justify-content: flex-end;
       gap: 10px;
     }
-    /* New layout rows */
-.row-2a {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-
-.row-buttons {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-}
-
 
     input, select {
       padding: 9px 11px;
@@ -152,14 +131,9 @@
       background: #ffffff;
       outline: none;
     }
-
     input:focus, select:focus {
       border-color: var(--accent);
       box-shadow: 0 0 0 2px rgba(74,141,242,0.2);
-    }
-
-    button {
-      font-family: inherit;
     }
 
     .btn {
@@ -169,18 +143,15 @@
       background: #ffffff;
       cursor: pointer;
       font-size: 13px;
-      white-space: nowrap;
     }
-
     .btn-primary {
       background: var(--accent);
       border-color: var(--accent);
       color: #ffffff;
     }
-
-    .btn-secondary { background: #f7f9fc; }
-
-    .btn:active { transform: translateY(1px); }
+    .btn-secondary {
+      background: #f7f9fc;
+    }
 
     .helper-text {
       margin-top: 6px;
@@ -204,12 +175,6 @@
 
     /* RESULTS */
 
-    .results-note {
-      font-size: 13px;
-      color: var(--text-muted);
-      margin-bottom: 10px;
-    }
-
     .teams-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -225,12 +190,7 @@
     }
 
     .team-name { font-size: 16px; font-weight: 600; }
-
-    .team-location {
-      font-size: 13px;
-      color: var(--text-muted);
-      margin-top: 2px;
-    }
+    .team-location { font-size: 13px; color: var(--text-muted); }
 
     .pill {
       margin-top: 8px;
@@ -241,10 +201,7 @@
       display: inline-block;
     }
 
-    .pill-distance {
-      margin-left: 6px;
-      color: #3b4256;
-    }
+    .pill-distance { margin-left: 6px; color: #3b4256; }
 
     .roster-btn {
       margin-top: 10px;
@@ -262,49 +219,20 @@
       overflow: hidden;
       transition: max-height 0.25s ease;
     }
-
     .roster.open { max-height: 330px; }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-    }
-
-    th {
-      text-align: left;
-      padding: 6px 4px;
-      color: var(--text-muted);
-      border-bottom: 1px solid #e2e4ea;
-    }
-
-    td {
-      padding: 6px 4px;
-      border-bottom: 1px solid #f2f2f4;
-    }
-
-    .empty-message {
-      font-size: 13px;
-      color: var(--text-muted);
-      margin-top: 10px;
-    }
 
     @media (max-width: 900px) {
       .teams-grid { grid-template-columns: 1fr 1fr; }
-      .row-2 { grid-template-columns: 1fr 1fr; }
     }
-
     @media (max-width: 600px) {
       .teams-grid { grid-template-columns: 1fr; }
-      .row-2 { grid-template-columns: 1fr; }
-      .row-3 { justify-content: start; }
+      .row-buttons { justify-content: start; }
     }
   </style>
 </head>
 
 <body>
 
-<!-- HERO -->
 <section class="hero">
   <div class="hero-content">
     <h1 class="hero-title">College Softball Search</h1>
@@ -316,75 +244,69 @@
 
 <main>
 
-  <!-- FILTERS -->
   <section class="filters-card">
-  <h2 class="filters-title">Filter programs</h2>
+    <h2 class="filters-title">Filter programs</h2>
 
-  <!-- ROW 1: Search bar -->
-  <div class="filters-section">
-    <div class="filters-row row-1">
-      <input id="search" placeholder="Search teams…" />
+    <div class="filters-section">
+      <div class="filters-row row-1">
+        <input id="search" placeholder="Search teams…" />
+      </div>
     </div>
-  </div>
 
-  <!-- ROW 2: Division + Conference -->
-  <div class="filters-section">
-    <div class="filters-row row-2a">
-      <select id="division">
-        <option value="">All divisions</option>
-        <option value="D1">Division I</option>
-        <option value="D2">Division II</option>
-        <option value="D3">Division III</option>
-        <option value="NAIA">NAIA</option>
-        <option value="JUCO">JUCO</option>
-      </select>
+    <div class="filters-section">
+      <div class="filters-row row-2a">
+        <select id="division">
+          <option value="">All divisions</option>
+          <option value="D1">Division I</option>
+          <option value="D2">Division II</option>
+          <option value="D3">Division III</option>
+          <option value="NAIA">NAIA</option>
+          <option value="JUCO">JUCO</option>
+        </select>
 
-      <select id="conference">
-        <option value="">All conferences</option>
-      </select>
+        <select id="conference">
+          <option value="">All conferences</option>
+        </select>
+      </div>
     </div>
-  </div>
 
-  <!-- ROW 3: ZIP + Range -->
-  <div class="filters-section">
-    <div class="filters-row row-2a">
-      <input id="zip" placeholder="ZIP (optional)" />
-      <select id="radius">
-        <option value="0">Any distance</option>
-        <option value="50">Within 50 miles</option>
-        <option value="100">Within 100 miles</option>
-        <option value="200">Within 200 miles</option>
-        <option value="400">Within 400 miles</option>
-      </select>
+    <div class="filters-section">
+      <div class="filters-row row-2a">
+        <input id="zip" placeholder="ZIP (optional)" />
+        <select id="radius">
+          <option value="0">Any distance</option>
+          <option value="50">Within 50 miles</option>
+          <option value="100">Within 100 miles</option>
+          <option value="200">Within 200 miles</option>
+          <option value="400">Within 400 miles</option>
+        </select>
+      </div>
     </div>
-  </div>
 
-  <!-- ROW 4: Buttons -->
-  <div class="filters-section">
-    <div class="filters-row row-buttons">
-      <button id="toggle-map" class="btn btn-secondary">Show map</button>
-      <button id="search-btn" class="btn btn-primary">Search</button>
+    <div class="filters-section">
+      <div class="filters-row row-buttons">
+        <button id="toggle-map" class="btn btn-secondary">Show map</button>
+        <button id="reset-filters" class="btn btn-secondary">Reset</button>
+        <button id="search-btn" class="btn btn-primary">Search</button>
+      </div>
     </div>
-  </div>
 
-  <div class="helper-text">
-    Choose your priorities, then click <strong>Search</strong> to see matching programs.
-  </div>
-</section>
+    <div class="helper-text">
+      Choose your priorities, then click <strong>Search</strong>.
+    </div>
+  </section>
 
-  <!-- MAP -->
   <section id="map-container">
     <div id="map"></div>
   </section>
 
-  <!-- RESULTS -->
   <section>
     <p id="results-note" class="results-note">
-      No results yet. Set your filters above and click <strong>Search</strong>.
+      No results yet. Set your filters and click Search.
     </p>
     <div id="teams" class="teams-grid"></div>
-    <div id="no-results" class="empty-message" style="display:none;">
-      No programs match your current filters. Try widening your search.
+    <div id="no-results" class="empty-message" style="display: none;">
+      No programs match your filters.
     </div>
   </section>
 
@@ -398,33 +320,31 @@
   let mapInitialized = false;
   let originLatLng = null;
 
-  // Haversine
   function distanceMiles(lat1, lon1, lat2, lon2) {
     const toRad = d => (d * Math.PI) / 180;
     const R = 3958.8;
     const dLat = toRad(lat2 - lat1);
     const dLon = toRad(lon2 - lon1);
     const a =
-      Math.sin(dLat/2)**2 +
+      Math.sin(dLat / 2)**2 +
       Math.cos(toRad(lat1)) *
       Math.cos(toRad(lat2)) *
-      Math.sin(dLon/2)**2;
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-    return R * c;
+      Math.sin(dLon / 2)**2;
+    return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
   }
 
-  // Real ZIP → lat/lng
   async function lookupZipLatLng(zip) {
     const url = `https://api.zippopotam.us/us/${zip}`;
     try {
       const response = await fetch(url);
       if (!response.ok) return null;
+
       const data = await response.json();
-      return {
-        lat: parseFloat(data.places[0].latitude),
-        lng: parseFloat(data.places[0].longitude)
-      };
-    } catch (err) {
+      const place = data.places?.[0];
+      return place
+        ? { lat: parseFloat(place.latitude), lng: parseFloat(place.longitude) }
+        : null;
+    } catch {
       return null;
     }
   }
@@ -432,8 +352,8 @@
   async function loadData() {
     const res = await fetch("softball_sec.json");
     const data = await res.json();
-    allTeams = Array.isArray(data) ? data : [];
 
+    allTeams = Array.isArray(data) ? data : [];
     allTeams.forEach(t => {
       t.rosterSize = (t.players || []).length;
       t.distanceMilesFromOrigin = null;
@@ -442,6 +362,7 @@
     buildConferenceOptions();
     document.getElementById("toggle-map").addEventListener("click", toggleMap);
     document.getElementById("search-btn").addEventListener("click", runSearch);
+    document.getElementById("reset-filters").addEventListener("click", resetFilters);
   }
 
   function buildConferenceOptions() {
@@ -460,6 +381,23 @@
     });
   }
 
+  function resetFilters() {
+    document.getElementById("search").value = "";
+    document.getElementById("zip").value = "";
+    document.getElementById("radius").value = "0";
+    document.getElementById("division").value = "";
+    document.getElementById("conference").value = "";
+
+    filtered = [];
+    document.getElementById("teams").innerHTML = "";
+    document.getElementById("no-results").style.display = "none";
+    document.getElementById("results-note").textContent =
+      "No results yet. Set your filters and click Search.";
+
+    originLatLng = null;
+    if (mapInitialized) updateMapMarkers();
+  }
+
   async function runSearch() {
     filtered = [...allTeams];
 
@@ -469,30 +407,24 @@
     const zip = document.getElementById("zip").value.trim();
     const radius = parseFloat(document.getElementById("radius").value || "0");
 
-    // Division
     if (division) {
       filtered = filtered.filter(t => (t.division || "") === division);
     }
 
-    // Conference
     if (conference) {
       filtered = filtered.filter(t => t.conf === conference);
     }
 
-    // Team search
     if (q) {
-      filtered = filtered.filter(t => {
-        return (
-          t.school.toLowerCase().includes(q) ||
-          (t.city || "").toLowerCase().includes(q) ||
-          (t.state || "").toLowerCase().includes(q)
-        );
-      });
+      filtered = filtered.filter(t =>
+        t.school.toLowerCase().includes(q) ||
+        (t.city || "").toLowerCase().includes(q) ||
+        (t.state || "").toLowerCase().includes(q)
+      );
     }
 
-    // ZIP filter
     originLatLng = null;
-    allTeams.forEach(t => t.distanceMilesFromOrigin = null);
+    allTeams.forEach(t => (t.distanceMilesFromOrigin = null));
 
     if (zip) {
       const origin = await lookupZipLatLng(zip);
@@ -502,16 +434,19 @@
         allTeams.forEach(t => {
           if (t.latitude && t.longitude) {
             t.distanceMilesFromOrigin = distanceMiles(
-              origin.lat, origin.lng,
-              t.latitude, t.longitude
+              origin.lat,
+              origin.lng,
+              t.latitude,
+              t.longitude
             );
           }
         });
 
         if (radius > 0) {
-          filtered = filtered.filter(t =>
-            t.distanceMilesFromOrigin != null &&
-            t.distanceMilesFromOrigin <= radius
+          filtered = filtered.filter(
+            t =>
+              t.distanceMilesFromOrigin != null &&
+              t.distanceMilesFromOrigin <= radius
           );
         }
 
@@ -529,7 +464,7 @@
 
     document.getElementById("results-note").textContent =
       filtered.length
-        ? `Showing ${filtered.length} program(s) that match your filters.`
+        ? `Showing ${filtered.length} program(s).`
         : "No results yet. Set your filters and click Search.";
   }
 
@@ -542,6 +477,7 @@
       emptyMsg.style.display = "block";
       return;
     }
+
     emptyMsg.style.display = "none";
 
     filtered.forEach(t => {
@@ -550,7 +486,7 @@
 
       const loc = `${t.city}, ${t.state}`;
       const dist = t.distanceMilesFromOrigin != null
-        ? `<span class="pill-distance">${t.distanceMilesFromOrigin.toFixed(0)} miles away</span>`
+        ? `<span class="pill-distance">${t.distanceMilesFromOrigin.toFixed(0)} miles</span>`
         : "";
 
       card.innerHTML = `
@@ -561,9 +497,9 @@
         <div class="roster">${renderRoster(t.players || [])}</div>
       `;
 
-      const rosterBtn = card.querySelector(".roster-btn");
+      const btn = card.querySelector(".roster-btn");
       const rosterEl = card.querySelector(".roster");
-      rosterBtn.addEventListener("click", () => {
+      btn.addEventListener("click", () => {
         rosterEl.classList.toggle("open");
       });
 
@@ -573,29 +509,30 @@
 
   function renderRoster(players) {
     if (!players.length) {
-      return "<div style='font-size:12px;color:#6d6d72;'>No roster data yet.</div>";
+      return "<div style='font-size:12px;color:#666;'>No roster data.</div>";
     }
-
-    const rows = players.map(p => `
-      <tr>
-        <td>${p.number || ""}</td>
-        <td>${p.name}</td>
-        <td>${p.pos}</td>
-        <td>${p.class}</td>
-      </tr>
-    `).join("");
 
     return `
       <table>
         <thead>
           <tr><th>#</th><th>Name</th><th>Pos</th><th>Class</th></tr>
         </thead>
-        <tbody>${rows}</tbody>
+        <tbody>
+          ${players
+            .map(
+              p => `
+            <tr>
+              <td>${p.number || ""}</td>
+              <td>${p.name}</td>
+              <td>${p.pos}</td>
+              <td>${p.class}</td>
+            </tr>`
+            )
+            .join("")}
+        </tbody>
       </table>
     `;
   }
-
-  // MAP
 
   function toggleMap() {
     const container = document.getElementById("map-container");
@@ -604,6 +541,7 @@
     if (container.style.display === "none") {
       container.style.display = "block";
       btn.textContent = "Hide map";
+
       if (!mapInitialized) initMap();
       updateMapMarkers();
     } else {
@@ -636,7 +574,8 @@
         marker.bindPopup(`<strong>${t.school}</strong><br>${t.city}, ${t.state}`);
 
         marker.on("click", () => {
-          document.getElementById("teams")
+          document
+            .getElementById("teams")
             .querySelector(`.team-card:nth-child(${filtered.indexOf(t) + 1})`)
             ?.scrollIntoView({ behavior: "smooth" });
         });
@@ -647,7 +586,7 @@
     });
 
     if (bounds.length) {
-      map.fitBounds(bounds, { padding: [30,30] });
+      map.fitBounds(bounds, { padding: [30, 30] });
     }
   }
 
