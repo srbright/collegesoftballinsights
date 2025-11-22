@@ -350,7 +350,7 @@
   }
 
   async function loadData() {
-    const res = await fetch("softball_sec.json");
+    const res = await fetch("all_teams.json");
     const data = await res.json();
 
     allTeams = Array.isArray(data) ? data : [];
